@@ -1,8 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeHeader from "@/components/HomeHeader";
+import {useState} from "react";
 
 export default function HomeScreen() {
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
+    
     return (
         <SafeAreaView style={{flex: 1}}>
             <HomeHeader/>
