@@ -126,7 +126,7 @@ export default function HomeScreen() {
                             </TouchableOpacity>
                         </View>
 
-                        <View>
+                        <View style={styles.productsGrid}>
                             {products?.map((product, index) => (
                                     <View
                                         key={index}
