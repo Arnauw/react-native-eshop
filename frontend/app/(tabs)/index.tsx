@@ -96,6 +96,7 @@ export default function HomeScreen() {
                             ))}
                         </ScrollView>
                     </View>
+
                     <View style={styles.featuredSection}>
                         <View style={styles.sectionHeader}>
                             <Text style={styles.sectionTitle}>Best Sellers</Text>
@@ -134,7 +135,7 @@ export default function HomeScreen() {
                                     >
                                         <ProductCard 
                                             product={product}
-                                            customStyle={{width: "100%"}}
+                                            customStyle={styles.productCard}
                                         />
                                     </View>
                                 )
@@ -148,6 +149,9 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+    productCard: {
+        width: "100%",
+    },
     wrapper: {
         // flex: 1,
         backgroundColor: AppColors.background.primary,
@@ -236,5 +240,4 @@ const styles = StyleSheet.create({
     featuredSection: {
         marginVertical: 16,
     },
-
 });

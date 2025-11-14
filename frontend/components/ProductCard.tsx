@@ -1,7 +1,18 @@
 import {FC} from 'react';
-import {View, StyleSheet, TouchableOpacity, ViewStyle, StyleProp, Image, Text} from 'react-native';
+import {
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    ViewStyle,
+    StyleProp,
+    Image,
+    Text,
+    Alert,
+} from 'react-native';
 import {AppColors} from "@/constants/theme";
 import {Product} from "@/type";
+import Button from "@/components/Button"
+import Toast from "react-native-toast-message";
 
 interface ProductCardProps {
     product: Product;
@@ -11,6 +22,17 @@ interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
     const {id, title, price, category, image} = product;
+    const handleAddToCart = () => {
+        Toast.show({
+            type: 'success',
+            text1: `Product ${title} added to cart`,
+            text2: 'View cart to complete your purchase',
+            visibilityTime: 2000,
+            // position: "bottom",
+        })
+        // Alert.alert(`Product ${title} added to cart`);
+    }
+
     return (
         <TouchableOpacity
             style={[
@@ -27,7 +49,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                     resizeMode="contain"
                 />
             </View>
-            
+
             <View style={styles.content}>
                 <Text style={styles.category}>{category}</Text>
                 <Text
@@ -37,10 +59,20 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                 >
                     {title}
                 </Text>
+
                 <View style={styles.footer}>
-                    <Text style={styles.price}>
+                    <Text
+                        style={[styles.price, !compact && {marginBottom: 4}]}
+                    >
                         {price.toFixed(2)} €
                     </Text>
+                    {!compact &&
+                        <Button
+                            onPress={handleAddToCart}
+                            title={'Add to cart'}
+                            size={'small'}
+                            variant={'outline'}
+                        />}
                 </View>
             </View>
         </TouchableOpacity>
