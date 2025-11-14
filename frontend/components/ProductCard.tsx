@@ -9,9 +9,7 @@ interface ProductCardProps {
     customStyle?: StyleProp<ViewStyle>;
 }
 
-const ProductCard: FC<ProductCardProps> = (
-    {product, compact = false, customStyle}
-) => {
+const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
     const {id, title, price, category, image} = product;
     return (
         <TouchableOpacity
@@ -29,6 +27,7 @@ const ProductCard: FC<ProductCardProps> = (
                     resizeMode="contain"
                 />
             </View>
+            
             <View style={styles.content}>
                 <Text style={styles.category}>{category}</Text>
                 <Text
@@ -38,11 +37,11 @@ const ProductCard: FC<ProductCardProps> = (
                 >
                     {title}
                 </Text>
-            </View>
-            <View style={styles.footer}>
-                <Text style={styles.price}>
-                    {price.toFixed(2)} €
-                </Text>
+                <View style={styles.footer}>
+                    <Text style={styles.price}>
+                        {price.toFixed(2)} €
+                    </Text>
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         position: 'relative',
         height: 150,
-        width: 100,
+        // width: 100,
         backgroundColor: AppColors.background.primary,
         padding: 5,
     },
