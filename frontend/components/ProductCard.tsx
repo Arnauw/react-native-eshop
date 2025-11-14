@@ -13,6 +13,7 @@ import {AppColors} from "@/constants/theme";
 import {Product} from "@/type";
 import Button from "@/components/Button"
 import Toast from "react-native-toast-message";
+import {useRouter} from "expo-router";
 
 interface ProductCardProps {
     product: Product;
@@ -22,6 +23,10 @@ interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
     const {id, title, price, category, image} = product;
+    const router = useRouter();
+    const handleProductRoute = (e: any)=> {
+        // router.push('');
+    }
     const handleAddToCart = () => {
         Toast.show({
             type: 'success',
@@ -32,9 +37,11 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
         })
         // Alert.alert(`Product ${title} added to cart`);
     }
+    
 
     return (
         <TouchableOpacity
+            onPress={handleProductRoute}
             style={[
                 styles.card,
                 compact && styles.compactCard,
