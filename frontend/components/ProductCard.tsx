@@ -10,7 +10,7 @@ import {
     Alert,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {Product} from "@/type";
+import {Product} from "@/types/type";
 import Button from "@/components/Button"
 import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";

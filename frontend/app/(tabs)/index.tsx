@@ -2,7 +2,7 @@ import {Animated, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'reac
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeHeader from "@/components/HomeHeader";
 import {useEffect, useState} from "react";
-import {Product} from "@/type";
+import {Product} from "@/types/type";
 import {useProductStore} from "@/store/productStore";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {AppColors} from "@/constants/theme";
