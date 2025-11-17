@@ -1,6 +1,9 @@
 import {Product} from "@/types/type";
 
-const API_URL = "https://fakestoreapi.com";
+// const API_URL = process.env.API_URL;
+const API_URL="https://fakestoreapi.com";
+
+console.log('API_URL is:', API_URL);
 
 const getProducts = async (): Promise<Product[]> => {
     try {
