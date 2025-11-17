@@ -1,5 +1,5 @@
 import {Product} from "@/types/type";
-import {API_URL} from "@/config";
+import {EXPO_PUBLIC_API_URL as API_URL}  from "@/config";
 
 // console.log('API_URL is:', API_URL);
 
