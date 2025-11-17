@@ -19,7 +19,7 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: 'Home',
-                    tabBarIcon: ({color}) => 
+                    tabBarIcon: ({color}) =>
                         (
                             <Ionicons size={28} name="home" color={color}/>
                         ),
@@ -46,9 +46,16 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen name="cart" options={{href: null}}/>
-            <Tabs.Screen name="search" options={{href: null}} />
-            <Tabs.Screen name="favorites" options={{href: null}} />
-            <Tabs.Screen name="product/[id]" options={{href: null}} />
+            <Tabs.Screen name="search" options={{href: null}}/>
+            <Tabs.Screen name="favorites" options={{href: null}}/>
+            <Tabs.Screen
+                name="product/[id]"
+                options={{
+                    href: null,
+                    tabBarStyle: {
+                        display: "none",
+                    }
+                }}/>
         </Tabs>
     );
 }

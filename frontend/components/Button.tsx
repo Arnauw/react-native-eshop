@@ -46,7 +46,7 @@ const Button: FC<ButtonProps> = ({
         styles.text,
         styles[`${variant}Text`],
         textStyle,
-    ]
+    ];
 
     return (
         <TouchableOpacity
@@ -126,7 +126,5 @@ const styles = StyleSheet.create({
     large: {
         paddingVertical: 16,
         paddingHorizontal: 32,
-
     },
-
-})
+});

@@ -25,7 +25,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
     const {id, title, price, category, image} = product;
     const router = useRouter();
     const handleProductRoute = (e: any)=> {
-        // router.push('');
+        router.push(`/product/${id}` as any);
     }
     const handleAddToCart = () => {
         Toast.show({
@@ -36,7 +36,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
             // position: "bottom",
         })
         // Alert.alert(`Product ${title} added to cart`);
-    }
+    };
     
 
     return (
@@ -164,4 +164,4 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: AppColors.gray[200],
     },
-})
+});

@@ -40,7 +40,7 @@ export default function HomeScreen() {
                 category: category,
             },
         });
-    }
+    };
 
     if (loading) {
         return (
