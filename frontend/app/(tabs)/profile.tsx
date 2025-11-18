@@ -26,6 +26,7 @@ const ProfileScreen = () => {
             {user ? (
                 <View>
                     <Text>User available</Text>
+                    <Text>{user?.email}</Text>
                 </View>
             ) : (
                 <View style={styles.container}>
