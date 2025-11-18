@@ -1,10 +1,15 @@
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import {SafeAreaView} from "react-native-safe-area-context";
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
 import {useEffect} from "react";
 import Wrapper from "@/components/wrapper";
 import {AppColors} from "@/constants/theme";
+import Button from "@/components/Button";
 
 const ProfileScreen = () => {
     const {user, logout, checkSession} = useAuthStore();
@@ -17,22 +22,30 @@ const ProfileScreen = () => {
     }, [user]);
 
     return (
-        // OLD BAD WAY LOL SO MUCH REPETITION
-        // <Wrapper>
-        //     {user ? (
-        //         <View>
-        //             <Text>User available</Text>
-        //         </View>
-        //     ) : (
-        //         <View>
-        //             <Text>Welcome!</Text>
-        //         </View>
-        //     )}
-        // </Wrapper>
         <Wrapper>
-            <View>
-                <Text>{user ? 'User available' : 'Welcome!'}</Text>
-            </View>
+            {user ? (
+                <View>
+                    <Text>User available</Text>
+                </View>
+            ) : (
+                <View style={styles.container}>
+                    <Text style={styles.title}>Welcome!</Text>
+                    <Text style={styles.message}>Please sign in or register to access your profile.</Text>
+                    <View style={styles.buttonContainer}>
+                        <Button title="Sign In" fullWidth
+                                style={styles.loginButton}
+                                textStyle={styles.buttonText}
+                                onPress={() => router.push("/(tabs)/login")}
+                        />
+                        <Button title="Register" fullWidth
+                                variant='outline'
+                                style={styles.signupButton}
+                                textStyle={styles.signupButtonText}
+                                onPress={() => router.push("/(tabs)/signup")}
+                        />
+                    </View>
+                </View>
+            )}
         </Wrapper>
     );
 };

@@ -1,4 +1,3 @@
-import {FC} from 'react';
 import {
     View,
     StyleSheet,
@@ -7,13 +6,13 @@ import {
     StyleProp,
     Image,
     Text,
-    Alert,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
 import {Product} from "@/types/type";
 import Button from "@/components/Button"
 import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";
+import {FC} from 'react';
 
 interface ProductCardProps {
     product: Product;

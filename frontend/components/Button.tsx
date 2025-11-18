@@ -1,5 +1,3 @@
-import React, {FC} from 'react';
-
 import {
     StyleProp,
     StyleSheet,
@@ -10,6 +8,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
+import {FC} from 'react';
 
 interface ButtonProps {
     title: string;

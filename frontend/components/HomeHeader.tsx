@@ -1,6 +1,10 @@
-import React from 'react';
-
-import {View, StyleSheet, Platform, TouchableOpacity, Text} from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Platform,
+    TouchableOpacity,
+    Text
+} from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {AppColors} from "@/constants/theme";
 import Logo from "@/components/Logo";

@@ -1,4 +1,11 @@
-import {Animated, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+    FlatList, 
+    StyleSheet, 
+    Text, 
+    TouchableOpacity, 
+    View, 
+    ScrollView,
+} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeHeader from "@/components/HomeHeader";
 import {useEffect, useState} from "react";
@@ -6,7 +13,6 @@ import {Product} from "@/types/type";
 import {useProductStore} from "@/store/productStore";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {AppColors} from "@/constants/theme";
-import ScrollView = Animated.ScrollView;
 import {AntDesign} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
 import ProductCard from "@/components/ProductCard";

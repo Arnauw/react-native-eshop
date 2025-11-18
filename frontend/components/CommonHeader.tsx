@@ -1,8 +1,15 @@
-import React from 'react';
-
-import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+    Platform, 
+    StyleSheet, 
+    TouchableOpacity, 
+    View
+} from 'react-native';
+import {
+    Feather, 
+    AntDesign, 
+    MaterialCommunityIcons
+} from "@expo/vector-icons";
 import {AppColors} from "@/constants/theme";
-import {Feather, AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
 
 interface Props {

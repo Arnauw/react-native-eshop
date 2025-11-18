@@ -1,9 +1,12 @@
 import {Tabs} from 'expo-router';
-import React from 'react';
 import {HapticTab} from '@/components/haptic-tab';
 import {Colors} from '@/constants/theme';
 import {useColorScheme} from '@/hooks/use-color-scheme';
-import {Ionicons, Foundation, Feather} from "@expo/vector-icons";
+import {
+    Ionicons,
+    Foundation,
+    Feather
+} from "@expo/vector-icons";
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
@@ -45,6 +48,8 @@ export default function TabLayout() {
                         ),
                 }}
             />
+            <Tabs.Screen name="login" options={{href: null}}/>
+            <Tabs.Screen name="signup" options={{href: null}}/>
             <Tabs.Screen name="cart" options={{href: null}}/>
             <Tabs.Screen name="search" options={{href: null}}/>
             <Tabs.Screen name="favorites" options={{href: null}}/>

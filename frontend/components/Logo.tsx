@@ -1,9 +1,9 @@
-import React from 'react';
-
-import {Text, View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from "react-native-safe-area-context";
+import {
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+} from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {useTheme} from "@react-navigation/core";
 import {useRouter} from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
