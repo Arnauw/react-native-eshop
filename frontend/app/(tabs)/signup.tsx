@@ -42,12 +42,28 @@ const SignUpScreen = () => {
             setPasswordError("Password is required");
         } else if (password.length < 6) {
             setPasswordError("Password must be at least 6 characters");
+        } else {
+            setPasswordError("");
         }
         
+        if (password !== confirmPassword) {
+            setConfirmPassword("Passwords do not match");
+            isValid = false;
+        } else {
+            setConfirmPassword("");
+        }
+        return isValid;
     }
     
     const handleSignUp = async () => {
-        console.log(email, password, confirmPassword);
+        // console.log(email, password, confirmPassword);
+        if (validateForm()) {
+            await signup(email, password);
+            router.push("/(tabs)/login");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+        }
     }
     
     return (
@@ -97,7 +113,7 @@ const SignUpScreen = () => {
                             secureTextEntry={true}
                         />
                         <Button
-                            title="Inscription"
+                            title="Sign Up"
                             onPress={handleSignUp}
                             fullWidth={true}
                             loading={isLoading}

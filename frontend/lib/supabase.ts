@@ -41,7 +41,7 @@ export const supabase = createClient(
         auth: {
             storage: ExpoSecureStoreAdapter,
             autoRefreshToken: true,
-            persistSession: true,
+            persistSession: false,
             detectSessionInUrl: false,
         },
         realtime: {

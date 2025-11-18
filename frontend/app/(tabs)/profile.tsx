@@ -32,12 +32,14 @@ const ProfileScreen = () => {
                     <Text style={styles.title}>Welcome!</Text>
                     <Text style={styles.message}>Please sign in or register to access your profile.</Text>
                     <View style={styles.buttonContainer}>
-                        <Button title="Sign In" fullWidth
+                        <Button title="Sign In"
+                                fullWidth={true}
                                 style={styles.loginButton}
                                 textStyle={styles.buttonText}
                                 onPress={() => router.push("/(tabs)/login")}
                         />
-                        <Button title="Register" fullWidth
+                        <Button title="Register"
+                                fullWidth={true}
                                 variant='outline'
                                 style={styles.signupButton}
                                 textStyle={styles.signupButtonText}

@@ -67,6 +67,10 @@ const TextInput: FC<TextInputProps> = ({
                     error && styles.inputError,
                 ]}
             />
+            {
+                error &&
+                <Text style={styles.errorText}>{error}</Text>
+            }
         </View>
     );
 };
