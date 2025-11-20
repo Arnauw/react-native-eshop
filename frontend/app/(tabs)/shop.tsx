@@ -1,5 +1,5 @@
 import {
-    FlatList,
+    FlatList, Modal,
     Platform, ScrollView,
     StyleSheet,
     Text,
@@ -51,6 +51,7 @@ const ShopScreen = () => {
             setCategory(categoryParam);
         }
     }, []);
+    console.log(loading);
 
     const renderHeader = () => {
         return (
@@ -79,6 +80,11 @@ const ShopScreen = () => {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        onPress={
+                            () => {
+                                setShowShortModal(true);
+                            }
+                        }
                         style={[
                             styles.sortOption,
                             isFilterActive && styles.activeSortOption,
@@ -141,46 +147,88 @@ const ShopScreen = () => {
     return (
         <Wrapper>
             {renderHeader()}
-            {
-                filteredProducts?.length === 0
-                    ? (
-                        <EmptyState
-                            type="search"
-                            message="No products found in your research query"
-                        />
-                    ) : (
-                        <FlatList
-                            data={filteredProducts}
-                            keyExtractor={
-                                (item) => item.id.toString()
-                            }
-                            numColumns={2}
-                            renderItem={
-                                ({item}) => (
-                                    <View style={styles.productContainer}>
-                                        <ProductCard
-                                            product={item}
-                                            customStyle={styles.fullWidth}
-                                        />
-                                    </View>
-                                )
-                            }
-                            contentContainerStyle={styles.productsGrid}
-                            columnWrapperStyle={styles.columnWrapper}
-                            showsVerticalScrollIndicator={false}
-                            ListEmptyComponent={
-                                <View style={styles.footer}/>
-                            }
-                        />
-                    )
-            }
-            {loading && (
-                <View
-                    style={styles.loadingSpinner}
-                >
+            {loading ? (
+                <View style={styles.loadingSpinner}>
                     <LoadingSpinner fullScreen={true}/>
                 </View>
-            )}
+            ) : filteredProducts?.length === 0
+                ? (
+                    <EmptyState
+                        type="search"
+                        message="No products found in your research query"
+                    />
+                ) : (
+                    <FlatList
+                        data={filteredProducts}
+                        keyExtractor={
+                            (item) => item.id.toString()
+                        }
+                        numColumns={2}
+                        renderItem={
+                            ({item}) => (
+                                <View style={styles.productContainer}>
+                                    <ProductCard
+                                        product={item}
+                                        customStyle={styles.fullWidth}
+                                    />
+                                </View>
+                            )
+                        }
+                        contentContainerStyle={styles.productsGrid}
+                        columnWrapperStyle={styles.columnWrapper}
+                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={
+                            <View style={styles.footer}/>
+                        }
+                    />
+                )
+            }
+            <Modal
+                visible={showShortModal}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setShowShortModal(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <View style={styles.modalHeader}>
+                            <Text>Sort by</Text>
+                            <TouchableOpacity
+                                onPress={
+                                    () => setShowShortModal(false)
+                                }
+                            >
+                                <AntDesign
+                                    name="close"
+                                    size={24}
+                                    color={AppColors.text.primary}
+                                    onPress={
+                                        () => setShowShortModal(false)
+                                    }
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity
+                            style={[
+                                styles.sortOption,
+                                activeSortOption === "price-asc"
+                                && styles.activeSortButton,
+                            ]}
+                            onPress={() => handleSort("price-asc")
+                            }>
+                            <Text style={styles.sortOptionText}>
+                                Price: Low to High
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+            </Modal>
+            {/*{loading && (*/}
+            {/*    <View style={styles.loadingSpinner}>*/}
+            {/*        <LoadingSpinner fullScreen={true}/>*/}
+            {/*    </View>*/}
+            {/*)}*/}
         </Wrapper>
     );
 };

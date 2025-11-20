@@ -1,7 +1,12 @@
-import {getCategories, getProducts, getProductsByCategory, searchProducts} from '@/lib/API';
+import {
+    getCategories,
+    getProducts,
+    getProductsByCategory,
+    searchProducts
+} from '@/lib/API';
 import {Product} from '@/types/type';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {create} from 'zustand';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createJSONStorage, persist} from 'zustand/middleware';
 
 interface ProductsState {
@@ -21,7 +26,7 @@ interface ProductsState {
 
 export const useProductStore = create<ProductsState>()(
     // persist(
-        (set, get) => ({
+    (set, get) => ({
             products: [],
             filteredProducts: [],
             selectedCategory: null,
@@ -58,6 +63,10 @@ export const useProductStore = create<ProductsState>()(
                         error: null,
                     });
                     if (category) {
+                        set ({ 
+                            loading: true,
+                            error: null,
+                        });
                         const products = await getProductsByCategory(category);
                         set({
                             filteredProducts: products,
