@@ -1,35 +1,43 @@
 import {
-    Platform,
+    Platform, ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
-import {EXPO_PUBLIC_API_URL as API_URL}  from "@/config";
+import {EXPO_PUBLIC_API_URL as API_URL} from "@/config";
 import {AppColors} from "@/constants/theme";
+import Wrapper from "@/components/wrapper";
+import {AntDesign, Ionicons} from "@expo/vector-icons";
+import {router, useRouter} from "expo-router";
+import {useProductStore} from "@/store/productStore";
 // Uncomment to refactor using getProducts from API.ts
 // import {getProducts} from "@/lib/API";
 // import {Product} from "@/types/type";
 
 const ShopScreen = () => {
-    const [products, setProducts] = useState([]);
+    const {
+        filteredProducts,
+        categories,
+        selectedCategory,
+        loading,
+        error,
+        fetchProducts,
+        fetchCategories,
+        setCategory,
+        sortProducts,
+    } = useProductStore();
+    const [products, setProducts] = useState<[]>([]);
+    const [showShortModal, setShowShortModal] = useState<boolean>(false);
+    const [activeSortOption, setActiveSortOption] = useState<string | null>(null);
+    const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
+    const router = useRouter();
     
     useEffect(() => {
-        const getProducts = async () => {
-            const response = await fetch(`${API_URL}/products`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                },
-            );
-            const data = await response.json();
-            setProducts(data);
-            console.log(data);
-        };
-        getProducts();
+        fetchCategories();
+        fetchProducts();
     }, []);
 
     // Correct way
@@ -46,19 +54,85 @@ const ShopScreen = () => {
     //     };
     //     fetchProducts();
     // }, []);
-    
-    return (
-        <SafeAreaView>
-            <View style={{ flex: 1 }}>
-                <Text style={{color: 'black'}}>Hello</Text>
+
+    const renderHeader = () => {
+        return (
+            <View style={styles.header}>
+                <Text style={styles.title}>
+                    All products
+                </Text>
+                <View style={styles.flexRow}>
+                    <TouchableOpacity
+                        style={styles.searchRow}
+                        onPress={() => {
+                            router.push("/(tabs)/search");
+                        }}
+                    >
+                        <View style={styles.searchContainer}>
+                            <View style={styles.searchInput}>
+                                <Text>Search a product...</Text>
+                            </View>
+                        </View>
+                        <View style={styles.searchButton}>
+                            <Ionicons
+                                name="search"
+                                size={20}
+                                color="white"
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[
+                            styles.sortOption,
+                            isFilterActive && styles.activeSortOption,
+                        ]}
+                    >
+                        <AntDesign
+                            name="filter"
+                            size={20}
+                            color={AppColors.text.primary}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.categoriesContainer}
+                >
+                    <TouchableOpacity
+                        onPress={() => setShowShortModal(true)}
+                        style={[
+                            styles.categoryButton,
+                            selectedCategory === null
+                            && styles.selectedCategory,
+                        ]}
+                    >
+                        <Text style={[
+                            styles.categoryText,
+                            selectedCategory === null
+                            && styles.selectedCategoryText,
+                        ]}>
+                            All
+                        </Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
-        </SafeAreaView>
+        )
+    };
+
+    return (
+        <Wrapper>
+            {renderHeader()}
+        </Wrapper>
     );
 };
 
 export default ShopScreen;
 
 const styles = StyleSheet.create({
+    flexRow: {
+        flexDirection: "row",
+    },
     header: {
         marginTop: Platform.OS === "android" ? 30 : 0,
         paddingBottom: 16,
@@ -140,7 +214,7 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.primary[500],
     },
     categoryText: {
-        fontFamily:"Inter-Medium",
+        fontFamily: "Inter-Medium",
         fontSize: 14,
         color: AppColors.text.primary,
     },
@@ -156,12 +230,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     productContainer: {
-        width:'48%',
+        width: '48%',
     },
     footer: {
         height: 100,
     },
-    modalOverlay:{
+    modalOverlay: {
         flex: 1,
         backgroundColor: "rgba(0,0,0,0.5)"
     },

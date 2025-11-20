@@ -1,4 +1,4 @@
-import {getCategories, getProducts} from '@/lib/API';
+import {getCategories, getProducts, getProductsByCategory, searchProducts} from '@/lib/API';
 import {Product} from '@/types/type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {create} from 'zustand';
@@ -13,14 +13,14 @@ interface ProductsState {
     selectedCategory: string | null;
     fetchProducts: () => Promise<void>;
     fetchCategories: () => Promise<void>;
-    // setCategory: (category: string | null) => Promise<void>;
-    // searchProducts: (query: string) => void;
-    // sortProducts: (sortBy: "price-asc" | "price-desc" | "rating") => void;
-    // searchProductsRealTime: (query: string) => Promise<void>;
+    setCategory: (category: string | null) => Promise<void>;
+    searchProducts: (query: string) => void;
+    sortProducts: (sortBy: "price-asc" | "price-desc" | "rating") => void;
+    searchProductsRealTime: (query: string) => Promise<void>;
 }
 
 export const useProductStore = create<ProductsState>()(
-    persist(
+    // persist(
         (set, get) => ({
             products: [],
             filteredProducts: [],
@@ -30,7 +30,7 @@ export const useProductStore = create<ProductsState>()(
             error: null,
             fetchProducts: async () => {
                 try {
-                    set({ loading: true, error: null });
+                    set({loading: true, error: null});
                     const products = await getProducts();
                     set({
                         products,
@@ -38,22 +38,109 @@ export const useProductStore = create<ProductsState>()(
                         loading: false,
                     });
                 } catch (error: any) {
-                    set({ error: error.message, loading: false });
+                    set({error: error.message, loading: false});
                 }
             },
             fetchCategories: async () => {
                 try {
-                    set({ loading: true, error: null });
+                    set({loading: true, error: null});
                     const categories = await getCategories();
-                    set({ categories, loading: false });
+                    set({categories, loading: false});
                 } catch (error: any) {
-                    set({ error: error.message, loading: false });
+                    set({error: error.message, loading: false});
                 }
             },
-        }),
-        {
-            name: 'product-storage',
-            storage: createJSONStorage<ProductsState>(() => AsyncStorage),
+            setCategory: async (category: string | null) => {
+                try {
+                    set({
+                        selectedCategory: category,
+                        loading: true,
+                        error: null,
+                    });
+                    if (category) {
+                        const products = await getProductsByCategory(category);
+                        set({
+                            filteredProducts: products,
+                            loading: false,
+                        });
+                    } else {
+                        set({
+                            filteredProducts: get().products,
+                            loading: false,
+                        });
+                    }
+                } catch (error: any) {
+                    set({
+                        error: error.message,
+                        loading: false,
+                    });
+                }
+            },
+            searchProducts: (query: string) => {
+                const searchQuery = query.toLowerCase().trim();
+                const {products, selectedCategory} = get();
+                let filtered = products;
+
+                if (selectedCategory) {
+                    filtered = products.filter(
+                        (product) => product.category === selectedCategory
+                    );
+                }
+                if (searchQuery) {
+                    filtered = filtered.filter(
+                        (product) => {
+                            product.title.toLowerCase().includes(searchQuery);
+                            product.description.toLowerCase().includes(searchQuery);
+                            product.category.toLowerCase().includes(searchQuery);
+                        }
+                    );
+                }
+                set({filteredProducts: filtered});
+            },
+            sortProducts: (sortBy: "price-asc" | "price-desc" | "rating") => {
+                const {filteredProducts} = get();
+                let sorted = [...filteredProducts];
+
+                switch (sortBy) {
+                    case "price-asc":
+                        sorted.sort((a, b) => a.price - b.price);
+                        break;
+                    case "price-desc":
+                        sorted.sort((a, b) => b.price - a.price);
+                        break;
+                    case "rating":
+                        sorted.sort((a, b) => b.rating.rate - a.rating.rate);
+                        break;
+                    default:
+                        break;
+                }
+                set({filteredProducts: sorted});
+            },
+            searchProductsRealTime: async (query: string) => {
+                try {
+                    set({loading: true, error: null});
+
+                    if (!query.trim()) {
+                        set({
+                            filteredProducts: get().products,
+                            loading: false,
+                        });
+                    }
+
+                    const searchResults = await searchProducts(query);
+                    set({
+                        filteredProducts: searchResults,
+                        loading: false,
+                    });
+                } catch (error: any) {
+                    set({error: error.message, loading: false});
+                }
+            },
         }
+        // ),
+        // {
+        //     name: 'product-storage',
+        //     storage: createJSONStorage<ProductsState>(() => AsyncStorage),
+        // }
     )
 );

@@ -1,5 +1,5 @@
 import {Product} from "@/types/type";
-import {EXPO_PUBLIC_API_URL as API_URL}  from "@/config";
+import {EXPO_PUBLIC_API_URL as API_URL} from "@/config";
 
 // console.log('API_URL is:', API_URL);
 
@@ -43,4 +43,46 @@ const getCategories = async (): Promise<string[]> => {
     }
 };
 
-export {getProducts, getProduct, getCategories,};
+const getProductsByCategory = async (category: string): Promise<Product[]> => {
+    try {
+        const response = await fetch(`${API_URL}/products/${category}`);
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch products in ${category}`, error);
+        throw error;
+    }
+};
+
+const searchProducts = async (query: string): Promise<Product[]> => {
+    try {
+        const response = await fetch(`${API_URL}/products`);
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const products = await response.json();
+        const searchQuery = query.toLowerCase().trim();
+
+        return products.filter(
+            (product: Product) => {
+                product.title.toLowerCase().includes(searchQuery)
+                || product.description.toLowerCase().includes(searchQuery)
+                || product.category.toLowerCase().includes(searchQuery)
+            }
+        );
+    } catch (error) {
+        console.error(`Error fetching products with query: ${query}`, error);
+        throw error;
+    }
+}
+
+export {
+    getProducts,
+    getProduct,
+    getCategories,
+    getProductsByCategory,
+    searchProducts,
+};

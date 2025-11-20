@@ -22,9 +22,12 @@ export default function HomeScreen() {
     const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
     const {
-        products, categories,
-        fetchProducts, fetchCategories,
-        loading, error,
+        products,
+        categories,
+        fetchProducts,
+        fetchCategories,
+        loading,
+        error,
     } = useProductStore();
 
     useEffect(() => {
@@ -43,7 +46,7 @@ export default function HomeScreen() {
         router.push({
             pathname: '/(tabs)/shop',
             params: {
-                category: category,
+                category,
             },
         });
     };
