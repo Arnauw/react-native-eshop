@@ -1,4 +1,5 @@
 import {
+    FlatList,
     Platform, ScrollView,
     StyleSheet,
     Text,
@@ -11,11 +12,11 @@ import {EXPO_PUBLIC_API_URL as API_URL} from "@/config";
 import {AppColors} from "@/constants/theme";
 import Wrapper from "@/components/wrapper";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
-import {router, useRouter} from "expo-router";
+import {router, useLocalSearchParams, useRouter} from "expo-router";
 import {useProductStore} from "@/store/productStore";
-// Uncomment to refactor using getProducts from API.ts
-// import {getProducts} from "@/lib/API";
-// import {Product} from "@/types/type";
+import EmptyState from "@/components/EmptyState";
+import ProductCard from "@/components/ProductCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const ShopScreen = () => {
     const {
@@ -29,31 +30,27 @@ const ShopScreen = () => {
         setCategory,
         sortProducts,
     } = useProductStore();
+    const {
+        q: searchParam,
+        category: categoryParam,
+    } = useLocalSearchParams<{
+        q?: string;
+        category?: string;
+    }>();
+    console.log(categoryParam);
     const [products, setProducts] = useState<[]>([]);
     const [showShortModal, setShowShortModal] = useState<boolean>(false);
     const [activeSortOption, setActiveSortOption] = useState<string | null>(null);
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
     const router = useRouter();
-    
+
     useEffect(() => {
         fetchCategories();
         fetchProducts();
+        if (categoryParam) {
+            setCategory(categoryParam);
+        }
     }, []);
-
-    // Correct way
-    // const [products, setProducts] = useState<Product[]>([]); // ✅ Typed
-    //
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const data = await getProducts();
-    //             setProducts(data);
-    //         } catch (error) {
-    //             console.error("Failed to load products:", error);
-    //         }
-    //     };
-    //     fetchProducts();
-    // }, []);
 
     const renderHeader = () => {
         return (
@@ -100,7 +97,7 @@ const ShopScreen = () => {
                     contentContainerStyle={styles.categoriesContainer}
                 >
                     <TouchableOpacity
-                        onPress={() => setShowShortModal(true)}
+                        onPress={() => setCategory(null)}
                         style={[
                             styles.categoryButton,
                             selectedCategory === null
@@ -115,6 +112,27 @@ const ShopScreen = () => {
                             All
                         </Text>
                     </TouchableOpacity>
+                    {categories?.map((category) => (
+                        <TouchableOpacity
+                            onPress={() => setCategory(category)}
+                            key={category}
+                            style={[
+                                styles.categoryButton,
+                                selectedCategory === category
+                                && styles.selectedCategory,
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.categoryText,
+                                    selectedCategory === category
+                                    && styles.selectedCategoryText,
+                                ]}
+                            >
+                                {category.charAt(0).toUpperCase() + category.slice(1)}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
                 </ScrollView>
             </View>
         )
@@ -123,6 +141,46 @@ const ShopScreen = () => {
     return (
         <Wrapper>
             {renderHeader()}
+            {
+                filteredProducts?.length === 0
+                    ? (
+                        <EmptyState
+                            type="search"
+                            message="No products found in your research query"
+                        />
+                    ) : (
+                        <FlatList
+                            data={filteredProducts}
+                            keyExtractor={
+                                (item) => item.id.toString()
+                            }
+                            numColumns={2}
+                            renderItem={
+                                ({item}) => (
+                                    <View style={styles.productContainer}>
+                                        <ProductCard
+                                            product={item}
+                                            customStyle={styles.fullWidth}
+                                        />
+                                    </View>
+                                )
+                            }
+                            contentContainerStyle={styles.productsGrid}
+                            columnWrapperStyle={styles.columnWrapper}
+                            showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={
+                                <View style={styles.footer}/>
+                            }
+                        />
+                    )
+            }
+            {loading && (
+                <View
+                    style={styles.loadingSpinner}
+                >
+                    <LoadingSpinner fullScreen={true}/>
+                </View>
+            )}
         </Wrapper>
     );
 };
@@ -130,6 +188,14 @@ const ShopScreen = () => {
 export default ShopScreen;
 
 const styles = StyleSheet.create({
+    loadingSpinner: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    fullWidth: {
+        width: "100%",
+    },
     flexRow: {
         flexDirection: "row",
     },
