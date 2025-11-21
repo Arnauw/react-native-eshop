@@ -1,6 +1,8 @@
 import {
-    FlatList, Modal,
-    Platform, ScrollView,
+    FlatList,
+    Modal,
+    Platform,
+    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -53,6 +55,20 @@ const ShopScreen = () => {
     }, []);
     console.log(loading);
 
+    const handleSort = (sortBy: "price-asc" | "price-desc" | "rating") => {
+        sortProducts(sortBy);
+        setActiveSortOption(sortBy);
+        setShowShortModal(false);
+        setIsFilterActive(true);
+    };
+
+    const handleResetFilter = () => {
+        sortProducts("price-asc");
+        setActiveSortOption(null);
+        setShowShortModal(false);
+        setIsFilterActive(false);
+    };
+
     const renderHeader = () => {
         return (
             <View style={styles.header}>
@@ -86,8 +102,8 @@ const ShopScreen = () => {
                             }
                         }
                         style={[
-                            styles.sortOption,
-                            isFilterActive && styles.activeSortOption,
+                            styles.sortOptionView,
+                            isFilterActive && styles.activeSortButton,
                         ]}
                     >
                         <AntDesign
@@ -209,17 +225,70 @@ const ShopScreen = () => {
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity
-                            style={[
-                                styles.sortOption,
-                                activeSortOption === "price-asc"
-                                && styles.activeSortButton,
-                            ]}
-                            onPress={() => handleSort("price-asc")
-                            }>
-                            <Text style={styles.sortOptionText}>
-                                Price: Low to High
+                            style={styles.sortOption}
+                            onPress={
+                                () => handleSort("price-asc")
+                            }
+                        >
+                            <Text
+                                style={[
+                                    styles.sortOptionText,
+                                    activeSortOption === "price-asc"
+                                    && styles.activeSortText,
+                                ]}
+                            >
+                                Price: Low to high
                             </Text>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.sortOption}
+                            onPress={
+                                () => handleSort("price-desc")
+                            }
+                        >
+                            <Text
+                                style={[
+                                    styles.sortOptionText,
+                                    activeSortOption === "price-desc"
+                                    && styles.activeSortText,
+                                ]}
+                            >
+                                Price: High to low
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.sortOption}
+                            onPress={
+                                () => handleSort("rating")
+                            }
+                        >
+                            <Text
+                                style={[
+                                    styles.sortOptionText,
+                                    activeSortOption === "rating"
+                                    && styles.activeSortText,
+                                ]}
+                            >
+                                Ranking: High to low
+                            </Text>
+                        </TouchableOpacity>
+                        {
+                            isFilterActive && (
+                                <TouchableOpacity
+                                    style={styles.sortOption}
+                                    onPress={handleResetFilter}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.sortOptionText,
+                                            {color: AppColors.error}
+                                        ]}
+                                    >
+                                        Remove filters
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        }
                     </View>
                 </View>
 
@@ -246,6 +315,7 @@ const styles = StyleSheet.create({
     },
     flexRow: {
         flexDirection: "row",
+        width: "100%",
     },
     header: {
         marginTop: Platform.OS === "android" ? 30 : 0,

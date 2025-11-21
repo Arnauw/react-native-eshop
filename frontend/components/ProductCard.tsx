@@ -21,9 +21,9 @@ interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
-    const {id, title, price, category, image} = product;
+    const {id, title, price, category, image, rating} = product;
     const router = useRouter();
-    const handleProductRoute = (e: any)=> {
+    const handleProductRoute = (e: any) => {
         router.push(`/product/${id}` as any);
     }
     const handleAddToCart = () => {
@@ -36,7 +36,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
         })
         // Alert.alert(`Product ${title} added to cart`);
     };
-    
+
 
     return (
         <TouchableOpacity
@@ -68,9 +68,22 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
 
                 <View style={styles.footer}>
                     <Text
-                        style={[styles.price, !compact && {marginBottom: 4}]}
+                        style={[
+                            styles.price,
+                            !compact
+                            && {marginBottom: 7}
+                        ]}
                     >
                         {price.toFixed(2)} €
+                    </Text>
+                    <Text
+                        style={[
+                            styles.ratingText,
+                            !compact
+                            && {marginBottom: 7}
+                        ]}
+                    >
+                        Notes: {`${rating?.rate}/${rating?.count}`}
                     </Text>
                     {!compact &&
                         <Button
