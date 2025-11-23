@@ -100,6 +100,7 @@ const SingleProductScreen = () => {
             <CommonHeader/>
             <ScrollView
                 showsVerticalScrollIndicator={false}
+                style={{flex: 1}}
             >
                 <View style={styles.imageContainer}>
                     <Image
@@ -134,49 +135,41 @@ const SingleProductScreen = () => {
                     <Text style={styles.description}>
                         {product?.description}
                     </Text>
-                    <View style={styles.quantityContainer}>
-                        <Text style={styles.quantityTitle}>
-                            Quantity
-                        </Text>
-                        <View style={styles.quantityControls}>
-                            <TouchableOpacity
-                                onPress={handleDecreaseQuantity}
-                                disabled={quantity <= 1}
-                                style={styles.quantityButton}
-                            >
-                                <AntDesign
-                                    name="minus"
-                                    size={20}
-                                    color={AppColors.primary[600]}
-                                />
-                            </TouchableOpacity>
-                            <Text style={styles.quantityValue}>
-                                {quantity}
-                            </Text>
-                            <TouchableOpacity
-                                onPress={handleIncreaseQuantity}
-                                disabled={quantity >= 100}
-                                style={styles.quantityButton}
-                            >
-                                <AntDesign
-                                    name="plus"
-                                    size={20}
-                                    color={AppColors.primary[600]}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
                 </View>
             </ScrollView>
             <View style={styles.footer}>
-                <Text style={styles.totalPrice}>
-                    Total: {(product?.price * quantity).toFixed(2)} €
-                </Text>
-                <ButtonCustom 
-                    title="Add to cart"
-                    onPress={handleAddToCart}
-                    style={styles.addToCartButton}
+                <View style={styles.quantityContainer}>
+                    <Text style={styles.quantityTitle}>Quantity</Text>
+                    <View style={styles.quantityControls}>
+                        <TouchableOpacity onPress={handleDecreaseQuantity} disabled={quantity <= 1}
+                                          style={styles.quantityButton}>
+                            <AntDesign name="minus" size={20} color={AppColors.primary[600]}/>
+                        </TouchableOpacity>
+
+                        <Text style={styles.quantityValue}>{quantity}</Text>
+
+                        <TouchableOpacity onPress={handleIncreaseQuantity} disabled={quantity >= 100}
+                                          style={styles.quantityButton}>
+                            <AntDesign name="plus" size={20} color={AppColors.primary[600]}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.divider}/>
+                <View style={styles.footerActions}>
+                    <View style={styles.totalPriceContainer}>
+                        <Text style={styles.totalLabel}>
+                            Total:
+                        </Text>
+                        <Text style={styles.totalPrice}>
+                            {(product?.price * quantity).toFixed(2)} €
+                        </Text>
+                    </View>
+                    <ButtonCustom
+                        title="Add to cart"
+                        onPress={handleAddToCart}
+                        style={styles.addToCartButton}
                     />
+                </View>
             </View>
         </View>
     );
@@ -190,15 +183,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    addToCartButton: {
-        width: "50%",
-    },
-    totalPrice: {
-        fontFamily: "Inter-Bold",
-        fontSize: 18,
-        color: AppColors.text.primary,
-    },
     headerContainerStyle: {
+        flex: 1,
         paddingTop: 30,
         backgroundColor: AppColors.background.primary,
     },
@@ -217,50 +203,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 24,
-    },
-    footer: {
-        position: 'absolute',
-        bottom: 50,
-        left: 0,
-        right: 0,
-        backgroundColor: AppColors.background.primary,
-        borderTopWidth: 1,
-        borderTopColor: AppColors.gray[200],
-        paddingHorizontal: 24,
-        paddingVertical: 16,
-        paddingBottom: 32,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    quantityValue: {
-        fontFamily: 'Inter-Medium',
-        fontSize: 16,
-        color: AppColors.text.primary,
-        paddingHorizontal: 16,
-    },
-    quantityButton: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        backgroundColor: AppColors.background.secondary,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    quantityControls: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    quantityTitle: {
-        fontFamily: 'Inter-SemiBold',
-        fontSize: 16,
-        color: AppColors.text.primary,
-    },
-    quantityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 24,
     },
     description: {
         fontFamily: 'Inter-Regular',
@@ -305,7 +247,7 @@ const styles = StyleSheet.create({
     },
     productInfo: {
         paddingHorizontal: 24,
-        paddingBottom: 120,
+        paddingBottom: 20,
         paddingTop: 10,
         backgroundColor: AppColors.background.secondary,
     },
@@ -323,5 +265,67 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: AppColors.background.primary,
         position: "relative",
+    },
+    footer: {
+        backgroundColor: AppColors.background.primary,
+        borderTopWidth: 1,
+        borderTopColor: AppColors.gray[200],
+        paddingHorizontal: 24,
+        paddingVertical: 16,
+        paddingBottom: 30,
+    },
+    quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+    },
+    quantityTitle: {
+        fontFamily: 'Inter-SemiBold',
+        fontSize: 16,
+        color: AppColors.text.primary,
+    },
+    quantityControls: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    quantityButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: AppColors.background.secondary,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    quantityValue: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 16,
+        color: AppColors.text.primary,
+        paddingHorizontal: 16,
+        minWidth: 40,
+        textAlign: 'center',
+    },
+    footerActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    totalLabel: {
+        fontFamily: "Inter-Bold",
+        fontSize: 20,
+        color: AppColors.text.primary,
+    },
+    totalPrice: {
+        fontFamily: "Inter-Bold",
+        fontSize: 20,
+        color: AppColors.primary[600],
+    },
+    totalPriceContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    addToCartButton: {
+        width: "50%",
     },
 });
