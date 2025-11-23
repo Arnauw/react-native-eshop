@@ -10,7 +10,7 @@ import {useRouter} from "expo-router";
 import {useEffect} from "react";
 import Wrapper from "@/components/wrapper";
 import {AppColors} from "@/constants/theme";
-import Button from "@/components/Button";
+import ButtonCustom from "@/components/ButtonCustom";
 import {Feather, FontAwesome5, Foundation} from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
@@ -173,7 +173,7 @@ const ProfileScreen = () => {
                         ))}
                     </View>
                     <View style={styles.logoutContainer}>
-                        <Button
+                        <ButtonCustom
                             title="Log out"
                             onPress={handleLogout}
                             variant="outline"
@@ -189,18 +189,18 @@ const ProfileScreen = () => {
                     <Text style={styles.title}>Welcome!</Text>
                     <Text style={styles.message}>Please sign in or register to access your profile.</Text>
                     <View style={styles.buttonContainer}>
-                        <Button title="Sign In"
-                                fullWidth={true}
-                                style={styles.loginButton}
-                                textStyle={styles.buttonText}
-                                onPress={() => router.push("/(tabs)/login")}
+                        <ButtonCustom title="Sign In"
+                                      fullWidth={true}
+                                      style={styles.loginButton}
+                                      textStyle={styles.buttonText}
+                                      onPress={() => router.push("/(tabs)/login")}
                         />
-                        <Button title="Register"
-                                fullWidth={true}
-                                variant='outline'
-                                style={styles.signupButton}
-                                textStyle={styles.signupButtonText}
-                                onPress={() => router.push("/(tabs)/signup")}
+                        <ButtonCustom title="Register"
+                                      fullWidth={true}
+                                      variant='outline'
+                                      style={styles.signupButton}
+                                      textStyle={styles.signupButtonText}
+                                      onPress={() => router.push("/(tabs)/signup")}
                         />
                     </View>
                 </View>

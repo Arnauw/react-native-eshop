@@ -11,8 +11,8 @@ import {Foundation} from "@expo/vector-icons";
 import {useState} from "react";
 import {useRouter} from "expo-router";
 import {useAuthStore} from "@/store/authStore";
-import Button from "@/components/Button";
-import TextInput from "@/components/TextInput"
+import ButtonCustom from "@/components/ButtonCustom";
+import TextInputCustom from "@/components/TextInputCustom"
 
 const LoginScreen = () => {
     const [email, setEmail] = useState("");
@@ -76,7 +76,7 @@ const LoginScreen = () => {
                             error &&
                             <Text style={styles.errorText}>{error}</Text>
                         }
-                        <TextInput
+                        <TextInputCustom
                             value={email}
                             onChangeText={setEmail}
                             label="Email"
@@ -86,7 +86,7 @@ const LoginScreen = () => {
                             autoCorrect={false}
                             error={emailError}
                         />
-                        <TextInput
+                        <TextInputCustom
                             value={password}
                             onChangeText={setPassword}
                             label="Password"
@@ -94,7 +94,7 @@ const LoginScreen = () => {
                             error={passwordError}
                             secureTextEntry={true}
                         />
-                        <Button
+                        <ButtonCustom
                             title="Sign In"
                             onPress={handleLogin}
                             fullWidth={true}

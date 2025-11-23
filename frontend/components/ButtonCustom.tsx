@@ -22,17 +22,18 @@ interface ButtonProps {
     textStyle?: StyleProp<TextStyle>;
 }
 
-const Button: FC<ButtonProps> = ({
-                                     title,
-                                     onPress,
-                                     variant = 'primary',
-                                     size = 'medium',
-                                     fullWidth = false,
-                                     disabled = false,
-                                     loading = false,
-                                     style,
-                                     textStyle,
-                                 }) => {
+const ButtonCustom: FC<ButtonProps> = (
+    {
+        title,
+        onPress,
+        variant = 'primary',
+        size = 'medium',
+        fullWidth = false,
+        disabled = false,
+        loading = false,
+        style,
+        textStyle,
+    }) => {
     const buttonStyle = [
         styles.button,
         styles[variant],
@@ -63,14 +64,13 @@ const Button: FC<ButtonProps> = ({
                     }
                 />
             ) : (
-                <Text>{title}</Text>
+                <Text style={textStyles}>{title}</Text>
             )}
-
         </TouchableOpacity>
     );
 };
 
-export default Button;
+export default ButtonCustom;
 
 const styles = StyleSheet.create({
     button: {

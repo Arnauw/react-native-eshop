@@ -7,11 +7,11 @@ import {
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
 import Wrapper from "@/components/wrapper";
-import TextInput from "@/components/TextInput"
+import TextInputCustom from "@/components/TextInputCustom"
 import {Foundation} from "@expo/vector-icons";
 import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
-import Button from "@/components/Button";
+import ButtonCustom from "@/components/ButtonCustom";
 import {useState} from 'react';
 
 const SignUpScreen = () => {
@@ -86,7 +86,7 @@ const SignUpScreen = () => {
                             error &&
                             <Text style={styles.errorText}>{error}</Text>
                         }
-                        <TextInput
+                        <TextInputCustom
                             value={email}
                             onChangeText={setEmail}
                             label="Email"
@@ -96,7 +96,7 @@ const SignUpScreen = () => {
                             autoCorrect={false}
                             error={emailError}
                         />
-                        <TextInput
+                        <TextInputCustom
                             value={password}
                             onChangeText={setPassword}
                             label="Password"
@@ -104,7 +104,7 @@ const SignUpScreen = () => {
                             error={passwordError}
                             secureTextEntry={true}
                         />
-                        <TextInput
+                        <TextInputCustom
                             value={confirmPassword}
                             onChangeText={setConfirmPassword}
                             label="Confirm password"
@@ -112,7 +112,7 @@ const SignUpScreen = () => {
                             error={confirmError}
                             secureTextEntry={true}
                         />
-                        <Button
+                        <ButtonCustom
                             title="Sign Up"
                             onPress={handleSignUp}
                             fullWidth={true}

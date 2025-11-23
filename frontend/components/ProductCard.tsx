@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
 import {Product} from "@/types/type";
-import Button from "@/components/Button"
+import ButtonCustom from "@/components/ButtonCustom"
 import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";
 import {FC} from 'react';
@@ -24,7 +24,8 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
     const {id, title, price, category, image, rating} = product;
     const router = useRouter();
     const handleProductRoute = (e: any) => {
-        router.push(`/product/${id}` as any);
+        router.push(`/product/${id}`);
+    //     as any is probably absolutely not necessary here so I removed it.
     }
     const handleAddToCart = () => {
         Toast.show({
@@ -86,7 +87,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                         Notes: {`${rating?.rate}/${rating?.count}`}
                     </Text>
                     {!compact &&
-                        <Button
+                        <ButtonCustom
                             onPress={handleAddToCart}
                             title={'Add to cart'}
                             size={'small'}

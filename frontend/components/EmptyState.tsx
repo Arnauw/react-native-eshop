@@ -6,7 +6,7 @@ import {
 import {AppColors} from "@/constants/theme";
 import {FC} from "react";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
-import Button from "@/components/Button";
+import ButtonCustom from "@/components/ButtonCustom";
 
 type EmptyStateType =
     "cart" |
@@ -92,7 +92,7 @@ const EmptyState: FC<EmptyStateProps> = (
             </Text>
             {
                 actionLabel && onAction && (
-                    <Button
+                    <ButtonCustom
                         title={actionLabel}
                         onPress={onAction}
                         variant="primary"

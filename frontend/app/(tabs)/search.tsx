@@ -16,7 +16,7 @@ import {
 import Wrapper from "@/components/wrapper";
 import {AppColors} from "@/constants/theme";
 import {useProductStore} from "@/store/productStore";
-import TextInput from "@/components/TextInput";
+import TextInputCustom from "@/components/TextInputCustom";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
 import ProductCard from "@/components/ProductCard";
@@ -71,7 +71,7 @@ const SearchScreen = () => {
                 <View style={styles.searchRow}>
                     <View style={styles.searchContainer}>
                         <View style={styles.inputWrapper}>
-                            <TextInput
+                            <TextInputCustom
                                 value={searchQuery}
                                 onChangeText={handleSearchChange}
                                 placeholder="Search a product"

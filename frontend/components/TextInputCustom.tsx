@@ -1,10 +1,10 @@
 import {
-    Text, 
-    View, 
-    StyleSheet, 
-    KeyboardTypeOptions, 
-    StyleProp, 
-    ViewStyle, 
+    Text,
+    View,
+    StyleSheet,
+    KeyboardTypeOptions,
+    StyleProp,
+    ViewStyle,
     TextStyle,
     TextInput as RNTextInput,
 } from 'react-native';
@@ -28,22 +28,23 @@ interface TextInputProps {
     labelStyle?: StyleProp<TextStyle>;
 }
 
-const TextInput: FC<TextInputProps> = ({
-    value,
-    onChangeText,
-    placeholder,
-    label,
-    error,
-    secureTextEntry = false,
-    keyboardType = "default",
-    autoCapitalize = "sentences",
-    autoCorrect = true, 
-    multiline = false,
-    numberOfLines = 1,
-    style,
-    inputStyle,
-    labelStyle,
-                                       }) => {
+const TextInputCustom: FC<TextInputProps> = (
+    {
+        value,
+        onChangeText,
+        placeholder,
+        label,
+        error,
+        secureTextEntry = false,
+        keyboardType = "default",
+        autoCapitalize = "sentences",
+        autoCorrect = true,
+        multiline = false,
+        numberOfLines = 1,
+        style,
+        inputStyle,
+        labelStyle,
+    }) => {
     return (
         <View style={[styles.container, style]}>
             {
@@ -75,7 +76,7 @@ const TextInput: FC<TextInputProps> = ({
     );
 };
 
-export default TextInput;
+export default TextInputCustom;
 
 const styles = StyleSheet.create({
     container: {
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
         minHeight: 100,
         textAlignVertical: "top"
     },
-    inputError:{
+    inputError: {
         borderColor: AppColors.error
     },
     errorText: {
