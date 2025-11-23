@@ -16,14 +16,10 @@ const HomeHeader = () => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Logo/>
-                <View
-                    style={styles.iconContainer}
-                >
+                <View style={styles.iconContainer}>
                     <TouchableOpacity
                         style={styles.searchButton}
-                        onPress={() => {
-                            router.push(`/(tabs)/search`);
-                        }}
+                        onPress={() => router.push(`/(tabs)/search`)}
                     >
                         <Ionicons
                             name={'search'}
@@ -31,11 +27,10 @@ const HomeHeader = () => {
                             color={AppColors.primary[700]}
                         />
                     </TouchableOpacity>
+
                     <TouchableOpacity
                         style={styles.searchButton}
-                        onPress={() => {
-                            router.push(`/(tabs)/favorites`);
-                        }}
+                        onPress={() => router.push(`/(tabs)/favorites`)}
                     >
                         <MaterialCommunityIcons
                             name={'heart-outline'}
@@ -43,16 +38,13 @@ const HomeHeader = () => {
                             color={AppColors.primary[700]}
                         />
                         <View style={styles.itemsView}>
-                            <Text style={styles.itemsText}>
-                                5
-                            </Text>
+                            <Text style={styles.itemsText}>5</Text>
                         </View>
                     </TouchableOpacity>
+
                     <TouchableOpacity
                         style={styles.searchButton}
-                        onPress={() => {
-                            router.push(`/(tabs)/cart`);
-                        }}
+                        onPress={() => router.push(`/(tabs)/cart`)}
                     >
                         <MaterialCommunityIcons
                             name={'cart-outline'}
@@ -60,9 +52,7 @@ const HomeHeader = () => {
                             color={AppColors.primary[700]}
                         />
                         <View style={styles.itemsView}>
-                            <Text style={styles.itemsText}>
-                                5
-                            </Text>
+                            <Text style={styles.itemsText}>5</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -72,7 +62,6 @@ const HomeHeader = () => {
 };
 
 export default HomeHeader;
-
 
 const styles = StyleSheet.create({
     container: {
@@ -104,25 +93,26 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         borderWidth: 1,
         borderColor: AppColors.primary[500],
-        position: 'relative',
     },
     itemsView: {
         position: "absolute",
-        top: -5,
-        right: -5,
-        borderRadius: 50,
-        width: 15,
-        height: 15,
+        top: -8,
+        right: -8,
+        width: 18,
+        height: 18,
+        borderRadius: 9,
         backgroundColor: AppColors.background.primary,
-        alignItems: "center",
-        justifyContent: "center",
         borderWidth: 1,
         borderColor: AppColors.primary[500],
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 10,
     },
     itemsText: {
         fontSize: 10,
         color: AppColors.accent[500],
-        fontWeight: 800,
+        fontWeight: "bold",
+        includeFontPadding: false,
+        textAlignVertical: 'center',
     },
 });
-

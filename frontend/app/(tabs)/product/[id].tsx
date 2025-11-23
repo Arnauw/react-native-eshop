@@ -4,16 +4,19 @@ import {
     StyleSheet,
     Dimensions,
     ScrollView,
-    Image,
+    Image, TouchableOpacity,
 } from 'react-native';
 import {useState, useEffect} from 'react';
 import {useLocalSearchParams, useRouter} from "expo-router";
 import CommonHeader from "@/components/CommonHeader";
-import {AppColors} from "@/constants/theme";
+import {AppColors,} from "@/constants/theme";
 import {Product} from "@/types/type"
 import {getProduct} from "@/lib/API"
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ButtonCustom from "@/components/ButtonCustom";
+import Rating from "@/components/Rating";
+import {AntDesign} from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 
 const {width} = Dimensions.get("window");
 
@@ -25,6 +28,29 @@ const SingleProductScreen = () => {
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const router = useRouter();
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity((prev) => prev - 1);
+        }
+        console.log(quantity);
+    };
+
+    const handleIncreaseQuantity = () => {
+        if (quantity < 100) {
+            setQuantity((prev) => prev + 1);
+        }
+        console.log(quantity);
+    };
+
+    const handleAddToCart = () => {
+        Toast.show({
+            type: "success",
+            text1: `Product ${product?.title} has been added to cart`,
+            text2: "View cart to complete your purchase.",
+            visibilityTime: 2000,
+        });
+    };
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -39,14 +65,17 @@ const SingleProductScreen = () => {
                 setLoading(false);
             }
         };
-        fetchProductData();
+        if (id) {
+            fetchProductData();
+            setQuantity(1);
+        }
     }, [id]);
     console.log('Product data: ', product);
 
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <LoadingSpinner/>
+                <LoadingSpinner fullScreen={true}/>
             </View>
         );
     }
@@ -79,7 +108,76 @@ const SingleProductScreen = () => {
                         style={styles.productImage}
                     />
                 </View>
+                <View style={styles.productInfo}>
+                    <Text style={styles.category}>
+                        {
+                            product?.category?.charAt(0).toUpperCase()
+                            + (product?.category?.slice(1))
+                        }
+                    </Text>
+                    <Text style={styles.title}>
+                        {product?.title}
+                    </Text>
+                    <View style={styles.ratingContainer}>
+                        <Rating
+                            rating={product?.rating?.rate}
+                            count={product?.rating?.count}
+                        />
+                    </View>
+                    <Text style={styles.price}>
+                        {product?.price.toFixed(2)} €
+                    </Text>
+                    <View style={styles.divider}/>
+                    <Text style={styles.descriptionTitle}>
+                        Description
+                    </Text>
+                    <Text style={styles.description}>
+                        {product?.description}
+                    </Text>
+                    <View style={styles.quantityContainer}>
+                        <Text style={styles.quantityTitle}>
+                            Quantity
+                        </Text>
+                        <View style={styles.quantityControls}>
+                            <TouchableOpacity
+                                onPress={handleDecreaseQuantity}
+                                disabled={quantity <= 1}
+                                style={styles.quantityButton}
+                            >
+                                <AntDesign
+                                    name="minus"
+                                    size={20}
+                                    color={AppColors.primary[600]}
+                                />
+                            </TouchableOpacity>
+                            <Text style={styles.quantityValue}>
+                                {quantity}
+                            </Text>
+                            <TouchableOpacity
+                                onPress={handleIncreaseQuantity}
+                                disabled={quantity >= 100}
+                                style={styles.quantityButton}
+                            >
+                                <AntDesign
+                                    name="plus"
+                                    size={20}
+                                    color={AppColors.primary[600]}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
             </ScrollView>
+            <View style={styles.footer}>
+                <Text style={styles.totalPrice}>
+                    Total: {(product?.price * quantity).toFixed(2)} €
+                </Text>
+                <ButtonCustom 
+                    title="Add to cart"
+                    onPress={handleAddToCart}
+                    style={styles.addToCartButton}
+                    />
+            </View>
         </View>
     );
 };

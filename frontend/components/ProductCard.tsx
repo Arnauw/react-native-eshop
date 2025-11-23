@@ -13,6 +13,7 @@ import ButtonCustom from "@/components/ButtonCustom"
 import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";
 import {FC} from 'react';
+import Rating from "@/components/Rating";
 
 interface ProductCardProps {
     product: Product;
@@ -25,7 +26,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
     const router = useRouter();
     const handleProductRoute = (e: any) => {
         router.push(`/product/${id}`);
-    //     as any is probably absolutely not necessary here so I removed it.
+        //     as any is probably absolutely not necessary here so I removed it.
     }
     const handleAddToCart = () => {
         Toast.show({
@@ -34,10 +35,8 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
             text2: 'View cart to complete your purchase',
             visibilityTime: 2000,
             // position: "bottom",
-        })
-        // Alert.alert(`Product ${title} added to cart`);
+        });
     };
-
 
     return (
         <TouchableOpacity
@@ -84,7 +83,16 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                             && {marginBottom: 7}
                         ]}
                     >
-                        Notes: {`${rating?.rate}/${rating?.count}`}
+                        <View style={
+                            !compact &&
+                            {paddingBottom: 7}
+                        }>
+                            <Rating
+                                rating={rating?.rate}
+                                count={rating?.count}
+                                size={14}
+                            />
+                        </View>
                     </Text>
                     {!compact &&
                         <ButtonCustom
@@ -100,7 +108,6 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
 };
 
 export default ProductCard;
-
 
 const styles = StyleSheet.create({
     price: {
