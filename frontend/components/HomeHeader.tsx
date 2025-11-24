@@ -17,7 +17,10 @@ import ButtonCustom from "@/components/ButtonCustom";
 const HomeHeader = () => {
     const router = useRouter();
     const {items} = useCartStore();
-    const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+    const cartItemCount = items.reduce(
+        (sum, item) =>
+            sum + item.quantity, 0
+    );
     const {favoriteItems} = useFavoriteStore();
 
     return (

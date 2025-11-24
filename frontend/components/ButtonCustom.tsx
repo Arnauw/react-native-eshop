@@ -8,7 +8,6 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {FC} from 'react';
 
 interface ButtonProps {
     title: string;
@@ -22,7 +21,7 @@ interface ButtonProps {
     textStyle?: StyleProp<TextStyle>;
 }
 
-const ButtonCustom: FC<ButtonProps> = (
+const ButtonCustom = (
     {
         title,
         onPress,
@@ -33,7 +32,8 @@ const ButtonCustom: FC<ButtonProps> = (
         loading = false,
         style,
         textStyle,
-    }) => {
+    }: ButtonProps
+) => {
     const buttonStyle = [
         styles.button,
         styles[variant],

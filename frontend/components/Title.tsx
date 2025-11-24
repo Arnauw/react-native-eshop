@@ -5,8 +5,12 @@ import {
 import {AppColors} from "@/constants/theme";
 import {ReactNode} from "react";
 
+interface TitleProps {
+    children: ReactNode;
+}
+
 const Title = (
-    {children}: { children: ReactNode }
+    {children}: TitleProps
 ) => {
     return (
         <Text

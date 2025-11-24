@@ -12,7 +12,6 @@ import {Product} from "@/types/product";
 import ButtonCustom from "@/components/ButtonCustom"
 import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";
-import {FC} from 'react';
 import Rating from "@/components/Rating";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
@@ -25,7 +24,13 @@ interface ProductCardProps {
     customStyle?: StyleProp<ViewStyle>;
 }
 
-const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
+const ProductCard = (
+    {
+        product,
+        compact = false,
+        customStyle
+    }: ProductCardProps
+) => {
     const {id, title, price, category, image, rating} = product;
     const router = useRouter();
     const {addItem, getItemCount} = useCartStore();
@@ -57,7 +62,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
             // position: "bottom",
         });
     };
-    
+
     const handleToggleFavorite = () => {
         toggleFavorite(product);
     };
@@ -136,12 +141,12 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                             />
                         </View>
                     </Text>
-                        <ButtonCustom
-                            onPress={handleAddToCart}
-                            title={'Add to cart'}
-                            size={'small'}
-                            variant={'outline'}
-                        />
+                    <ButtonCustom
+                        onPress={handleAddToCart}
+                        title={'Add to cart'}
+                        size={'small'}
+                        variant={'outline'}
+                    />
                 </View>
             </View>
         </TouchableOpacity>

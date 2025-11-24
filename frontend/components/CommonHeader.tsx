@@ -1,24 +1,30 @@
 import {
-    Platform, 
-    StyleSheet, 
-    TouchableOpacity, 
+    Platform,
+    StyleSheet,
+    TouchableOpacity,
     View
 } from 'react-native';
 import {
-    Feather, 
-    AntDesign, 
+    Feather,
+    AntDesign,
     MaterialCommunityIcons
 } from "@expo/vector-icons";
 import {AppColors} from "@/constants/theme";
 import {useRouter} from "expo-router";
 
-interface Props {
+interface CommonHeaderProps {
     isFav?: boolean;
     showCart?: boolean;
     handleToggleFavorite?: () => void;
 }
 
-const CommonHeader = ({isFav, showCart, handleToggleFavorite}: Props) => {
+const CommonHeader = (
+    {
+        isFav,
+        showCart,
+        handleToggleFavorite
+    }: CommonHeaderProps
+) => {
     const router = useRouter();
     const handleGoBack = () => {
         if (router.canGoBack()) {

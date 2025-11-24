@@ -1,14 +1,19 @@
 import {
     StyleSheet,
-    Text,
     View,
     Platform
 } from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {AppColors} from "@/constants/theme";
-import {ReactNode} from "react";
+import { ReactNode } from "react";
 
-const Wrapper = ({children}: { children: ReactNode }) => {
+interface WrapperProps {
+    children: ReactNode;
+}
+
+const Wrapper = (
+    {children}: WrapperProps
+) => {
     return (
         <SafeAreaView style={styles.safeView}>
             <View style={styles.container}>

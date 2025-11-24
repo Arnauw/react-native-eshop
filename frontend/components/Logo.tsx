@@ -8,7 +8,6 @@ import {useRouter} from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Logo = () => {
-
     const router = useRouter();
 
     return (
@@ -26,7 +25,6 @@ const Logo = () => {
 };
 
 export default Logo;
-
 
 const styles = StyleSheet.create({
     logoView: {

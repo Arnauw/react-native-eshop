@@ -6,8 +6,12 @@ import {ReactNode} from "react";
 import HomeHeader from "@/components/HomeHeader";
 import {AppColors} from "@/constants/theme";
 
+interface MainLayoutProps {
+    children: ReactNode;
+}
+
 const MainLayout = (
-    {children}: { children: ReactNode }
+    {children}: MainLayoutProps
 ) => {
     return (
         <>
