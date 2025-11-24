@@ -9,9 +9,16 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {AppColors} from "@/constants/theme";
 import Logo from "@/components/Logo";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import {router} from "expo-router";
+import {useRouter} from "expo-router";
+import useCartStore from "@/store/cartStore";
+import useFavoriteStore from "@/store/favoriteStore";
 
 const HomeHeader = () => {
+    const router = useRouter();
+    const {items} = useCartStore();
+    const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+    const {favoriteItems} = useFavoriteStore();
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -38,7 +45,9 @@ const HomeHeader = () => {
                             color={AppColors.primary[700]}
                         />
                         <View style={styles.itemsView}>
-                            <Text style={styles.itemsText}>5</Text>
+                            <Text style={styles.itemsText}>
+                                {favoriteItems?.length ? favoriteItems?.length : 0}
+                            </Text>
                         </View>
                     </TouchableOpacity>
 
@@ -52,7 +61,9 @@ const HomeHeader = () => {
                             color={AppColors.primary[700]}
                         />
                         <View style={styles.itemsView}>
-                            <Text style={styles.itemsText}>5</Text>
+                            <Text style={styles.itemsText}>
+                                {cartItemCount > 0 ? cartItemCount : 0}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>

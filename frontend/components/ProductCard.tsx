@@ -14,6 +14,8 @@ import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";
 import {FC} from 'react';
 import Rating from "@/components/Rating";
+import useCartStore from "@/store/cartStore";
+import useFavoriteStore from "@/store/favoriteStore";
 
 interface ProductCardProps {
     product: Product;
@@ -24,11 +26,16 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
     const {id, title, price, category, image, rating} = product;
     const router = useRouter();
+    const {addItem} = useCartStore();
+    const {isFavorite, toggleFavorite} = useFavoriteStore();
+    
     const handleProductRoute = (e: any) => {
         router.push(`/product/${id}`);
-        //     as any is probably absolutely not necessary here so I removed it.
-    }
+        //     "as any" is probably absolutely not necessary here so I removed it.
+    };
+    
     const handleAddToCart = () => {
+        addItem(product, 1);
         Toast.show({
             type: 'success',
             text1: `Product ${title} added to cart`,
@@ -38,6 +45,7 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
         });
     };
 
+    
     return (
         <TouchableOpacity
             onPress={handleProductRoute}
