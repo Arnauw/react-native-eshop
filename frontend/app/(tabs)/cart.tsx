@@ -9,6 +9,7 @@ import useCartStore from "@/store/cartStore";
 import {useAuthStore} from "@/store/authStore";
 import {useState} from "react";
 import MainLayout from "@/components/MainLayout";
+import EmptyState from "@/components/EmptyState";
 
 
 const CartScreen = () => {
@@ -16,15 +17,24 @@ const CartScreen = () => {
     const {items, getTotalPrice, clearCart} = useCartStore();
     const {user} = useAuthStore();
     const [loading, setLoading] = useState<boolean>(false);
-    
+
     return (
-           <MainLayout>
-               <View>
-                   <Text>
-                       Cart
-                   </Text>
-               </View>
-           </MainLayout>
+        <MainLayout>
+            {items?.length > 0 ? (
+                <View>
+                    <Text>
+                        Products
+                    </Text>
+                </View>
+            ) : (
+                <EmptyState
+                    type="cart"
+                    message="Your cart is empty"
+                    actionLabel="Start adding products"
+                    onAction={() => router.push("/")}
+                />
+            )}
+        </MainLayout>
     );
 };
 

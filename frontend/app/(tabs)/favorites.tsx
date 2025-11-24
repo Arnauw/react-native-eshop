@@ -19,7 +19,7 @@ const FavoritesScreen = () => {
     console.log("FavoritesScreen: ", favoriteItems);
 
     const navigateToProducts = async () => {
-        router.push("/(tabs)/shop");
+        router.push("/");
     };
 
     if (favoriteItems?.length === 0) {
