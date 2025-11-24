@@ -12,6 +12,7 @@ import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
+import ButtonCustom from "@/components/ButtonCustom";
 
 const HomeHeader = () => {
     const router = useRouter();
@@ -24,6 +25,10 @@ const HomeHeader = () => {
             <View style={styles.header}>
                 <Logo/>
                 <View style={styles.iconContainer}>
+
+                    {/* REMOVE THIS LATER IT'S FOR TESTING */}
+                    <ButtonCustom title="Clear Cart" onPress={() => useCartStore.persist.clearStorage()} />
+                    
                     <TouchableOpacity
                         style={styles.searchButton}
                         onPress={() => router.push(`/(tabs)/search`)}

@@ -23,6 +23,11 @@ const useCartStore = create<CartState>()(
         (set, get) => ({
             items: [],
             addItem: (product: Product, quantity: number = 1) => {
+                const currentCount = get().getItemCount();
+                if (currentCount + quantity > 99) {
+                    return;
+                }
+
                 set((state) => {
                     const existingItem = state.items.find(
                         (item) => item.product.id === product.id

@@ -26,7 +26,7 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyle}) => {
     const {id, title, price, category, image, rating} = product;
     const router = useRouter();
-    const {addItem} = useCartStore();
+    const {addItem, getItemCount} = useCartStore();
     const {isFavorite, toggleFavorite} = useFavoriteStore();
     
     const handleProductRoute = (e: any) => {
@@ -35,6 +35,16 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
     };
     
     const handleAddToCart = () => {
+        if (getItemCount() >= 99) {
+            Toast.show({
+                type: 'error',
+                text1: 'Cart is full',
+                text2: 'You cannot have more than 99 items.',
+                visibilityTime: 2000,
+            });
+            return;
+        }
+
         addItem(product, 1);
         Toast.show({
             type: 'success',
