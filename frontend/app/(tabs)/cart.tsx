@@ -1,16 +1,122 @@
-import {StyleSheet, Text, View} from 'react-native';
-import {SafeAreaView} from "react-native-safe-area-context";
+import {
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+import {AppColors} from "@/constants/theme";
+import {useRouter} from "expo-router";
+import useCartStore from "@/store/cartStore";
+import {useAuthStore} from "@/store/authStore";
+import {useState} from "react";
+import MainLayout from "@/components/MainLayout";
 
-const cart = () => {
+
+const CartScreen = () => {
+    const router = useRouter();
+    const {items, getTotalPrice, clearCart} = useCartStore();
+    const {user} = useAuthStore();
+    const [loading, setLoading] = useState<boolean>(false);
+    
     return (
-        <SafeAreaView>
-            <View style={{ flex: 1 }}>
-                <Text style={{color: 'black'}}>Hello</Text>
-            </View>
-        </SafeAreaView>
+           <MainLayout>
+               <View>
+                   <Text>
+                       Cart
+                   </Text>
+               </View>
+           </MainLayout>
     );
 };
 
-export default cart;
+export default CartScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        position: 'relative',
+        // backgroundColor: AppColors.background.secondary,
+    },
+    resetText: {
+        color: AppColors.error
+    },
+    headerView: {
+        paddingTop: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: AppColors.gray[200],
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        alignItems: 'flex-start'
+    },
+    header: {
+        paddingBottom: 16,
+        paddingTop: 7,
+        backgroundColor: AppColors.background.primary,
+    },
+    itemCount: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        color: AppColors.text.secondary,
+        marginTop: 4,
+    },
+    cartItemsContainer: {
+        paddingVertical: 16,
+    },
+    summaryContainer: {
+        // position: 'absolute',
+        // bottom: 200,
+        // width: "100%",
+        backgroundColor: AppColors.background.primary,
+        paddingVertical: 20,
+        borderTopWidth: 1,
+        borderTopColor: AppColors.gray[200],
+    },
+    summaryRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    summaryLabel: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        color: AppColors.text.secondary
+    },
+    summaryValue: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14,
+        color: AppColors.text.primary,
+    },
+    divider: {
+        height: 1,
+        backgroundColor: AppColors.gray[200],
+        marginVertical: 12,
+    },
+    totalLabel: {
+        fontFamily: "Inter-SemiBold",
+        fontSize: 16,
+        color: AppColors.text.primary,
+    },
+    totalValue: {
+        fontFamily: 'Inter-Bold',
+        fontSize: 20,
+        color: AppColors.primary[600],
+    },
+    checkoutButton: {
+        marginTop: 16,
+    },
+    alertView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    alertText: {
+        fontWeight: "500",
+        textAlign: 'center',
+        color: AppColors.error,
+        marginRight: 3,
+    },
+    loginText: {
+        fontWeight: "700",
+        color: AppColors.primary[500]
+    },
+});
