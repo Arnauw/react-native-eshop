@@ -10,7 +10,7 @@ import {useState, useEffect} from 'react';
 import {useLocalSearchParams, useRouter} from "expo-router";
 import CommonHeader from "@/components/CommonHeader";
 import {AppColors,} from "@/constants/theme";
-import {Product} from "@/types/type"
+import {Product} from "@/types/product"
 import {getProduct} from "@/lib/API"
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ButtonCustom from "@/components/ButtonCustom";

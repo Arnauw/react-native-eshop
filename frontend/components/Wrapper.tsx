@@ -8,7 +8,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {AppColors} from "@/constants/theme";
 import {ReactNode} from "react";
 
-const wrapper = ({children}: { children: ReactNode }) => {
+const Wrapper = ({children}: { children: ReactNode }) => {
     return (
         <SafeAreaView style={styles.safeView}>
             <View style={styles.container}>
@@ -18,7 +18,7 @@ const wrapper = ({children}: { children: ReactNode }) => {
     );
 };
 
-export default wrapper;
+export default Wrapper;
 
 const styles = StyleSheet.create({
     safeView: {

@@ -4,7 +4,7 @@ import {
     getProductsByCategory,
     searchProducts
 } from '@/lib/API';
-import {Product} from '@/types/type';
+import {Product} from '@/types/product';
 import {create} from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createJSONStorage, persist} from 'zustand/middleware';

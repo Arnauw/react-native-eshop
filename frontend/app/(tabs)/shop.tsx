@@ -12,7 +12,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
 import {EXPO_PUBLIC_API_URL as API_URL} from "@/config";
 import {AppColors} from "@/constants/theme";
-import Wrapper from "@/components/wrapper";
+import Wrapper from "@/components/Wrapper";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import {router, useLocalSearchParams, useRouter} from "expo-router";
 import {useProductStore} from "@/store/productStore";
@@ -79,7 +79,7 @@ const ShopScreen = () => {
                     <TouchableOpacity
                         style={styles.searchRow}
                         onPress={() => {
-                            router.push("/(tabs)/search");
+                            router.push("/search");
                         }}
                     >
                         <View style={styles.searchContainer}>

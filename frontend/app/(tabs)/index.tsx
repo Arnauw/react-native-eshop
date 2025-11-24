@@ -9,7 +9,7 @@ import {
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeHeader from "@/components/HomeHeader";
 import {useEffect, useState} from "react";
-import {Product} from "@/types/type";
+import {Product} from "@/types/product";
 import {useProductStore} from "@/store/productStore";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {AppColors} from "@/constants/theme";
@@ -44,7 +44,7 @@ export default function HomeScreen() {
 
     const navigateToCategory = (category: string) => {
         router.push({
-            pathname: '/(tabs)/shop',
+            pathname: '/shop',
             params: {
                 category,
             },

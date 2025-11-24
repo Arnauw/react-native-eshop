@@ -8,7 +8,7 @@ import {
 import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
 import {useEffect} from "react";
-import Wrapper from "@/components/wrapper";
+import Wrapper from "@/components/Wrapper";
 import {AppColors} from "@/constants/theme";
 import ButtonCustom from "@/components/ButtonCustom";
 import {Feather, FontAwesome5, Foundation} from "@expo/vector-icons";
@@ -37,7 +37,7 @@ const ProfileScreen = () => {
             ),
             title: 'My cart',
             onPress: () => {
-                router.push('/(tabs)/cart');
+                router.push('/cart');
             },
         },
         {
@@ -51,7 +51,7 @@ const ProfileScreen = () => {
             ),
             title: 'My orders',
             onPress: () => {
-                // router.push('/(tabs)/orders');
+                // router.push('/orders');
             },
         },
         {
@@ -65,7 +65,7 @@ const ProfileScreen = () => {
             ),
             title: 'My payments',
             onPress: () => {
-                // router.push('/(tabs)/cart');
+                // router.push('/cart');
             },
         },
         {
@@ -79,7 +79,7 @@ const ProfileScreen = () => {
             ),
             title: 'Delivery address',
             onPress: () => {
-                // router.push('/(tabs)/cart');
+                // router.push('/cart');
             },
         },
         {
@@ -93,7 +93,7 @@ const ProfileScreen = () => {
             ),
             title: 'Parameters',
             onPress: () => {
-                // router.push('/(tabs)/cart');
+                // router.push('/cart');
             },
         },
     ];
@@ -193,14 +193,14 @@ const ProfileScreen = () => {
                                       fullWidth={true}
                                       style={styles.loginButton}
                                       textStyle={styles.buttonText}
-                                      onPress={() => router.push("/(tabs)/login")}
+                                      onPress={() => router.push("/login")}
                         />
                         <ButtonCustom title="Register"
                                       fullWidth={true}
                                       variant='outline'
                                       style={styles.signupButton}
                                       textStyle={styles.signupButtonText}
-                                      onPress={() => router.push("/(tabs)/signup")}
+                                      onPress={() => router.push("/signup")}
                         />
                     </View>
                 </View>

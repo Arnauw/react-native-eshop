@@ -13,7 +13,7 @@ import {
     AntDesign,
     Ionicons
 } from "@expo/vector-icons";
-import Wrapper from "@/components/wrapper";
+import Wrapper from "@/components/Wrapper";
 import {AppColors} from "@/constants/theme";
 import {useProductStore} from "@/store/productStore";
 import TextInputCustom from "@/components/TextInputCustom";

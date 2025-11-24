@@ -6,7 +6,7 @@ import {
     ScrollView,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import Wrapper from "@/components/wrapper";
+import Wrapper from "@/components/Wrapper";
 import {Foundation} from "@expo/vector-icons";
 import {useState} from "react";
 import {useRouter} from "expo-router";
@@ -50,7 +50,7 @@ const LoginScreen = () => {
     const handleLogin = async () => {
         if (validateForm()) {
             await login(email, password);
-            router.push("/(tabs)/profile");
+            router.push("/profile");
             setEmail("");
             setPassword("");
         }

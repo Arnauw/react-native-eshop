@@ -9,7 +9,7 @@ import {useRouter} from "expo-router";
 import useFavoriteStore from "@/store/favoriteStore";
 import {AppColors} from "@/constants/theme";
 import HomeHeader from "@/components/HomeHeader";
-import Wrapper from "@/components/wrapper";
+import Wrapper from "@/components/Wrapper";
 import ProductCard from "@/components/ProductCard";
 import EmptyState from "@/components/EmptyState";
 

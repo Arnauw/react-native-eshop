@@ -35,7 +35,7 @@ const HomeHeader = () => {
 
                     <TouchableOpacity
                         style={styles.searchButton}
-                        onPress={() => router.push(`/(tabs)/search`)}
+                        onPress={() => router.push(`/search`)}
                     >
                         <Ionicons
                             name={'search'}
@@ -46,7 +46,7 @@ const HomeHeader = () => {
 
                     <TouchableOpacity
                         style={styles.searchButton}
-                        onPress={() => router.push(`/(tabs)/favorites`)}
+                        onPress={() => router.push(`/favorites`)}
                     >
                         <MaterialCommunityIcons
                             name={'heart-outline'}
@@ -62,7 +62,7 @@ const HomeHeader = () => {
 
                     <TouchableOpacity
                         style={styles.searchButton}
-                        onPress={() => router.push(`/(tabs)/cart`)}
+                        onPress={() => router.push(`/cart`)}
                     >
                         <MaterialCommunityIcons
                             name={'cart-outline'}

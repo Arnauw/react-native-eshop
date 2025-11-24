@@ -6,7 +6,7 @@ import {
     ScrollView,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import Wrapper from "@/components/wrapper";
+import Wrapper from "@/components/Wrapper";
 import TextInputCustom from "@/components/TextInputCustom"
 import {Foundation} from "@expo/vector-icons";
 import {useAuthStore} from "@/store/authStore";
@@ -59,7 +59,7 @@ const SignUpScreen = () => {
         // console.log(email, password, confirmPassword);
         if (validateForm()) {
             await signup(email, password);
-            router.push("/(tabs)/login");
+            router.push("/login");
             setEmail("");
             setPassword("");
             setConfirmPassword("");

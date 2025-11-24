@@ -8,7 +8,7 @@ import {
     Text,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {Product} from "@/types/type";
+import {Product} from "@/types/product";
 import ButtonCustom from "@/components/ButtonCustom"
 import Toast from "react-native-toast-message";
 import {useRouter} from "expo-router";
