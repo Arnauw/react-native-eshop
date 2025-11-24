@@ -17,6 +17,8 @@ import ButtonCustom from "@/components/ButtonCustom";
 import Rating from "@/components/Rating";
 import {AntDesign} from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
+import useCartStore from "@/store/cartStore";
+import useFavoriteStore from "@/store/favoriteStore";
 
 const {width} = Dimensions.get("window");
 
@@ -28,29 +30,8 @@ const SingleProductScreen = () => {
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const router = useRouter();
-
-    const handleDecreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity((prev) => prev - 1);
-        }
-        console.log(quantity);
-    };
-
-    const handleIncreaseQuantity = () => {
-        if (quantity < 100) {
-            setQuantity((prev) => prev + 1);
-        }
-        console.log(quantity);
-    };
-
-    const handleAddToCart = () => {
-        Toast.show({
-            type: "success",
-            text1: `Product ${product?.title} has been added to cart`,
-            text2: "View cart to complete your purchase.",
-            visibilityTime: 2000,
-        });
-    };
+    const {addItem, getItemCount} = useCartStore();
+    const {isFavorite, toggleFavorite} = useFavoriteStore();
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -79,7 +60,6 @@ const SingleProductScreen = () => {
             </View>
         );
     }
-
     if (error || !product) {
         return (
             <View style={styles.errorContainer}>
@@ -94,10 +74,52 @@ const SingleProductScreen = () => {
             </View>
         );
     }
+    const isFav = isFavorite(product?.id);
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity((prev) => prev - 1);
+        }
+        console.log(quantity);
+    };
+
+    const handleIncreaseQuantity = () => {
+        if (quantity < 100) {
+            setQuantity((prev) => prev + 1);
+        }
+        console.log(quantity);
+    };
+
+    const handleAddToCart = () => {
+        if (getItemCount() >= 99) {
+            Toast.show({
+                type: 'error',
+                text1: 'Cart is full',
+                text2: 'You cannot have more than 99 items.',
+                visibilityTime: 2000,
+            });
+            return;
+        }
+
+        addItem(product, quantity);
+        Toast.show({
+            type: "success",
+            text1: `Product ${product?.title} has been added to cart`,
+            text2: "View cart to complete your purchase.",
+            visibilityTime: 2000,
+        });
+    };
+
+    const handleToggleFavorite = () => {
+        toggleFavorite(product);
+    }
 
     return (
         <View style={styles.headerContainerStyle}>
-            <CommonHeader/>
+            <CommonHeader
+                isFav={isFav}
+                handleToggleFavorite={handleToggleFavorite}
+            />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}
@@ -320,7 +342,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: AppColors.primary[600],
     },
-    totalPriceContainer:{
+    totalPriceContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,

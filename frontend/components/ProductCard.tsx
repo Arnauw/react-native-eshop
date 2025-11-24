@@ -16,6 +16,8 @@ import {FC} from 'react';
 import Rating from "@/components/Rating";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
+import {AntDesign} from "@expo/vector-icons";
+import favoriteStore from "@/store/favoriteStore";
 
 interface ProductCardProps {
     product: Product;
@@ -28,12 +30,13 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
     const router = useRouter();
     const {addItem, getItemCount} = useCartStore();
     const {isFavorite, toggleFavorite} = useFavoriteStore();
-    
+    const isFav = isFavorite(id);
+
     const handleProductRoute = (e: any) => {
         router.push(`/product/${id}`);
         //     "as any" is probably absolutely not necessary here so I removed it.
     };
-    
+
     const handleAddToCart = () => {
         if (getItemCount() >= 99) {
             Toast.show({
@@ -54,8 +57,12 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
             // position: "bottom",
         });
     };
-
     
+    const handleToggleFavorite = () => {
+        toggleFavorite(product);
+    };
+
+
     return (
         <TouchableOpacity
             onPress={handleProductRoute}
@@ -72,6 +79,23 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                     style={styles.image}
                     resizeMode="contain"
                 />
+                <TouchableOpacity
+                    onPress={handleToggleFavorite}
+                    style={[
+                        styles.favoriteButton,
+                        {borderWidth: isFav ? 1 : 0}
+                    ]}
+                >
+                    <AntDesign
+                        name="heart"
+                        size={18}
+                        color={
+                            isFav
+                                ? AppColors.error
+                                : AppColors.gray[400]
+                        }
+                    />
+                </TouchableOpacity>
             </View>
 
             <View style={styles.content}>
@@ -163,7 +187,7 @@ const styles = StyleSheet.create({
     favoriteButton: {
         position: 'absolute',
         top: 8,
-        right: -45,
+        right: 8,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderRadius: 18,
         padding: 2,

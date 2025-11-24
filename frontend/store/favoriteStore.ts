@@ -32,7 +32,7 @@ const useFavoriteStore = create<FavoriteState>()(
             toggleFavorite: (product: Product) => {
                 const isFav = get().isFavorite(product.id);
                 if (isFav) {
-                    get().isFavorite(product.id);
+                    get().removeFavorite(product.id);
                 } else {
                     get().addFavorite(product);
                 }
