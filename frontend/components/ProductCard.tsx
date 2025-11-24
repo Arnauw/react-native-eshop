@@ -136,13 +136,12 @@ const ProductCard: FC<ProductCardProps> = ({product, compact = false, customStyl
                             />
                         </View>
                     </Text>
-                    {!compact &&
                         <ButtonCustom
                             onPress={handleAddToCart}
                             title={'Add to cart'}
                             size={'small'}
                             variant={'outline'}
-                        />}
+                        />
                 </View>
             </View>
         </TouchableOpacity>

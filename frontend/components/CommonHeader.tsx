@@ -70,16 +70,12 @@ const CommonHeader = ({isFav, showCart, handleToggleFavorite}: Props) => {
                     <MaterialCommunityIcons
                         name="cart-outline"
                         size={24}
-                        color={
-                            isFav
-                                ? AppColors.background.primary
-                                : AppColors.text.primary
-                        }
-                        fill={
-                            isFav
-                                ? AppColors.background.primary
-                                : 'transparent'
-                        }
+                        color={AppColors.text.primary}
+                        // fill={
+                        //     isFav
+                        //         ? AppColors.background.primary
+                        //         : 'transparent'
+                        // }
                     />
                 </TouchableOpacity>
             </View>
