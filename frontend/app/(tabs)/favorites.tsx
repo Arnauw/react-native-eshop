@@ -22,7 +22,7 @@ const FavoritesScreen = () => {
         router.push("/");
     };
 
-    if (favoriteItems?.length === 0) {
+    if (favoriteItems?.length !== 0) {
         return (
             <Wrapper>
                 <HomeHeader/>

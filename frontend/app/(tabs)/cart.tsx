@@ -10,6 +10,7 @@ import {useAuthStore} from "@/store/authStore";
 import {useState} from "react";
 import MainLayout from "@/components/MainLayout";
 import EmptyState from "@/components/EmptyState";
+import Title from "@/components/Title";
 
 
 const CartScreen = () => {
@@ -21,9 +22,14 @@ const CartScreen = () => {
     return (
         <MainLayout>
             {items?.length > 0 ? (
-                <View>
-                    <Text>
-                        Products
+                <View style={styles.header}>
+                    <Title>
+                        Cart products
+                    </Title>
+                    <Text
+                        style={styles.itemCount}
+                    >
+                        {items?.length}
                     </Text>
                 </View>
             ) : (

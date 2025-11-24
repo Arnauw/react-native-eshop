@@ -9,7 +9,6 @@ import {
     TextInput as RNTextInput,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {FC} from "react";
 
 interface TextInputProps {
     value: string;
@@ -28,7 +27,7 @@ interface TextInputProps {
     labelStyle?: StyleProp<TextStyle>;
 }
 
-const TextInputCustom: FC<TextInputProps> = (
+const TextInputCustom = (
     {
         value,
         onChangeText,
@@ -44,7 +43,8 @@ const TextInputCustom: FC<TextInputProps> = (
         style,
         inputStyle,
         labelStyle,
-    }) => {
+    }: TextInputProps
+) => {
     return (
         <View style={[styles.container, style]}>
             {

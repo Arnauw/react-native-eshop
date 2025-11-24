@@ -4,7 +4,6 @@ import {
     StyleSheet,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {FC} from "react";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import ButtonCustom from "@/components/ButtonCustom";
 
@@ -22,13 +21,13 @@ interface EmptyStateProps {
     onAction?: () => void;
 };
 
-const EmptyState: FC<EmptyStateProps> = (
+const EmptyState = (
     {
         type,
         message,
         actionLabel,
         onAction,
-    }
+    } : EmptyStateProps
 ) => {
     const size = 64;
     const color = AppColors.gray[400];
@@ -84,9 +83,9 @@ const EmptyState: FC<EmptyStateProps> = (
 
     return (
         <View style={styles.container}>
-            <Text style={styles.iconContainer}>
+            <View style={styles.iconContainer}>
                 {getIcon()}
-            </Text>
+            </View>
             <Text style={styles.message}>
                 {message || getDefaultMessage()}
             </Text>

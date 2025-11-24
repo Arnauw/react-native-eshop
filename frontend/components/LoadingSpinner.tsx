@@ -5,7 +5,6 @@ import {
     View
 } from "react-native";
 import {AppColors} from "@/constants/theme";
-import {FC} from "react";
 
 interface LoadingSpinnerProps {
     size?: "small" | "large";
@@ -14,12 +13,14 @@ interface LoadingSpinnerProps {
     fullScreen?: boolean;
 }
 
-const LoadingSpinner: FC<LoadingSpinnerProps> = ({
-    size = "small",
-    color = AppColors.primary[500],
-    text = "Loading...",
-    fullScreen = false,
-}) => {
+const LoadingSpinner = (
+    {
+        size = "small",
+        color = AppColors.primary[500],
+        text = "Loading...",
+        fullScreen = false,
+    }: LoadingSpinnerProps
+) => {
     if (fullScreen) {
         return (
             <View style={styles.fullScreen}>
