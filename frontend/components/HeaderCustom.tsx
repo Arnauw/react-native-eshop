@@ -23,7 +23,7 @@ const HeaderCustom = () => {
     const isProfilePage = pathname === '/profile' || pathname === '/login' || pathname === '/signup';
 
     return (
-        <SafeAreaView style={[styles.container, { backgroundColor: colors.background.primary }]}>
+        <SafeAreaView style={{ backgroundColor: colors.background.primary }}>
             <View style={[styles.header, { borderBottomColor: isDarkMode ? colors.gray[800] : colors.gray[300] }]}>
                 <Logo/>
                 <View style={styles.iconContainer}>
@@ -122,9 +122,6 @@ const HeaderCustom = () => {
 export default HeaderCustom;
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: Platform.OS === "android" ? 35 : 0,
-    },
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -132,6 +129,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingBottom: 5,
         paddingHorizontal: 20,
+        paddingTop: 12,
     },
     iconContainer: {
         flex: 1,
