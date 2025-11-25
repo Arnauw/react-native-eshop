@@ -19,15 +19,16 @@ const HomeHeader = () => {
     const {items} = useCartStore();
     const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const {favoriteItems} = useFavoriteStore();
-    const isRootScreen = pathname === '/' || pathname === '/index';
+    const isProfilePage = pathname === '/profile' || pathname === '/login' || pathname === '/signup';
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Logo/>
                 <View style={styles.iconContainer}>
-                    
-                    {!isRootScreen && router.canGoBack() && (
+
+                    {/* 1. BACK BUTTON */}
+                    {pathname !== '/' && router.canGoBack() && (
                         <TouchableOpacity
                             style={styles.searchButton}
                             onPress={() => router.back()}
@@ -39,7 +40,22 @@ const HomeHeader = () => {
                             />
                         </TouchableOpacity>
                     )}
-                    
+
+                    {/* 2. SHOP BUTTON */}
+                    {pathname !== '/shop' && (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            onPress={() => router.push('/(tabs)/shop')}
+                        >
+                            <MaterialCommunityIcons
+                                name={'storefront-outline'}
+                                size={20}
+                                color={AppColors.primary[700]}
+                            />
+                        </TouchableOpacity>
+                    )}
+
+                    {/* 3. SEARCH BUTTON */}
                     {pathname !== '/search' && (
                         <TouchableOpacity
                             style={styles.searchButton}
@@ -52,7 +68,8 @@ const HomeHeader = () => {
                             />
                         </TouchableOpacity>
                     )}
-                    
+
+                    {/* 4. FAVORITES BUTTON */}
                     {pathname !== '/favorites' && (
                         <TouchableOpacity
                             style={styles.searchButton}
@@ -70,7 +87,7 @@ const HomeHeader = () => {
                             </View>
                         </TouchableOpacity>
                     )}
-                    
+
                     {pathname !== '/cart' && (
                         <TouchableOpacity
                             style={styles.searchButton}
@@ -86,6 +103,19 @@ const HomeHeader = () => {
                                     {cartItemCount > 0 ? cartItemCount : 0}
                                 </Text>
                             </View>
+                        </TouchableOpacity>
+                    )}
+                    
+                    {!isProfilePage && (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            onPress={() => router.push('/profile')}
+                        >
+                            <Ionicons
+                                name={'person-outline'}
+                                size={20}
+                                color={AppColors.primary[700]}
+                            />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -115,6 +145,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'center',
         justifyContent: 'flex-end',
+        gap: 8,
     },
     searchButton: {
         backgroundColor: AppColors.primary[50],
@@ -123,7 +154,6 @@ const styles = StyleSheet.create({
         height: 35,
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 8,
         borderWidth: 1,
         borderColor: AppColors.primary[500],
     },

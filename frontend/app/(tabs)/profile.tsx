@@ -1,14 +1,14 @@
 import {
     Alert,
-    Platform,
     StyleSheet,
-    Text, TouchableOpacity,
+    Text,
+    TouchableOpacity,
     View,
 } from 'react-native';
 import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
 import {useEffect} from "react";
-import Wrapper from "@/components/Wrapper";
+import MainLayout from "@/components/MainLayout";
 import {AppColors} from "@/constants/theme";
 import ButtonCustom from "@/components/ButtonCustom";
 import {Feather, FontAwesome5, Foundation} from "@expo/vector-icons";
@@ -125,9 +125,9 @@ const ProfileScreen = () => {
     };
 
     return (
-        <Wrapper>
+        <MainLayout>
             {user ? (
-                <View>
+                <View style={styles.contentContainer}>
                     <View style={styles.header}>
                         <Text style={styles.title}>My profile</Text>
                     </View>
@@ -143,7 +143,7 @@ const ProfileScreen = () => {
                             <Text style={styles.profileEmail}>{user?.email}</Text>
                             <TouchableOpacity
                                 // style={styles.profileBtn}
-                                // onPress={() => logout()}
+                                onPress={() => logout()}
                             >
                                 <Text style={styles.editProfileText}>Edit my profile</Text>
                             </TouchableOpacity>
@@ -185,11 +185,11 @@ const ProfileScreen = () => {
                     </View>
                 </View>
             ) : (
-                <View style={styles.container}>
+                <View style={styles.guestContainer}>
                     <Text style={styles.title}>Welcome!</Text>
-                    <Text style={styles.message}>Please sign in or register to access your profile.</Text>
+                    <Text style={styles.message}>Please log in or register to access your profile.</Text>
                     <View style={styles.buttonContainer}>
-                        <ButtonCustom title="Sign In"
+                        <ButtonCustom title="Log In"
                                       fullWidth={true}
                                       style={styles.loginButton}
                                       textStyle={styles.buttonText}
@@ -205,23 +205,29 @@ const ProfileScreen = () => {
                     </View>
                 </View>
             )}
-        </Wrapper>
+        </MainLayout>
     );
 };
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-    container: {
+    guestContainer: {
         flex: 1,
         backgroundColor: AppColors.background.primary,
         alignItems: "center",
         justifyContent: "center",
+        paddingHorizontal: 24,
+    },
+    contentContainer: {
+        flex: 1,
+        backgroundColor: AppColors.background.primary,
     },
     header: {
         paddingBottom: 16,
+        paddingHorizontal: 16,
+        paddingTop: 16,
         backgroundColor: AppColors.background.primary,
-        marginTop: Platform.OS === "android" ? 30 : 0,
     },
     title: {
         fontFamily: "Inter-Bold",
@@ -231,8 +237,8 @@ const styles = StyleSheet.create({
     profileCard: {
         flexDirection: 'row',
         alignItems: "center",
-        // backgroundColor: AppColors.background.primary,
         paddingVertical: 20,
+        paddingHorizontal: 16,
         borderBottomWidth: 1,
         borderBottomColor: AppColors.gray[200],
     },
@@ -285,7 +291,7 @@ const styles = StyleSheet.create({
     },
     logoutContainer: {
         marginTop: 24,
-        //paddingHorizontal: 16
+        paddingHorizontal: 16
     },
     logoutButton: {
         backgroundColor: "transparent",
@@ -300,6 +306,7 @@ const styles = StyleSheet.create({
         color: AppColors.text.secondary,
         textAlign: "center",
         marginBottom: 24,
+        marginTop: 8,
     },
     buttonContainer: {
         width: "100%",

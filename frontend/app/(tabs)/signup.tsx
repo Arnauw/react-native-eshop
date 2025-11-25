@@ -1,14 +1,14 @@
 import {
-    Text, 
-    View, 
-    StyleSheet, 
-    KeyboardAvoidingView, 
+    Text,
+    View,
+    StyleSheet,
+    KeyboardAvoidingView,
     ScrollView,
+    Platform
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import Wrapper from "@/components/Wrapper";
+import MainLayout from "@/components/MainLayout";
 import TextInputCustom from "@/components/TextInputCustom"
-import {Foundation} from "@expo/vector-icons";
 import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
 import ButtonCustom from "@/components/ButtonCustom";
@@ -27,17 +27,17 @@ const SignUpScreen = () => {
 
     const validateForm = () => {
         let isValid = true;
-        
+
         if (!email.trim()) {
             setEmailError("Email is required");
             isValid = false;
         } else if (!/\S+@\S+\.\S+/.test(email)) {
-         setEmailError("Invalid email address");
-         isValid = false;
+            setEmailError("Invalid email address");
+            isValid = false;
         } else {
             setEmailError("");
         }
-        
+
         if(!password) {
             setPasswordError("Password is required");
         } else if (password.length < 6) {
@@ -45,7 +45,7 @@ const SignUpScreen = () => {
         } else {
             setPasswordError("");
         }
-        
+
         if (password !== confirmPassword) {
             setConfirmPassword("Passwords do not match");
             isValid = false;
@@ -54,9 +54,8 @@ const SignUpScreen = () => {
         }
         return isValid;
     }
-    
+
     const handleSignUp = async () => {
-        // console.log(email, password, confirmPassword);
         if (validateForm()) {
             await signup(email, password);
             router.push("/login");
@@ -65,22 +64,23 @@ const SignUpScreen = () => {
             setConfirmPassword("");
         }
     }
-    
+
     return (
-        <Wrapper>
-            <KeyboardAvoidingView style={styles.container}>
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
-                    <View>
-                        <View>
-                            <Foundation
-                                name={"shopping-cart"}
-                                size={40}
-                                color={AppColors.primary[500]}
-                            />
-                        </View>
-                        <Text style={styles.title}>ShopNGo</Text>
-                        <Text style={styles.subtitle}>Create a new account</Text>
+        <MainLayout>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{flex: 1}}
+            >
+                <ScrollView
+                    contentContainerStyle={styles.scrollContainer}
+                    showsVerticalScrollIndicator={false}
+                >
+
+                    <View style={styles.header}>
+                        <Text style={styles.title}>Create Account</Text>
+                        <Text style={styles.subtitle}>Sign up to get started!</Text>
                     </View>
+
                     <View style={styles.form}>
                         {
                             error &&
@@ -122,39 +122,29 @@ const SignUpScreen = () => {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-        </Wrapper>
+        </MainLayout>
     );
 };
 
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // backgroundColor: AppColors.background.primary,
-    },
     scrollContainer: {
         flexGrow: 1,
-        paddingTop: 60,
+        justifyContent: 'center',
+        paddingHorizontal: 24,
         paddingBottom: 40,
+        paddingTop: 20,
     },
     header: {
         alignItems: 'center',
-        marginBottom: 40,
-    },
-    logoContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: AppColors.primary[50],
-        alignItems: "center",
-        justifyContent: 'center',
-        marginBottom: 16,
+        marginBottom: 32,
     },
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 28,
         color: AppColors.text.primary,
+        marginBottom: 8,
     },
     subtitle: {
         fontFamily: "Inter-Regular",
@@ -165,23 +155,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     button: {
-        marginTop: 16,
-    },
-    footer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 24
-    },
-    footerText: {
-        fontFamily: "Inter-Regular",
-        fontSize: 14,
-        color: AppColors.text.secondary,
-    },
-    link: {
-        fontFamily: "Inter-SemiBold",
-        fontSize: 14,
-        color: AppColors.primary[500],
-        marginLeft: 4,
+        marginTop: 24,
     },
     errorText: {
         color: AppColors.error,

@@ -4,10 +4,10 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
     ScrollView,
+    Platform,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import Wrapper from "@/components/Wrapper";
-import {Foundation} from "@expo/vector-icons";
+import MainLayout from "@/components/MainLayout";
 import {useState} from "react";
 import {useRouter} from "expo-router";
 import {useAuthStore} from "@/store/authStore";
@@ -46,7 +46,7 @@ const LoginScreen = () => {
 
         return isValid;
     }
-    
+
     const handleLogin = async () => {
         if (validateForm()) {
             await login(email, password);
@@ -57,20 +57,21 @@ const LoginScreen = () => {
     }
 
     return (
-        <Wrapper>
-            <KeyboardAvoidingView>
-                <ScrollView style={styles.scrollContainer}>
+        <MainLayout>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{flex: 1}}
+            >
+                <ScrollView
+                    contentContainerStyle={styles.scrollContainer}
+                    showsVerticalScrollIndicator={false}
+                >
+
                     <View style={styles.header}>
-                        <View style={styles.logoContainer}>
-                            <Foundation 
-                                name="shopping-cart"
-                                size={40}
-                                color={AppColors.primary[500]}
-                            />
-                        </View>
-                        <Text style={styles.title}>ShopNGo</Text>
-                        <Text style={styles.subtitle}>Sign in to your account</Text>
+                        <Text style={styles.title}>Welcome Back!</Text>
+                        <Text style={styles.subtitle}>Log in to your account</Text>
                     </View>
+
                     <View style={styles.form}>
                         {
                             error &&
@@ -95,7 +96,7 @@ const LoginScreen = () => {
                             secureTextEntry={true}
                         />
                         <ButtonCustom
-                            title="Sign In"
+                            title="Log In"
                             onPress={handleLogin}
                             fullWidth={true}
                             loading={isLoading}
@@ -104,34 +105,23 @@ const LoginScreen = () => {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-        </Wrapper>
+        </MainLayout>
     );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: AppColors.background.primary,
-    },
     scrollContainer: {
         flexGrow: 1,
-        paddingTop: 60,
+        justifyContent: 'center',
+        paddingTop: 40,
+        paddingHorizontal: 24,
         paddingBottom: 40,
     },
     header: {
         alignItems: 'center',
-        marginBottom: 40,
-    },
-    logoContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: AppColors.primary[50],
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 16,
+        marginBottom: 32,
     },
     title: {
         fontFamily: 'Inter-Bold',
@@ -148,23 +138,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     button: {
-        marginTop: 16,
-    },
-    footer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 16,
-    },
-    footerText: {
-        fontFamily: 'Inter-Regular',
-        fontSize: 14,
-        color: AppColors.text.secondary,
-    },
-    link: {
-        fontFamily: "Inter-SemiBold",
-        fontSize: 14,
-        color: AppColors.primary[500],
-        marginLeft: 4,
+        marginTop: 24,
     },
     errorText: {
         color: AppColors.error,

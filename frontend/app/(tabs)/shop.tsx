@@ -1,20 +1,17 @@
 import {
     FlatList,
     Modal,
-    Platform,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View
 } from 'react-native';
-import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
-import {EXPO_PUBLIC_API_URL as API_URL} from "@/config";
 import {AppColors} from "@/constants/theme";
-import Wrapper from "@/components/Wrapper";
+import MainLayout from "@/components/MainLayout";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
-import {router, useLocalSearchParams, useRouter} from "expo-router";
+import {useLocalSearchParams, useRouter} from "expo-router";
 import {useProductStore} from "@/store/productStore";
 import EmptyState from "@/components/EmptyState";
 import ProductCard from "@/components/ProductCard";
@@ -26,21 +23,18 @@ const ShopScreen = () => {
         categories,
         selectedCategory,
         loading,
-        error,
         fetchProducts,
         fetchCategories,
         setCategory,
         sortProducts,
     } = useProductStore();
     const {
-        q: searchParam,
         category: categoryParam,
     } = useLocalSearchParams<{
         q?: string;
         category?: string;
     }>();
-    console.log(categoryParam);
-    const [products, setProducts] = useState<[]>([]);
+
     const [showShortModal, setShowShortModal] = useState<boolean>(false);
     const [activeSortOption, setActiveSortOption] = useState<string | null>(null);
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
@@ -53,7 +47,6 @@ const ShopScreen = () => {
             setCategory(categoryParam);
         }
     }, []);
-    console.log(loading);
 
     const handleSort = (sortBy: "price-asc" | "price-desc" | "rating") => {
         sortProducts(sortBy);
@@ -84,7 +77,7 @@ const ShopScreen = () => {
                     >
                         <View style={styles.searchContainer}>
                             <View style={styles.searchInput}>
-                                <Text>Search a product...</Text>
+                                <Text style={{color: AppColors.text.secondary}}>Search a product...</Text>
                             </View>
                         </View>
                         <View style={styles.searchButton}>
@@ -161,7 +154,7 @@ const ShopScreen = () => {
     };
 
     return (
-        <Wrapper>
+        <MainLayout>
             {renderHeader()}
             {loading ? (
                 <View style={styles.loadingSpinner}>
@@ -208,7 +201,7 @@ const ShopScreen = () => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
-                            <Text>Sort by</Text>
+                            <Text style={styles.modalTitle}>Sort by</Text>
                             <TouchableOpacity
                                 onPress={
                                     () => setShowShortModal(false)
@@ -218,9 +211,6 @@ const ShopScreen = () => {
                                     name="close"
                                     size={24}
                                     color={AppColors.text.primary}
-                                    onPress={
-                                        () => setShowShortModal(false)
-                                    }
                                 />
                             </TouchableOpacity>
                         </View>
@@ -293,12 +283,7 @@ const ShopScreen = () => {
                 </View>
 
             </Modal>
-            {/*{loading && (*/}
-            {/*    <View style={styles.loadingSpinner}>*/}
-            {/*        <LoadingSpinner fullScreen={true}/>*/}
-            {/*    </View>*/}
-            {/*)}*/}
-        </Wrapper>
+        </MainLayout>
     );
 };
 
@@ -318,8 +303,9 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     header: {
-        marginTop: Platform.OS === "android" ? 30 : 0,
+        paddingTop: 10,
         paddingBottom: 16,
+        paddingHorizontal: 16,
         backgroundColor: AppColors.background.primary,
         borderBottomWidth: 1,
         borderBottomColor: AppColors.gray[200],
@@ -335,25 +321,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 16,
         flex: 1,
-        marginRight: 5,
+        marginRight: 10,
     },
     searchContainer: {
         flex: 1,
     },
     searchInput: {
         backgroundColor: AppColors.background.secondary,
-        borderRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
         paddingHorizontal: 16,
         paddingVertical: 12,
-        fontSize: 16,
         borderWidth: 1,
         borderColor: AppColors.gray[300],
-        color: AppColors.text.primary,
-    },
-    searchInputStyle: {
-        backgroundColor: AppColors.background.secondary,
-        borderRadius: 8,
-        borderColor: "transparent",
+        borderRightWidth: 0,
+        height: 44,
+        justifyContent: 'center',
     },
     searchButton: {
         backgroundColor: AppColors.primary[500],
@@ -363,18 +346,15 @@ const styles = StyleSheet.create({
         height: 44,
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 8,
-        position: "absolute",
-        right: 0,
     },
-    sortButton: {
-        backgroundColor: AppColors.background.secondary,
-        borderRadius: 8,
+    sortOptionView: {
+        borderWidth: 1,
+        borderColor: AppColors.gray[200],
         width: 44,
         height: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 8,
+        borderRadius: 8,
+        alignItems: "center",
+        justifyContent: 'center'
     },
     activeSortButton: {
         borderWidth: 1,
@@ -421,13 +401,15 @@ const styles = StyleSheet.create({
     },
     modalOverlay: {
         flex: 1,
-        backgroundColor: "rgba(0,0,0,0.5)"
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: 'flex-end',
     },
     modalContent: {
         backgroundColor: AppColors.background.primary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         padding: 24,
+        marginTop: 'auto',
     },
     modalHeader: {
         flexDirection: "row",
@@ -439,15 +421,6 @@ const styles = StyleSheet.create({
         fontFamily: "Inter-SemiBold",
         fontSize: 18,
         color: AppColors.text.primary,
-    },
-    sortOptionView: {
-        borderWidth: 1,
-        borderColor: AppColors.gray[200],
-        width: 45,
-        height: 45,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: 'center'
     },
     sortOption: {
         paddingVertical: 16,
@@ -461,17 +434,5 @@ const styles = StyleSheet.create({
         fontFamily: "Inter-Regular",
         fontSize: 16,
         color: AppColors.text.primary,
-    },
-    errorContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: "center",
-        padding: 24,
-    },
-    errorText: {
-        fontFamily: "Inter-Medium",
-        fontSize: 16,
-        color: AppColors.error,
-        textAlign: "center",
     },
 });
