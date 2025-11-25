@@ -11,6 +11,7 @@ import {AppColors} from "@/constants/theme";
 import ProductCard from "@/components/ProductCard";
 import EmptyState from "@/components/EmptyState";
 import MainLayout from "@/components/MainLayout";
+import Title from "@/components/Title";
 
 const FavoritesScreen = () => {
     const router = useRouter();
@@ -37,9 +38,9 @@ const FavoritesScreen = () => {
         <MainLayout>
             <View style={styles.headerView}>
                 <View>
-                    <Text style={styles.title}>
+                    <Title>
                         Favorite list
-                    </Text>
+                    </Title>
                     <Text style={styles.itemCount}>
                         {favoriteItems?.length} products
                     </Text>

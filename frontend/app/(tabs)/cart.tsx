@@ -34,7 +34,7 @@ const CartScreen = () => {
             {items?.length > 0 ? (
                 <View style={styles.container}>
                     <View style={styles.headerView}>
-                        <View style={styles.header}>
+                        <View>
                             <Title>
                                 Cart products
                             </Title>
@@ -136,18 +136,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         position: 'relative',
-        // backgroundColor: AppColors.background.secondary,
     },
     resetText: {
-        color: AppColors.error
+        color: AppColors.error,
+        fontWeight: '500',
     },
     headerView: {
-        paddingTop: 10,
+        paddingBottom: 15,
         borderBottomWidth: 1,
         borderBottomColor: AppColors.gray[200],
         flexDirection: 'row',
-        justifyContent: "space-between",
-        alignItems: 'flex-start'
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 10,
     },
     header: {
         paddingBottom: 16,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Regular',
         fontSize: 14,
         color: AppColors.text.secondary,
-        marginTop: 4,
+        marginTop: 2,
     },
     cartItemsContainer: {
         paddingVertical: 16,

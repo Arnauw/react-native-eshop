@@ -1,8 +1,9 @@
 import {
     FlatList,
     StyleSheet,
-    Text, TouchableOpacity,
-    View
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import {
     useEffect,
@@ -13,13 +14,13 @@ import {
     AntDesign,
     Ionicons
 } from "@expo/vector-icons";
-import Wrapper from "@/components/Wrapper";
 import {AppColors} from "@/constants/theme";
 import {useProductStore} from "@/store/productStore";
 import TextInputCustom from "@/components/TextInputCustom";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
 import ProductCard from "@/components/ProductCard";
+import MainLayout from "@/components/MainLayout";
 
 const SearchScreen = () => {
     const [searchQuery, setSearchQuery] = useState<string>("");
@@ -110,7 +111,7 @@ const SearchScreen = () => {
     };
 
     return (
-        <Wrapper>
+        <MainLayout>
             {renderHeader()}
             {loading ? (
                 <LoadingSpinner/>
@@ -158,7 +159,7 @@ const SearchScreen = () => {
                     }
                 />
             )}
-        </Wrapper>
+        </MainLayout>
     )
 }
 

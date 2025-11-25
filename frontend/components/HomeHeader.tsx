@@ -28,14 +28,6 @@ const HomeHeader = () => {
             <View style={styles.header}>
                 <Logo/>
                 <View style={styles.iconContainer}>
-
-                    {/* REMOVE THIS LATER IT'S FOR TESTING */}
-                    <ButtonCustom
-                        title="Clear Cart"
-                        onPress={() => useCartStore.persist.clearStorage()}
-                        size="small"
-                    />
-
                     <TouchableOpacity
                         style={styles.searchButton}
                         onPress={() => router.push(`/search`)}
