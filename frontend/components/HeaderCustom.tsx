@@ -124,7 +124,7 @@ export default HeaderCustom;
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Platform.OS === "android" ? 35 : 0,
+        paddingTop: Platform.OS === "android" ? 35 : 0,
     },
     header: {
         flexDirection: "row",
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     },
     itemsText: {
         fontSize: 10,
-        color: "#f97316", // Keeping accent static for now, or use colors.accent[500]
+        color: "#f97316",
         fontWeight: "bold",
         includeFontPadding: false,
         textAlignVertical: 'center',
