@@ -1,6 +1,7 @@
 import {
     View,
     StyleSheet,
+    Platform
 } from 'react-native';
 import {ReactNode} from "react";
 import HomeHeader from "@/components/HomeHeader";
@@ -30,5 +31,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         backgroundColor: AppColors.background.primary,
+        // Global bottom padding for all screens
+        paddingBottom: Platform.OS === 'ios' ? 20 : 30,
     },
 });

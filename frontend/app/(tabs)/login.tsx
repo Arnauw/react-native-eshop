@@ -15,10 +15,10 @@ import ButtonCustom from "@/components/ButtonCustom";
 import TextInputCustom from "@/components/TextInputCustom"
 
 const LoginScreen = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [emailError, setEmailError] = useState<string>("");
+    const [passwordError, setPasswordError] = useState<string>("");
 
     const router = useRouter();
     const { login, isLoading, error } = useAuthStore();

@@ -1,67 +1,23 @@
-import {Tabs} from 'expo-router';
-import {HapticTab} from '@/components/haptic-tab';
-import {Colors} from '@/constants/theme';
-import {useColorScheme} from '@/hooks/use-color-scheme';
-import {
-    Ionicons,
-    Foundation,
-    Feather
-} from "@expo/vector-icons";
+import { Stack } from 'expo-router';
 
 export default function TabLayout() {
-    const colorScheme = useColorScheme();
-
     return (
-        <Tabs
+        <Stack
             screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
-                tabBarButton: HapticTab,
-            }}>
-            <Tabs.Screen
-                name="index"
-                options={{
-                    title: 'Home',
-                    tabBarIcon: ({color}) =>
-                        (
-                            <Ionicons size={28} name="home" color={color}/>
-                        ),
-                }}
-            />
-            <Tabs.Screen
-                name="shop"
-                options={{
-                    title: 'Shop',
-                    tabBarIcon: ({color}) =>
-                        (
-                            <Foundation size={28} name="shopping-cart" color={color}/>
-                        ),
-                }}
-            />
-            <Tabs.Screen
-                name="profile"
-                options={{
-                    title: 'Profile',
-                    tabBarIcon: ({color}) =>
-                        (
-                            <Feather size={28} name="user" color={color}/>
-                        ),
-                }}
-            />
-            <Tabs.Screen name="login" options={{href: null}}/>
-            <Tabs.Screen name="signup" options={{href: null}}/>
-            <Tabs.Screen name="cart" options={{href: null}}/>
-            <Tabs.Screen name="search" options={{href: null}}/>
-            <Tabs.Screen name="favorites" options={{href: null}}/>
-            <Tabs.Screen name="orders" options={{href: null}}/>
-            <Tabs.Screen
-                name="product/[id]"
-                options={{
-                    href: null,
-                    tabBarStyle: {
-                        display: "none",
-                    }
-                }}/>
-        </Tabs>
+                animation: 'default',
+            }}
+        >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="shop" />
+            <Stack.Screen name="profile" />
+            <Stack.Screen name="login" />
+            <Stack.Screen name="signup" />
+            <Stack.Screen name="cart" />
+            <Stack.Screen name="search" />
+            <Stack.Screen name="favorites" />
+            <Stack.Screen name="orders" />
+            <Stack.Screen name="product/[id]" />
+        </Stack>
     );
-}
+};

@@ -20,6 +20,7 @@ import Toast from "react-native-toast-message";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
 import MainLayout from "@/components/MainLayout";
+import {useProductStore} from "@/store/productStore";
 
 const {width} = Dimensions.get("window");
 
@@ -32,23 +33,34 @@ const SingleProductScreen = () => {
     const router = useRouter();
     const {addItem, getItemCount} = useCartStore();
     const {isFavorite, toggleFavorite} = useFavoriteStore();
+    const {products} = useProductStore();
 
     useEffect(() => {
-        const fetchProductData = async () => {
-            setLoading(true);
-            try {
-                const data = await getProduct(Number(id));
-                setProduct(data);
-            } catch (error) {
-                setError('Failed to fetch product data.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (id) {
+        const productId = Number(id);
+        
+        const cachedProduct = products.find(
+            p => p.id === productId
+        );
+
+        if (cachedProduct) {
+            setProduct(cachedProduct);
+            setLoading(false);
+        } else {
+            const fetchProductData = async () => {
+                setLoading(true);
+                try {
+                    const data = await getProduct(productId);
+                    setProduct(data);
+                } catch (error) {
+                    setError('Failed to fetch product data.');
+                } finally {
+                    setLoading(false);
+                }
+            };
             fetchProductData();
-            setQuantity(1);
         }
+
+        setQuantity(1);
     }, [id]);
 
     if (loading) {
@@ -278,7 +290,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         backgroundColor: AppColors.background.secondary,
         borderTopLeftRadius: 20,
-        borderTopRightRadius: 20, 
+        borderTopRightRadius: 20,
         marginTop: 10,
     },
     productImage: {
@@ -303,7 +315,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,

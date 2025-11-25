@@ -1,13 +1,11 @@
 import {
-    FlatList, 
-    StyleSheet, 
-    Text, 
-    TouchableOpacity, 
-    View, 
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
     ScrollView,
 } from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import HomeHeader from "@/components/HomeHeader";
 import {useEffect, useState} from "react";
 import {Product} from "@/types/product";
 import {useProductStore} from "@/store/productStore";
@@ -16,6 +14,7 @@ import {AppColors} from "@/constants/theme";
 import {AntDesign} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
 import ProductCard from "@/components/ProductCard";
+import MainLayout from "@/components/MainLayout";
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -31,8 +30,12 @@ export default function HomeScreen() {
     } = useProductStore();
 
     useEffect(() => {
-        fetchProducts();
-        fetchCategories();
+        if (products.length === 0) {
+            fetchProducts();
+        }
+        if (categories.length === 0) {
+            fetchCategories();
+        }
     }, []);
 
     useEffect(() => {
@@ -51,136 +54,138 @@ export default function HomeScreen() {
         });
     };
 
-    if (loading) {
+    const navigateToShop = () => {
+        router.push('/(tabs)/shop');
+    };
+    
+    if (loading && products.length === 0) {
         return (
-            <SafeAreaProvider style={styles.container}>
-                <View style={styles.errorContainer}>
-                    <LoadingSpinner fullScreen/>
-                </View>
-            </SafeAreaProvider>
+            <View style={styles.loadingContainer}>
+                <LoadingSpinner fullScreen/>
+            </View>
         )
     }
 
     if (error) {
         return (
-            <SafeAreaProvider style={styles.container}>
-                <View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>Error: {error}</Text>
-                </View>
-            </SafeAreaProvider>
+            <View style={styles.loadingContainer}>
+                <Text style={styles.errorText}>Error: {error}</Text>
+            </View>
         )
     }
 
     return (
-        <View style={styles.wrapper}>
-            <HomeHeader/>
-            <View style={styles.contentContainer}>
-                <ScrollView
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.scrollContainerView}
-                >
-                    <View style={styles.categoriesSection}>
-                        <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Categories</Text>
-                        </View>
-                        <ScrollView
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            {categories?.map((category, index) => (
-                                <TouchableOpacity
-                                    style={styles.categoryButton}
-                                    key={index}
-                                    onPress={() => navigateToCategory(category)}
-                                >
-                                    <AntDesign
-                                        name={"tag"}
-                                        size={16}
-                                        color={AppColors.primary[500]}
-                                    />
-                                    <Text style={styles.categoryText}>
-                                        {category.charAt(0).toUpperCase() + category.slice(1)}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </ScrollView>
+        <MainLayout>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContainerView}
+            >
+                <View style={styles.categoriesSection}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Categories</Text>
                     </View>
-
-                    <View style={styles.featuredSection}>
-                        <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Best Sellers</Text>
+                    <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {categories?.map((category, index) => (
                             <TouchableOpacity
-                                // onPress={navigateToAllProducts}
+                                style={styles.categoryButton}
+                                key={index}
+                                onPress={() => navigateToCategory(category)}
                             >
-                                <Text style={styles.seeAllText}>See all</Text>
+                                <AntDesign
+                                    name={"tag"}
+                                    size={16}
+                                    color={AppColors.primary[500]}
+                                />
+                                <Text style={styles.categoryText}>
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                </Text>
                             </TouchableOpacity>
-                        </View>
-                        <FlatList
-                            data={featuredProducts}
-                            keyExtractor={(item, index) => index.toString()}
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.featuredProductsContainer}
-                            renderItem={({item}) => (
-                                <View style={styles.featuredProductsContainer}>
-                                    <ProductCard product={item} compact={true}/>
-                                </View>
-                            )}
-                        />
-                    </View>
-                    <View style={styles.newestSection}>
-                        <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>New Products</Text>
-                            <TouchableOpacity>
-                                <Text>See All</Text>
-                            </TouchableOpacity>
-                        </View>
+                        ))}
+                    </ScrollView>
+                </View>
 
-                        <View style={styles.productsGrid}>
-                            {products?.map((product, index) => (
-                                    <View
-                                        key={index}
-                                        style={styles.productContainer}
-                                    >
-                                        <ProductCard 
-                                            product={product}
-                                            customStyle={styles.productCard}
-                                        />
-                                    </View>
-                                )
-                            )}
-                        </View>
+                <View style={styles.featuredSection}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Best Sellers</Text>
+                        <TouchableOpacity onPress={navigateToShop}>
+                            <Text style={styles.seeAllText}>See all</Text>
+                        </TouchableOpacity>
                     </View>
-                </ScrollView>
-            </View>
-        </View>
+                    <FlatList
+                        data={featuredProducts}
+                        keyExtractor={(item) => item.id.toString()}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({item}) => (
+                            <View style={styles.featuredProductWrapper}>
+                                <ProductCard product={item} compact={true}/>
+                            </View>
+                        )}
+                    />
+                </View>
+
+                <View style={styles.newestSection}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>New Products</Text>
+                        <TouchableOpacity onPress={navigateToShop}>
+                            <Text style={styles.seeAllText}>See All</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.productsGrid}>
+                        {products?.map((product) => (
+                                <View
+                                    key={product.id}
+                                    style={styles.productContainer}
+                                >
+                                    <ProductCard
+                                        product={product}
+                                        customStyle={styles.productCard}
+                                    />
+                                </View>
+                            )
+                        )}
+                    </View>
+                </View>
+            </ScrollView>
+        </MainLayout>
     )
 }
 
 const styles = StyleSheet.create({
-    productCard: {
-        width: "100%",
-    },
-    wrapper: {
-        // flex: 1,
-        backgroundColor: AppColors.background.primary,
-    },
-    container: {
-        flex: 1,
-        backgroundColor: AppColors.background.primary,
-    },
-    contentContainer: {
-        // paddingHorizontal: 20,
-        paddingLeft: 20,
-    },
-    scrollContainerView: {
-        paddingBottom: 300,
-    },
-    errorContainer: {
+    loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 24,
+        backgroundColor: AppColors.background.primary,
+    },
+    scrollContainerView: {
+        paddingBottom: 20,
+    },
+    errorText: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 16,
+        color: AppColors.error,
+        textAlign: 'center',
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    sectionTitle: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14,
+        color: AppColors.primary[500],
+    },
+    seeAllText: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14,
+        color: AppColors.primary[500],
     },
     categoriesSection: {
         marginTop: 10,
@@ -193,7 +198,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 12,
         borderRadius: 8,
-        marginLeft: 5,
+        marginRight: 10,
         minWidth: 100,
     },
     categoryText: {
@@ -203,50 +208,25 @@ const styles = StyleSheet.create({
         color: AppColors.text.primary,
         textTransform: 'capitalize',
     },
-    sectionHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 16,
-        paddingRight: 20,
+    featuredSection: {
+        marginVertical: 16,
     },
-    sectionTitle: {
-        fontFamily: 'Inter-Medium',
-        fontSize: 14,
-        color: AppColors.primary[500],
+    featuredProductWrapper: {
+        marginRight: 4,
     },
-    seeAllText: {
-        fontFamily: 'Inter-Medium',
-        fontSize: 14,
-        color: AppColors.primary[500],
-    },
-    errorText: {
-        fontFamily: 'Inter-Medium',
-        fontSize: 16,
-        color: AppColors.error,
-        textAlign: 'center',
-    },
-    productContainer: {
-        width: "48%",
+    newestSection: {
+        marginVertical: 16,
     },
     productsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        paddingRight: 20,
     },
-    newestSection: {
-        marginVertical: 16,
-        marginBottom: 32,
+    productContainer: {
+        width: "48%",
+        marginBottom: 16,
     },
-    productGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-    },
-    featuredProductsContainer: {},
-    featuredProductContainer: {},
-    featuredSection: {
-        marginVertical: 16,
+    productCard: {
+        width: "100%",
     },
 });

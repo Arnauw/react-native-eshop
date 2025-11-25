@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,
 } from 'react-native';
 import {useEffect, useState} from "react";
 import {AppColors} from "@/constants/theme";
@@ -28,12 +28,8 @@ const ShopScreen = () => {
         setCategory,
         sortProducts,
     } = useProductStore();
-    const {
-        category: categoryParam,
-    } = useLocalSearchParams<{
-        q?: string;
-        category?: string;
-    }>();
+
+    const { category: categoryParam } = useLocalSearchParams<{ category?: string; }>();
 
     const [showShortModal, setShowShortModal] = useState<boolean>(false);
     const [activeSortOption, setActiveSortOption] = useState<string | null>(null);
@@ -41,8 +37,14 @@ const ShopScreen = () => {
     const router = useRouter();
 
     useEffect(() => {
-        fetchCategories();
-        fetchProducts();
+        if (categories.length === 0) {
+            fetchCategories();
+        }
+
+        if (filteredProducts.length === 0) {
+            fetchProducts();
+        }
+        
         if (categoryParam) {
             setCategory(categoryParam);
         }
@@ -71,9 +73,7 @@ const ShopScreen = () => {
                 <View style={styles.flexRow}>
                     <TouchableOpacity
                         style={styles.searchRow}
-                        onPress={() => {
-                            router.push("/search");
-                        }}
+                        onPress={() => router.push("/search")}
                     >
                         <View style={styles.searchContainer}>
                             <View style={styles.searchInput}>
@@ -81,29 +81,17 @@ const ShopScreen = () => {
                             </View>
                         </View>
                         <View style={styles.searchButton}>
-                            <Ionicons
-                                name="search"
-                                size={20}
-                                color="white"
-                            />
+                            <Ionicons name="search" size={20} color="white"/>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={
-                            () => {
-                                setShowShortModal(true);
-                            }
-                        }
+                        onPress={() => setShowShortModal(true)}
                         style={[
                             styles.sortOptionView,
                             isFilterActive && styles.activeSortButton,
                         ]}
                     >
-                        <AntDesign
-                            name="filter"
-                            size={20}
-                            color={AppColors.text.primary}
-                        />
+                        <AntDesign name="filter" size={20} color={AppColors.text.primary}/>
                     </TouchableOpacity>
                 </View>
                 <ScrollView
@@ -115,14 +103,12 @@ const ShopScreen = () => {
                         onPress={() => setCategory(null)}
                         style={[
                             styles.categoryButton,
-                            selectedCategory === null
-                            && styles.selectedCategory,
+                            selectedCategory === null && styles.selectedCategory,
                         ]}
                     >
                         <Text style={[
                             styles.categoryText,
-                            selectedCategory === null
-                            && styles.selectedCategoryText,
+                            selectedCategory === null && styles.selectedCategoryText,
                         ]}>
                             All
                         </Text>
@@ -133,16 +119,13 @@ const ShopScreen = () => {
                             key={category}
                             style={[
                                 styles.categoryButton,
-                                selectedCategory === category
-                                && styles.selectedCategory,
+                                selectedCategory === category && styles.selectedCategory,
                             ]}
                         >
-                            <Text
-                                style={[
-                                    styles.categoryText,
-                                    selectedCategory === category
-                                    && styles.selectedCategoryText,
-                                ]}
+                            <Text style={[
+                                styles.categoryText,
+                                selectedCategory === category && styles.selectedCategoryText,
+                            ]}
                             >
                                 {category.charAt(0).toUpperCase() + category.slice(1)}
                             </Text>
@@ -156,42 +139,36 @@ const ShopScreen = () => {
     return (
         <MainLayout>
             {renderHeader()}
-            {loading ? (
+            
+            {loading && filteredProducts.length === 0 ? (
                 <View style={styles.loadingSpinner}>
                     <LoadingSpinner fullScreen={true}/>
                 </View>
-            ) : filteredProducts?.length === 0
-                ? (
-                    <EmptyState
-                        type="search"
-                        message="No products found in your research query"
-                    />
-                ) : (
-                    <FlatList
-                        data={filteredProducts}
-                        keyExtractor={
-                            (item) => item.id.toString()
-                        }
-                        numColumns={2}
-                        renderItem={
-                            ({item}) => (
-                                <View style={styles.productContainer}>
-                                    <ProductCard
-                                        product={item}
-                                        customStyle={styles.fullWidth}
-                                    />
-                                </View>
-                            )
-                        }
-                        contentContainerStyle={styles.productsGrid}
-                        columnWrapperStyle={styles.columnWrapper}
-                        showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={
-                            <View style={styles.footer}/>
-                        }
-                    />
-                )
-            }
+            ) : filteredProducts?.length === 0 ? (
+                <EmptyState
+                    type="search"
+                    message="No products found"
+                />
+            ) : (
+                <FlatList
+                    data={filteredProducts}
+                    keyExtractor={(item) => item.id.toString()}
+                    numColumns={2}
+                    renderItem={({item}) => (
+                        <View style={styles.productContainer}>
+                            <ProductCard
+                                product={item}
+                                customStyle={styles.fullWidth}
+                            />
+                        </View>
+                    )}
+                    contentContainerStyle={styles.productsGrid}
+                    columnWrapperStyle={styles.columnWrapper}
+                    showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<View style={styles.footer}/>}
+                />
+            )}
+
             <Modal
                 visible={showShortModal}
                 transparent={true}
@@ -202,86 +179,34 @@ const ShopScreen = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
                             <Text style={styles.modalTitle}>Sort by</Text>
-                            <TouchableOpacity
-                                onPress={
-                                    () => setShowShortModal(false)
-                                }
-                            >
-                                <AntDesign
-                                    name="close"
-                                    size={24}
-                                    color={AppColors.text.primary}
-                                />
+                            <TouchableOpacity onPress={() => setShowShortModal(false)}>
+                                <AntDesign name="close" size={24} color={AppColors.text.primary}/>
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                            style={styles.sortOption}
-                            onPress={
-                                () => handleSort("price-asc")
-                            }
-                        >
-                            <Text
-                                style={[
-                                    styles.sortOptionText,
-                                    activeSortOption === "price-asc"
-                                    && styles.activeSortText,
-                                ]}
-                            >
+                        <TouchableOpacity style={styles.sortOption} onPress={() => handleSort("price-asc")}>
+                            <Text style={[styles.sortOptionText, activeSortOption === "price-asc" && styles.activeSortText]}>
                                 Price: Low to high
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.sortOption}
-                            onPress={
-                                () => handleSort("price-desc")
-                            }
-                        >
-                            <Text
-                                style={[
-                                    styles.sortOptionText,
-                                    activeSortOption === "price-desc"
-                                    && styles.activeSortText,
-                                ]}
-                            >
+                        <TouchableOpacity style={styles.sortOption} onPress={() => handleSort("price-desc")}>
+                            <Text style={[styles.sortOptionText, activeSortOption === "price-desc" && styles.activeSortText]}>
                                 Price: High to low
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.sortOption}
-                            onPress={
-                                () => handleSort("rating")
-                            }
-                        >
-                            <Text
-                                style={[
-                                    styles.sortOptionText,
-                                    activeSortOption === "rating"
-                                    && styles.activeSortText,
-                                ]}
-                            >
+                        <TouchableOpacity style={styles.sortOption} onPress={() => handleSort("rating")}>
+                            <Text style={[styles.sortOptionText, activeSortOption === "rating" && styles.activeSortText]}>
                                 Ranking: High to low
                             </Text>
                         </TouchableOpacity>
-                        {
-                            isFilterActive && (
-                                <TouchableOpacity
-                                    style={styles.sortOption}
-                                    onPress={handleResetFilter}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.sortOptionText,
-                                            {color: AppColors.error}
-                                        ]}
-                                    >
-                                        Remove filters
-                                    </Text>
-                                </TouchableOpacity>
-                            )
-                        }
+                        {isFilterActive && (
+                            <TouchableOpacity style={styles.sortOption} onPress={handleResetFilter}>
+                                <Text style={[styles.sortOptionText, {color: AppColors.error}]}>
+                                    Remove filters
+                                </Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
-
             </Modal>
         </MainLayout>
     );
@@ -294,6 +219,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        marginTop: 50,
     },
     fullWidth: {
         width: "100%",
@@ -409,7 +335,6 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         padding: 24,
-        marginTop: 'auto',
     },
     modalHeader: {
         flexDirection: "row",
