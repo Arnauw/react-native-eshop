@@ -18,9 +18,12 @@ import Toast from "react-native-toast-message";
 const ProfileScreen = () => {
     const {user, logout, checkSession, isLoading} = useAuthStore();
     const router = useRouter();
-    
     const { colors } = useAppTheme();
 
+    const handleEditProfile = () => {
+
+    }
+    
     useEffect(() => {
         if (!user) {
             checkSession();
@@ -67,7 +70,7 @@ const ProfileScreen = () => {
             ),
             title: 'My payments',
             onPress: () => {
-                // router.push('/cart');
+                // router.push('/payments');
             },
         },
         {
@@ -81,7 +84,7 @@ const ProfileScreen = () => {
             ),
             title: 'Delivery address',
             onPress: () => {
-                // router.push('/cart');
+                // router.push('/address');
             },
         },
         {
@@ -93,9 +96,9 @@ const ProfileScreen = () => {
                     color={colors.primary[500]}
                 />
             ),
-            title: 'Parameters',
+            title: 'Settings',
             onPress: () => {
-                // router.push('/cart');
+                // router.push('/settings');
             },
         },
     ];
@@ -148,7 +151,7 @@ const ProfileScreen = () => {
                                 {user?.email}
                             </Text>
                             <TouchableOpacity
-                                onPress={() => logout()}
+                                onPress={handleEditProfile}
                             >
                                 <Text style={[styles.editProfileText, { color: colors.primary[500] }]}>
                                     Edit my profile
