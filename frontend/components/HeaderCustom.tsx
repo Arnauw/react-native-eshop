@@ -13,7 +13,7 @@ import {useRouter, usePathname} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
 
-const HomeHeader = () => {
+const HeaderCustom = () => {
     const router = useRouter();
     const pathname = usePathname();
     const {items} = useCartStore();
@@ -107,7 +107,7 @@ const HomeHeader = () => {
     );
 };
 
-export default HomeHeader;
+export default HeaderCustom;
 
 const styles = StyleSheet.create({
     container: {

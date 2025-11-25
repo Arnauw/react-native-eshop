@@ -1,6 +1,5 @@
 import {
     Text,
-    View,
     StyleSheet,
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
@@ -16,7 +15,7 @@ const MyComponent = () => {
 export default MyComponent;
 
 const styles = StyleSheet.create({
-    erroContainer: {
+    errorContainer: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",

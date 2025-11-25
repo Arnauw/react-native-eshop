@@ -4,7 +4,7 @@ import {
     Platform
 } from 'react-native';
 import {ReactNode} from "react";
-import HomeHeader from "@/components/HomeHeader";
+import HeaderCustom from "@/components/HeaderCustom";
 import {AppColors} from "@/constants/theme";
 
 interface MainLayoutProps {
@@ -16,7 +16,7 @@ const MainLayout = (
 ) => {
     return (
         <>
-            <HomeHeader/>
+            <HeaderCustom/>
             <View style={styles.container}>
                 {children}
             </View>
