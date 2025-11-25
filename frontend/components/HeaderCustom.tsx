@@ -38,7 +38,6 @@ const HeaderCustom = () => {
                             color={colors.primary[700]}
                         />
                     </TouchableOpacity>
-                    {/* ------------------------ */}
 
                     {pathname !== '/' && router.canGoBack() && (
                         <TouchableOpacity
