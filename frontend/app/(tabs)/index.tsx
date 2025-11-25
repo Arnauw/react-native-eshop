@@ -55,7 +55,7 @@ export default function HomeScreen() {
     };
 
     const navigateToShop = () => {
-        router.push('/(tabs)/shop');
+        router.push('/shop');
     };
     
     if (loading && products.length === 0) {

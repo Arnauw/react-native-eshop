@@ -43,7 +43,7 @@ const HomeHeader = () => {
                     {pathname !== '/shop' && (
                         <TouchableOpacity
                             style={styles.searchButton}
-                            onPress={() => router.push('/(tabs)/shop')}
+                            onPress={() => router.push('/shop')}
                         >
                             <MaterialCommunityIcons
                                 name={'storefront-outline'}

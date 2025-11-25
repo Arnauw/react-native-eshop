@@ -114,6 +114,7 @@ const ProfileScreen = () => {
                             text1: "Logout successful",
                             text2: "You have logged out",
                             visibilityTime: 2000,
+                            position: "bottom",
                         });
                     } catch (error) {
                         console.log("Profile: Error during log out" ,error);

@@ -105,6 +105,7 @@ const SingleProductScreen = () => {
                 text1: 'Cart is full',
                 text2: 'You cannot have more than 99 items.',
                 visibilityTime: 2000,
+                position: "bottom",
             });
             return;
         }
@@ -115,6 +116,7 @@ const SingleProductScreen = () => {
             text1: `Product ${product?.title} has been added to cart`,
             text2: "View cart to complete your purchase.",
             visibilityTime: 2000,
+            position: "bottom",
         });
     };
 

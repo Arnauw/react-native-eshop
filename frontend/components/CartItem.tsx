@@ -37,12 +37,14 @@ const CartItem = (
                 type: "success",
                 text1: "Quantity decreased",
                 visibilityTime: 2000,
+                position: "bottom",
             });
         } else {
             Toast.show({
                 type: "error",
                 text1: "You cannot remove less than 1 product",
                 visibilityTime: 2000,
+                position: "bottom",
             });
         }
     };
@@ -53,6 +55,7 @@ const CartItem = (
             type: "success",
             text1: "Quantity increased",
             visibilityTime: 2000,
+            position: "bottom",
         });
     };
 
@@ -63,6 +66,7 @@ const CartItem = (
             text1: "Product removed",
             text2: `${product.title} has been removed from the cart`,
             visibilityTime: 2000,
+            position: "bottom",
         });
     };
 
