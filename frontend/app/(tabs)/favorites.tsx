@@ -8,101 +8,89 @@ import {
 import {useRouter} from "expo-router";
 import useFavoriteStore from "@/store/favoriteStore";
 import {AppColors} from "@/constants/theme";
-import HomeHeader from "@/components/HomeHeader";
-import Wrapper from "@/components/Wrapper";
 import ProductCard from "@/components/ProductCard";
 import EmptyState from "@/components/EmptyState";
+import MainLayout from "@/components/MainLayout"; // <--- IMPORT THIS
 
 const FavoritesScreen = () => {
     const router = useRouter();
     const {favoriteItems, resetFavorite} = useFavoriteStore()
-    console.log("FavoritesScreen: ", favoriteItems);
 
     const navigateToProducts = async () => {
         router.push("/");
     };
-
+    
     if (favoriteItems?.length === 0) {
         return (
-            <Wrapper>
-                <HomeHeader/>
+            <MainLayout>
                 <EmptyState
                     type="favorites"
-                    message="You didn't add any products to your favorites"
-                    actionLabel="Browse products"
+                    message="Your favorite list is empty"
+                    actionLabel="Start adding products"
                     onAction={navigateToProducts}
                 />
-            </Wrapper>
+            </MainLayout>
         )
     }
-
+    
     return (
-        <View style={{flex: 1}}>
-            <HomeHeader/>
-            {favoriteItems?.length > 0 && (
-                <Wrapper>
-                    <View style={styles.headerView}>
-                        <View style={styles.header}>
-                            <Text style={styles.title}>
-                                Favorite products list
-                            </Text>
-                            <Text style={styles.itemCount}>
-                                {favoriteItems?.length} products
-                            </Text>
-                        </View>
-                        <View>
-                            <TouchableOpacity
-                                onPress={() => resetFavorite()}
-                            >
-                                <Text style={styles.resetText}>
-                                    Reset favorites
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+        <MainLayout>
+            <View style={styles.headerView}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>
+                        Favorite products list
+                    </Text>
+                    <Text style={styles.itemCount}>
+                        {favoriteItems?.length} products
+                    </Text>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => resetFavorite()}
+                    >
+                        <Text style={styles.resetText}>
+                            Reset favorites
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <FlatList
+                data={favoriteItems}
+                keyExtractor={(item) => item.id.toString()}
+                numColumns={2}
+                renderItem={({item}) => (
+                    <View style={styles.productContainer}>
+                        <ProductCard
+                            product={item}
+                            customStyle={{width: "100%"}}
+                        />
                     </View>
-                    <FlatList
-                        data={favoriteItems}
-                        keyExtractor={(item) => item.id.toString()}
-                        numColumns={2}
-                        renderItem={({item}) => (
-                            <View style={styles.productContainer}>
-                                <ProductCard
-                                    product={item}
-                                    customStyle={{width: "100%"}}
-                                />
-                            </View>
-                        )}
-                        contentContainerStyle={styles.productsGrid}
-                        columnWrapperStyle={styles.columnWrapper}
-                        showsVerticalScrollIndicator={false}
-                        ListFooterComponent={<View style={styles.footer}/>}
-                    />
-                </Wrapper>
-            )}
-        </View>
-    )
-        ;
+                )}
+                contentContainerStyle={styles.productsGrid}
+                columnWrapperStyle={styles.columnWrapper}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={<View style={styles.footer}/>}
+            />
+        </MainLayout>
+    );
 };
 
 export default FavoritesScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: AppColors.background.primary,
-    },
     headerView: {
-        paddingBottom: 5,
-        backgroundColor: AppColors.background.primary,
+        paddingBottom: 15,
         borderBottomWidth: 1,
         borderBottomColor: AppColors.gray[200],
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
+        alignItems: 'center',
+        marginTop: 10,
     },
     header: {},
     resetText: {
         color: AppColors.error,
+        fontWeight: '500',
     },
     title: {
         fontFamily: 'Inter-Bold',
@@ -116,13 +104,14 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
     productsGrid: {
-        paddingTop: 10,
+        paddingTop: 15,
     },
     columnWrapper: {
         justifyContent: 'space-between',
     },
     productContainer: {
         width: '48%',
+        marginBottom: 10,
     },
     footer: {
         height: 100,
