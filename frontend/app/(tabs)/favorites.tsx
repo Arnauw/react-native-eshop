@@ -10,7 +10,7 @@ import useFavoriteStore from "@/store/favoriteStore";
 import {AppColors} from "@/constants/theme";
 import ProductCard from "@/components/ProductCard";
 import EmptyState from "@/components/EmptyState";
-import MainLayout from "@/components/MainLayout"; // <--- IMPORT THIS
+import MainLayout from "@/components/MainLayout";
 
 const FavoritesScreen = () => {
     const router = useRouter();
@@ -36,7 +36,7 @@ const FavoritesScreen = () => {
     return (
         <MainLayout>
             <View style={styles.headerView}>
-                <View style={styles.header}>
+                <View>
                     <Text style={styles.title}>
                         Favorite products list
                     </Text>
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
     },
-    header: {},
     resetText: {
         color: AppColors.error,
         fontWeight: '500',
