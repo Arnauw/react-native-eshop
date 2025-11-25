@@ -9,67 +9,85 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {AppColors} from "@/constants/theme";
 import Logo from "@/components/Logo";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import {useRouter} from "expo-router";
+import {useRouter, usePathname} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
-import ButtonCustom from "@/components/ButtonCustom";
 
 const HomeHeader = () => {
     const router = useRouter();
+    const pathname = usePathname();
     const {items} = useCartStore();
-    const cartItemCount = items.reduce(
-        (sum, item) =>
-            sum + item.quantity, 0
-    );
+    const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const {favoriteItems} = useFavoriteStore();
+    const isRootScreen = pathname === '/' || pathname === '/index';
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Logo/>
                 <View style={styles.iconContainer}>
-                    <TouchableOpacity
-                        style={styles.searchButton}
-                        onPress={() => router.push(`/search`)}
-                    >
-                        <Ionicons
-                            name={'search'}
-                            size={20}
-                            color={AppColors.primary[700]}
-                        />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.searchButton}
-                        onPress={() => router.push(`/favorites`)}
-                    >
-                        <MaterialCommunityIcons
-                            name={'heart-outline'}
-                            size={20}
-                            color={AppColors.primary[700]}
-                        />
-                        <View style={styles.itemsView}>
-                            <Text style={styles.itemsText}>
-                                {favoriteItems?.length ? favoriteItems?.length : 0}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.searchButton}
-                        onPress={() => router.push(`/cart`)}
-                    >
-                        <MaterialCommunityIcons
-                            name={'cart-outline'}
-                            size={20}
-                            color={AppColors.primary[700]}
-                        />
-                        <View style={styles.itemsView}>
-                            <Text style={styles.itemsText}>
-                                {cartItemCount > 0 ? cartItemCount : 0}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
+                    
+                    {!isRootScreen && router.canGoBack() && (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            onPress={() => router.back()}
+                        >
+                            <Ionicons
+                                name={'arrow-back'}
+                                size={20}
+                                color={AppColors.primary[700]}
+                            />
+                        </TouchableOpacity>
+                    )}
+                    
+                    {pathname !== '/search' && (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            onPress={() => router.push(`/search`)}
+                        >
+                            <Ionicons
+                                name={'search'}
+                                size={20}
+                                color={AppColors.primary[700]}
+                            />
+                        </TouchableOpacity>
+                    )}
+                    
+                    {pathname !== '/favorites' && (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            onPress={() => router.push(`/favorites`)}
+                        >
+                            <MaterialCommunityIcons
+                                name={'heart-outline'}
+                                size={20}
+                                color={AppColors.primary[700]}
+                            />
+                            <View style={styles.itemsView}>
+                                <Text style={styles.itemsText}>
+                                    {favoriteItems?.length ? favoriteItems?.length : 0}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                    
+                    {pathname !== '/cart' && (
+                        <TouchableOpacity
+                            style={styles.searchButton}
+                            onPress={() => router.push(`/cart`)}
+                        >
+                            <MaterialCommunityIcons
+                                name={'cart-outline'}
+                                size={20}
+                                color={AppColors.primary[700]}
+                            />
+                            <View style={styles.itemsView}>
+                                <Text style={styles.itemsText}>
+                                    {cartItemCount > 0 ? cartItemCount : 0}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         </SafeAreaView>

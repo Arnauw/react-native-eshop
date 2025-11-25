@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import {useState, useEffect} from 'react';
 import {useLocalSearchParams, useRouter} from "expo-router";
-import CommonHeader from "@/components/CommonHeader";
-import {AppColors,} from "@/constants/theme";
+import {AppColors} from "@/constants/theme";
 import {Product} from "@/types/product"
 import {getProduct} from "@/lib/API"
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -20,12 +19,12 @@ import {AntDesign} from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
+import MainLayout from "@/components/MainLayout";
 
 const {width} = Dimensions.get("window");
 
 const SingleProductScreen = () => {
     const {id} = useLocalSearchParams<{ id: string }>();
-    console.log("id: ", id);
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -42,7 +41,6 @@ const SingleProductScreen = () => {
                 setProduct(data);
             } catch (error) {
                 setError('Failed to fetch product data.');
-                console.log('Failed to fetch product data.', error);
             } finally {
                 setLoading(false);
             }
@@ -52,7 +50,6 @@ const SingleProductScreen = () => {
             setQuantity(1);
         }
     }, [id]);
-    console.log('Product data: ', product);
 
     if (loading) {
         return (
@@ -81,14 +78,12 @@ const SingleProductScreen = () => {
         if (quantity > 1) {
             setQuantity((prev) => prev - 1);
         }
-        console.log(quantity);
     };
 
     const handleIncreaseQuantity = () => {
         if (quantity < 100) {
             setQuantity((prev) => prev + 1);
         }
-        console.log(quantity);
     };
 
     const handleAddToCart = () => {
@@ -116,85 +111,95 @@ const SingleProductScreen = () => {
     }
 
     return (
-        <View style={styles.headerContainerStyle}>
-            <CommonHeader
-                isFav={isFav}
-                handleToggleFavorite={handleToggleFavorite}
-            />
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={{flex: 1}}
-            >
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={{uri: product?.image}}
-                        resizeMode="contain"
-                        style={styles.productImage}
-                    />
-                </View>
-                <View style={styles.productInfo}>
-                    <Text style={styles.category}>
-                        {
-                            product?.category?.charAt(0).toUpperCase()
-                            + (product?.category?.slice(1))
-                        }
-                    </Text>
-                    <Text style={styles.title}>
-                        {product?.title}
-                    </Text>
-                    <View style={styles.ratingContainer}>
-                        <Rating
-                            rating={product?.rating?.rate}
-                            count={product?.rating?.count}
+        <MainLayout>
+            <View style={styles.container}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    style={{flex: 1}}
+                >
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={{uri: product?.image}}
+                            resizeMode="contain"
+                            style={styles.productImage}
+                        />
+
+                        <TouchableOpacity
+                            onPress={handleToggleFavorite}
+                            style={styles.favoriteButton}
+                        >
+                            <AntDesign
+                                name={"heart"}
+                                size={22}
+                                color={isFav ? AppColors.error : AppColors.gray[400]}
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.productInfo}>
+                        <Text style={styles.category}>
+                            {
+                                product?.category?.charAt(0).toUpperCase()
+                                + (product?.category?.slice(1))
+                            }
+                        </Text>
+                        <Text style={styles.title}>
+                            {product?.title}
+                        </Text>
+                        <View style={styles.ratingContainer}>
+                            <Rating
+                                rating={product?.rating?.rate}
+                                count={product?.rating?.count}
+                            />
+                        </View>
+                        <Text style={styles.price}>
+                            {product?.price.toFixed(2)} €
+                        </Text>
+                        <View style={styles.divider}/>
+                        <Text style={styles.descriptionTitle}>
+                            Description
+                        </Text>
+                        <Text style={styles.description}>
+                            {product?.description}
+                        </Text>
+                    </View>
+                </ScrollView>
+                <View style={styles.footer}>
+                    <View style={styles.quantityContainer}>
+                        <Text style={styles.quantityTitle}>Quantity</Text>
+                        <View style={styles.quantityControls}>
+                            <TouchableOpacity onPress={handleDecreaseQuantity} disabled={quantity <= 1}
+                                              style={styles.quantityButton}>
+                                <AntDesign name="minus" size={20} color={AppColors.primary[600]}/>
+                            </TouchableOpacity>
+
+                            <Text style={styles.quantityValue}>{quantity}</Text>
+
+                            <TouchableOpacity onPress={handleIncreaseQuantity} disabled={quantity >= 100}
+                                              style={styles.quantityButton}>
+                                <AntDesign name="plus" size={20} color={AppColors.primary[600]}/>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.divider}/>
+                    <View style={styles.footerActions}>
+                        <View style={styles.totalPriceContainer}>
+                            <Text style={styles.totalLabel}>
+                                Total:
+                            </Text>
+                            <Text style={styles.totalPrice}>
+                                {(product?.price * quantity).toFixed(2)} €
+                            </Text>
+                        </View>
+                        <ButtonCustom
+                            title="Add to cart"
+                            onPress={handleAddToCart}
+                            style={styles.addToCartButton}
                         />
                     </View>
-                    <Text style={styles.price}>
-                        {product?.price.toFixed(2)} €
-                    </Text>
-                    <View style={styles.divider}/>
-                    <Text style={styles.descriptionTitle}>
-                        Description
-                    </Text>
-                    <Text style={styles.description}>
-                        {product?.description}
-                    </Text>
-                </View>
-            </ScrollView>
-            <View style={styles.footer}>
-                <View style={styles.quantityContainer}>
-                    <Text style={styles.quantityTitle}>Quantity</Text>
-                    <View style={styles.quantityControls}>
-                        <TouchableOpacity onPress={handleDecreaseQuantity} disabled={quantity <= 1}
-                                          style={styles.quantityButton}>
-                            <AntDesign name="minus" size={20} color={AppColors.primary[600]}/>
-                        </TouchableOpacity>
-
-                        <Text style={styles.quantityValue}>{quantity}</Text>
-
-                        <TouchableOpacity onPress={handleIncreaseQuantity} disabled={quantity >= 100}
-                                          style={styles.quantityButton}>
-                            <AntDesign name="plus" size={20} color={AppColors.primary[600]}/>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.divider}/>
-                <View style={styles.footerActions}>
-                    <View style={styles.totalPriceContainer}>
-                        <Text style={styles.totalLabel}>
-                            Total:
-                        </Text>
-                        <Text style={styles.totalPrice}>
-                            {(product?.price * quantity).toFixed(2)} €
-                        </Text>
-                    </View>
-                    <ButtonCustom
-                        title="Add to cart"
-                        onPress={handleAddToCart}
-                        style={styles.addToCartButton}
-                    />
                 </View>
             </View>
-        </View>
+        </MainLayout>
     );
 };
 
@@ -206,10 +211,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    headerContainerStyle: {
+    container: {
         flex: 1,
-        paddingTop: 30,
         backgroundColor: AppColors.background.primary,
+        position: "relative",
     },
     errorButton: {
         marginTop: 8,
@@ -243,7 +248,6 @@ const styles = StyleSheet.create({
     divider: {
         height: 1,
         backgroundColor: AppColors.gray[200],
-        // marginVertical: 16,
         marginBottom: 16
     },
     price: {
@@ -271,8 +275,11 @@ const styles = StyleSheet.create({
     productInfo: {
         paddingHorizontal: 24,
         paddingBottom: 20,
-        paddingTop: 10,
+        paddingTop: 20,
         backgroundColor: AppColors.background.secondary,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20, 
+        marginTop: 10,
     },
     productImage: {
         width: "80%",
@@ -282,12 +289,26 @@ const styles = StyleSheet.create({
         width: width,
         height: width,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        position: 'relative',
     },
-    container: {
-        flex: 1,
-        backgroundColor: AppColors.background.primary,
-        position: "relative",
+    favoriteButton: {
+        position: 'absolute',
+        top: 20,
+        right: 44,
+        backgroundColor: 'white',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: AppColors.gray[100],
     },
     footer: {
         backgroundColor: AppColors.background.primary,
