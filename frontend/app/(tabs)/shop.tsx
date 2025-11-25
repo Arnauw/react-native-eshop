@@ -9,17 +9,19 @@ import {
     Keyboard
 } from 'react-native';
 import {useEffect, useRef, useState} from "react";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import MainLayout from "@/components/MainLayout";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
-import {useLocalSearchParams} from "expo-router";
+import {useLocalSearchParams, useRouter} from "expo-router";
 import {useProductStore} from "@/store/productStore";
 import EmptyState from "@/components/EmptyState";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TextInputCustom from "@/components/TextInputCustom";
+import Title from "@/components/Title";
 
 const ShopScreen = () => {
+    const { colors } = useAppTheme();
     const {
         filteredProducts,
         categories,
@@ -31,13 +33,13 @@ const ShopScreen = () => {
         sortProducts,
         searchProductsRealTime,
     } = useProductStore();
-
     const { category: categoryParam } = useLocalSearchParams<{ category?: string; }>();
     const [searchQuery, setSearchQuery] = useState<string>("");
     const searchTimeOutRef = useRef<NodeJS.Timeout | number | null>(null);
     const [showShortModal, setShowShortModal] = useState<boolean>(false);
     const [activeSortOption, setActiveSortOption] = useState<string | null>(null);
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (categories.length === 0) fetchCategories();
@@ -46,22 +48,21 @@ const ShopScreen = () => {
         if (categoryParam) {
             setCategory(categoryParam);
         }
-        
+
         return () => {
             if (searchTimeOutRef.current) {
-                clearTimeout(searchTimeOutRef.current);
+                clearTimeout(searchTimeOutRef.current as number);
             }
         };
     }, []);
-    
+
     const handleSearchChange = (text: string) => {
         setSearchQuery(text);
 
         if (searchTimeOutRef.current) {
-            clearTimeout(searchTimeOutRef.current);
+            clearTimeout(searchTimeOutRef.current as number);
         }
-
-        // Debounce: Wait 500ms after user stops typing
+        
         if (text.length >= 1) {
             searchTimeOutRef.current = setTimeout(() => {
                 searchProductsRealTime(text);
@@ -93,11 +94,11 @@ const ShopScreen = () => {
 
     const renderHeader = () => {
         return (
-            <View style={styles.header}>
-                <Text style={styles.title}>
+            <View style={[styles.header, { backgroundColor: colors.background.primary, borderBottomColor: colors.gray[200] }]}>
+                <Title>
                     All products
-                </Text>
-                
+                </Title>
+
                 <View style={styles.flexRow}>
                     <View style={styles.searchContainer}>
                         <View style={styles.inputWrapper}>
@@ -105,20 +106,20 @@ const ShopScreen = () => {
                                 value={searchQuery}
                                 onChangeText={handleSearchChange}
                                 placeholder="Search a product..."
+                                placeholderTextColor={colors.text.secondary}
                                 style={styles.searchInputContainer}
-                                inputStyle={styles.searchInputStyle}
+                                inputStyle={[styles.searchInputStyle, { backgroundColor: colors.background.secondary, color: colors.text.primary }]}
                             />
                             {searchQuery.length > 0 ? (
                                 <TouchableOpacity
                                     onPress={handleClearSearch}
                                     style={styles.clearButton}
                                 >
-                                    <AntDesign name="close" size={16} color={AppColors.gray[500]} />
+                                    <AntDesign name="close" size={16} color={colors.gray[500]} />
                                 </TouchableOpacity>
                             ) : (
-                                // Magnifying glass icon when no text
                                 <View style={styles.searchIcon}>
-                                    <Ionicons name="search" size={20} color={AppColors.text.secondary} />
+                                    <Ionicons name="search" size={20} color={colors.text.secondary} />
                                 </View>
                             )}
                         </View>
@@ -128,10 +129,11 @@ const ShopScreen = () => {
                         onPress={() => setShowShortModal(true)}
                         style={[
                             styles.sortOptionView,
-                            isFilterActive && styles.activeSortButton,
+                            { backgroundColor: colors.background.primary, borderColor: colors.gray[200] },
+                            isFilterActive && { borderColor: colors.error },
                         ]}
                     >
-                        <AntDesign name="filter" size={20} color={AppColors.text.primary}/>
+                        <AntDesign name="filter" size={20} color={colors.text.primary}/>
                     </TouchableOpacity>
                 </View>
 
@@ -144,12 +146,12 @@ const ShopScreen = () => {
                         onPress={() => setCategory(null)}
                         style={[
                             styles.categoryButton,
-                            selectedCategory === null && styles.selectedCategory,
+                            { backgroundColor: selectedCategory === null ? colors.primary[500] : colors.background.secondary }
                         ]}
                     >
                         <Text style={[
                             styles.categoryText,
-                            selectedCategory === null && styles.selectedCategoryText,
+                            { color: selectedCategory === null ? colors.background.primary : colors.text.primary }
                         ]}>
                             All
                         </Text>
@@ -160,12 +162,12 @@ const ShopScreen = () => {
                             key={category}
                             style={[
                                 styles.categoryButton,
-                                selectedCategory === category && styles.selectedCategory,
+                                { backgroundColor: selectedCategory === category ? colors.primary[500] : colors.background.secondary }
                             ]}
                         >
                             <Text style={[
                                 styles.categoryText,
-                                selectedCategory === category && styles.selectedCategoryText,
+                                { color: selectedCategory === category ? colors.background.primary : colors.text.primary }
                             ]}
                             >
                                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -182,7 +184,7 @@ const ShopScreen = () => {
             {renderHeader()}
 
             {loading && filteredProducts.length === 0 ? (
-                <View style={styles.loadingSpinner}>
+                <View style={[styles.loadingSpinner, { backgroundColor: colors.background.primary }]}>
                     <LoadingSpinner fullScreen={true}/>
                 </View>
             ) : filteredProducts?.length === 0 ? (
@@ -210,8 +212,7 @@ const ShopScreen = () => {
                     onScrollBeginDrag={() => Keyboard.dismiss()}
                 />
             )}
-
-            {/* Sort Modal */}
+            
             <Modal
                 visible={showShortModal}
                 transparent={true}
@@ -219,31 +220,56 @@ const ShopScreen = () => {
                 onRequestClose={() => setShowShortModal(false)}
             >
                 <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
+                    <View style={[styles.modalContent, { backgroundColor: colors.background.primary }]}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Sort by</Text>
+                            <Text style={[styles.modalTitle, { color: colors.text.primary }]}>Sort by</Text>
                             <TouchableOpacity onPress={() => setShowShortModal(false)}>
-                                <AntDesign name="close" size={24} color={AppColors.text.primary}/>
+                                <AntDesign name="close" size={24} color={colors.text.primary}/>
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.sortOption} onPress={() => handleSort("price-asc")}>
-                            <Text style={[styles.sortOptionText, activeSortOption === "price-asc" && styles.activeSortText]}>
+
+                        <TouchableOpacity
+                            style={[styles.sortOption, { borderBottomColor: colors.gray[200] }]}
+                            onPress={() => handleSort("price-asc")}
+                        >
+                            <Text style={[
+                                styles.sortOptionText,
+                                { color: colors.text.primary },
+                                activeSortOption === "price-asc" && { color: colors.primary[600], fontWeight: 'bold' }
+                            ]}>
                                 Price: Low to high
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.sortOption} onPress={() => handleSort("price-desc")}>
-                            <Text style={[styles.sortOptionText, activeSortOption === "price-desc" && styles.activeSortText]}>
+
+                        <TouchableOpacity
+                            style={[styles.sortOption, { borderBottomColor: colors.gray[200] }]}
+                            onPress={() => handleSort("price-desc")}
+                        >
+                            <Text style={[
+                                styles.sortOptionText,
+                                { color: colors.text.primary },
+                                activeSortOption === "price-desc" && { color: colors.primary[600], fontWeight: 'bold' }
+                            ]}>
                                 Price: High to low
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.sortOption} onPress={() => handleSort("rating")}>
-                            <Text style={[styles.sortOptionText, activeSortOption === "rating" && styles.activeSortText]}>
+
+                        <TouchableOpacity
+                            style={[styles.sortOption, { borderBottomColor: colors.gray[200] }]}
+                            onPress={() => handleSort("rating")}
+                        >
+                            <Text style={[
+                                styles.sortOptionText,
+                                { color: colors.text.primary },
+                                activeSortOption === "rating" && { color: colors.primary[600], fontWeight: 'bold' }
+                            ]}>
                                 Ranking: High to low
                             </Text>
                         </TouchableOpacity>
+
                         {isFilterActive && (
                             <TouchableOpacity style={styles.sortOption} onPress={handleResetFilter}>
-                                <Text style={[styles.sortOptionText, {color: AppColors.error}]}>
+                                <Text style={[styles.sortOptionText, {color: colors.error}]}>
                                     Remove filters
                                 </Text>
                             </TouchableOpacity>
@@ -277,14 +303,11 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 16,
         paddingHorizontal: 16,
-        backgroundColor: AppColors.background.primary,
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[200],
     },
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 24,
-        color: AppColors.text.primary,
         marginBottom: 16,
     },
     searchContainer: {
@@ -299,7 +322,6 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     searchInputStyle: {
-        backgroundColor: AppColors.background.secondary,
         borderRadius: 8,
         borderColor: 'transparent',
         paddingRight: 40,
@@ -311,7 +333,6 @@ const styles = StyleSheet.create({
         height: 24,
         width: 24,
         borderRadius: 12,
-        backgroundColor: AppColors.gray[200],
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 1,
@@ -324,21 +345,14 @@ const styles = StyleSheet.create({
     },
     sortOptionView: {
         borderWidth: 1,
-        borderColor: AppColors.gray[200],
         width: 44,
         height: 44,
         borderRadius: 8,
         alignItems: "center",
         justifyContent: 'center',
-        backgroundColor: AppColors.background.primary,
     },
     activeSortButton: {
         borderWidth: 1,
-        borderColor: AppColors.error,
-    },
-    activeSortText: {
-        color: AppColors.primary[600],
-        fontWeight: 'bold',
     },
     categoriesContainer: {
         paddingVertical: 8,
@@ -347,19 +361,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 8,
         borderRadius: 20,
-        backgroundColor: AppColors.background.secondary,
         marginRight: 8,
-    },
-    selectedCategory: {
-        backgroundColor: AppColors.primary[500],
     },
     categoryText: {
         fontFamily: "Inter-Medium",
         fontSize: 14,
-        color: AppColors.text.primary,
-    },
-    selectedCategoryText: {
-        color: AppColors.background.primary,
     },
     productsGrid: {
         paddingHorizontal: 5,
@@ -381,7 +387,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     modalContent: {
-        backgroundColor: AppColors.background.primary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         padding: 24,
@@ -395,19 +400,13 @@ const styles = StyleSheet.create({
     modalTitle: {
         fontFamily: "Inter-SemiBold",
         fontSize: 18,
-        color: AppColors.text.primary,
     },
     sortOption: {
         paddingVertical: 16,
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[200],
-    },
-    activeSortOption: {
-        backgroundColor: AppColors.background.secondary
     },
     sortOptionText: {
         fontFamily: "Inter-Regular",
         fontSize: 16,
-        color: AppColors.text.primary,
     },
 });

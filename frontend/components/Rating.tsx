@@ -3,7 +3,7 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {ComponentProps, FC} from "react";
 import {FontAwesome} from "@expo/vector-icons";
 
@@ -23,9 +23,11 @@ const Rating: FC<RatingProps> = (
         size = 16,
         showCount = true,
     }) => {
+    const { colors } = useAppTheme();
+
     const renderStars = () => {
         const stars = [];
-        
+
         for (let i = 1; i <= 5; i++) {
             let iconName: FontAwesomeIconName = 'star-o';
 
@@ -40,7 +42,7 @@ const Rating: FC<RatingProps> = (
                     key={i}
                     name={iconName}
                     size={size}
-                    color={AppColors.accent[500]}
+                    color={colors.accent[500]}
                 />
             );
         }
@@ -53,7 +55,7 @@ const Rating: FC<RatingProps> = (
                 {renderStars()}
             </View>
             {showCount && count !== undefined && (
-                <Text style={styles.count}>({count})</Text>
+                <Text style={[styles.count, { color: colors.text.secondary }]}>({count})</Text>
             )}
         </View>
     );
@@ -65,7 +67,6 @@ const styles = StyleSheet.create({
     count: {
         marginLeft: 4,
         fontSize: 14,
-        color: AppColors.text.secondary,
     },
     starsContainer: {
         flexDirection: 'row',

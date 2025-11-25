@@ -3,7 +3,7 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import ButtonCustom from "@/components/ButtonCustom";
 
@@ -29,8 +29,10 @@ const EmptyState = (
         onAction,
     } : EmptyStateProps
 ) => {
+    const { colors } = useAppTheme();
     const size = 64;
-    const color = AppColors.gray[400];
+    const color = colors.gray[400];
+
     const getIcon = () => {
         switch (type) {
             case "cart":
@@ -86,7 +88,7 @@ const EmptyState = (
             <View style={styles.iconContainer}>
                 {getIcon()}
             </View>
-            <Text style={styles.message}>
+            <Text style={[styles.message, { color: colors.text.secondary }]}>
                 {message || getDefaultMessage()}
             </Text>
             {
@@ -117,7 +119,6 @@ const styles = StyleSheet.create({
     },
     message: {
         fontSize: 18,
-        color: AppColors.text.secondary,
         textAlign: 'center',
         marginBottom: 24,
     },

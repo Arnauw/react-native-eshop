@@ -14,7 +14,7 @@ import {
     AntDesign,
     Ionicons
 } from "@expo/vector-icons";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {useProductStore} from "@/store/productStore";
 import TextInputCustom from "@/components/TextInputCustom";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -23,8 +23,9 @@ import ProductCard from "@/components/ProductCard";
 import MainLayout from "@/components/MainLayout";
 
 const SearchScreen = () => {
+    const { colors } = useAppTheme();
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const searchTimeOutRef = useRef<number | null>(null);
+    const searchTimeOutRef = useRef<NodeJS.Timeout | number | null>(null);
     const {
         error,
         filteredProducts,
@@ -39,7 +40,7 @@ const SearchScreen = () => {
         }
         return () => {
             if (searchTimeOutRef.current) {
-                clearTimeout(searchTimeOutRef.current);
+                clearTimeout(searchTimeOutRef.current as number);
             }
         };
     }, []);
@@ -47,7 +48,7 @@ const SearchScreen = () => {
     const handleSearchChange = (text: string) => {
         setSearchQuery(text);
         if (searchTimeOutRef.current) {
-            clearTimeout(searchTimeOutRef.current);
+            clearTimeout(searchTimeOutRef.current as number);
         }
         if (text.length >= 3) {
             searchTimeOutRef.current = setTimeout(() => {
@@ -65,8 +66,11 @@ const SearchScreen = () => {
 
     const renderHeader = () => {
         return (
-            <View style={styles.header}>
-                <Text style={styles.title}>
+            <View style={[styles.header, {
+                backgroundColor: colors.background.primary,
+                borderBottomColor: colors.gray[200]
+            }]}>
+                <Text style={[styles.title, { color: colors.text.primary }]}>
                     Search products
                 </Text>
                 <View style={styles.searchRow}>
@@ -77,17 +81,17 @@ const SearchScreen = () => {
                                 onChangeText={handleSearchChange}
                                 placeholder="Search a product"
                                 style={styles.searchInput}
-                                inputStyle={styles.searchInputStyle}
+                                inputStyle={[styles.searchInputStyle, { backgroundColor: colors.background.secondary }]}
                             />
                             {searchQuery?.length > 0 && (
                                 <TouchableOpacity
                                     onPress={handleClearSearch}
-                                    style={styles.clearButton}
+                                    style={[styles.clearButton, { backgroundColor: colors.gray[200] }]}
                                 >
                                     <AntDesign
                                         name="close"
                                         size={16}
-                                        color={AppColors.gray[500]}
+                                        color={colors.gray[500]}
                                     />
                                 </TouchableOpacity>
                             )}
@@ -97,12 +101,12 @@ const SearchScreen = () => {
                         onPress={
                             () => searchProductsRealTime(searchQuery)
                         }
-                        style={styles.searchButton}
+                        style={[styles.searchButton, { backgroundColor: colors.primary[500] }]}
                     >
                         <Ionicons
                             name="search"
                             size={24}
-                            color={AppColors.background.primary}
+                            color="white"
                         />
                     </TouchableOpacity>
                 </View>
@@ -113,15 +117,16 @@ const SearchScreen = () => {
     return (
         <MainLayout>
             {renderHeader()}
+            
             {loading ? (
-                <LoadingSpinner/>
+                <View style={[styles.loadingContainer, { backgroundColor: colors.background.primary }]}>
+                    <LoadingSpinner/>
+                </View>
             ) : error ? (
-                <View>
-                    <View style={styles.errorContainer}>
-                        <Text style={styles.errorText}>
-                            {error}
-                        </Text>
-                    </View>
+                <View style={[styles.errorContainer, { backgroundColor: colors.background.primary }]}>
+                    <Text style={[styles.errorText, { color: colors.error }]}>
+                        {error}
+                    </Text>
                 </View>
             ) : filteredProducts?.length === 0 && searchQuery ? (
                 <EmptyState
@@ -131,29 +136,25 @@ const SearchScreen = () => {
             ) : (
                 <FlatList
                     data={searchQuery ? filteredProducts : []}
-                    keyExtractor={
-                        (item) => item.id.toString()
-                    }
+                    keyExtractor={(item) => item.id.toString()}
                     numColumns={2}
-                    renderItem={
-                        ({item}) => (
-                            <View style={styles.productContainer}>
-                                <ProductCard
-                                    product={item}
-                                    customStyle={{width: "100%"}}
-                                />
-                            </View>
-                        )
-                    }
+                    renderItem={({item}) => (
+                        <View style={styles.productContainer}>
+                            <ProductCard
+                                product={item}
+                                customStyle={{width: "100%"}}
+                            />
+                        </View>
+                    )}
                     contentContainerStyle={styles.productsGrid}
                     columnWrapperStyle={styles.columnWrapper}
-                    ListFooterComponent={
-                        <View style={styles.footer}/>
-                    }
+                    ListFooterComponent={<View style={styles.footer}/>}
                     ListEmptyComponent={
                         !searchQuery ? (
                             <View style={styles.emptyStateContainer}>
-                                <Text style={styles.emptyStateText}>Enter at least 3 letters to start the search</Text>
+                                <Text style={[styles.emptyStateText, { color: colors.text.secondary }]}>
+                                    Enter at least 3 letters to start the search
+                                </Text>
                             </View>
                         ) : null
                     }
@@ -168,20 +169,16 @@ export default SearchScreen;
 const styles = StyleSheet.create({
     header: {
         paddingBottom: 16,
-        backgroundColor: AppColors.background.primary,
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[200],
     },
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 24,
-        color: AppColors.text.primary,
         marginBottom: 16,
     },
     searchRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        // flex: 1,
     },
     searchContainer: {
         flex: 1,
@@ -196,7 +193,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     searchInputStyle: {
-        backgroundColor: AppColors.background.secondary,
         borderRadius: 8,
         borderColor: 'transparent',
         paddingRight: 40,
@@ -207,13 +203,11 @@ const styles = StyleSheet.create({
         height: 24,
         width: 24,
         borderRadius: 12,
-        backgroundColor: AppColors.gray[200],
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 1,
     },
     searchButton: {
-        backgroundColor: AppColors.primary[500],
         borderRadius: 8,
         width: 44,
         height: 44,
@@ -235,14 +229,18 @@ const styles = StyleSheet.create({
     footer: {
         height: 100,
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     errorContainer: {
-        // flex: 1,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
     },
     errorText: {
-        color: AppColors.error,
         fontSize: 16,
         textAlign: 'center',
     },
@@ -253,7 +251,6 @@ const styles = StyleSheet.create({
     },
     emptyStateText: {
         fontSize: 16,
-        color: AppColors.text.secondary,
         textAlign: 'center',
         lineHeight: 24,
     },

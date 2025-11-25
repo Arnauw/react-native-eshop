@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 interface ButtonProps {
     title: string;
@@ -34,19 +34,43 @@ const ButtonCustom = (
         textStyle,
     }: ButtonProps
 ) => {
+    const { colors } = useAppTheme();
+    const variantStyles = {
+        primary: { backgroundColor: colors.primary[500] },
+        secondary: { backgroundColor: colors.accent[500] },
+        outline: {
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            borderColor: colors.primary[500]
+        },
+        ghost: { backgroundColor: 'transparent' },
+    };
+
+    const variantTextStyles = {
+        primary: { color: '#FFFFFF' },
+        secondary: { color: '#FFFFFF' },
+        outline: { color: colors.primary[500] },
+        ghost: { color: colors.primary[500] },
+    };
+
     const buttonStyle = [
         styles.button,
-        styles[variant],
+        variantStyles[variant],
         styles[size],
         fullWidth && styles.fullWidth,
         disabled && styles.disabled,
         style,
     ];
+
     const textStyles = [
         styles.text,
-        styles[`${variant}Text`],
+        variantTextStyles[variant],
         textStyle,
     ];
+    
+    const spinnerColor = variant === 'primary' || variant === 'secondary'
+        ? '#FFFFFF'
+        : colors.primary[500];
 
     return (
         <TouchableOpacity
@@ -56,13 +80,7 @@ const ButtonCustom = (
             activeOpacity={0.8}
         >
             {loading ? (
-                <ActivityIndicator
-                    color={
-                        variant === 'primary'
-                            ? AppColors.background.primary
-                            : AppColors.primary[500]
-                    }
-                />
+                <ActivityIndicator color={spinnerColor} />
             ) : (
                 <Text style={textStyles}>{title}</Text>
             )}
@@ -87,32 +105,6 @@ const styles = StyleSheet.create({
     },
     disabled: {
         opacity: 0.5,
-    },
-    primary: {
-        backgroundColor: AppColors.primary[500],
-    },
-    secondary: {
-        backgroundColor: AppColors.accent[500],
-    },
-    outline: {
-        backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderColor: AppColors.primary[500],
-    },
-    ghost: {
-        backgroundColor: 'transparent',
-    },
-    primaryText: {
-        color: AppColors.background.primary,
-    },
-    secondaryText: {
-        color: AppColors.background.primary,
-    },
-    outlineText: {
-        color: AppColors.primary[500],
-    },
-    ghostText: {
-        color: AppColors.primary[500],
     },
     small: {
         paddingVertical: 8,

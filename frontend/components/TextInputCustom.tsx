@@ -8,12 +8,13 @@ import {
     TextStyle,
     TextInput as RNTextInput,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 interface TextInputProps {
     value: string;
     onChangeText: (text: string) => void;
     placeholder?: string;
+    placeholderTextColor?: string;
     label?: string;
     error?: string;
     secureTextEntry?: boolean;
@@ -32,6 +33,7 @@ const TextInputCustom = (
         value,
         onChangeText,
         placeholder,
+        placeholderTextColor,
         label,
         error,
         secureTextEntry = false,
@@ -45,16 +47,24 @@ const TextInputCustom = (
         labelStyle,
     }: TextInputProps
 ) => {
+    const { colors, isDarkMode } = useAppTheme();
+
     return (
         <View style={[styles.container, style]}>
-            {
-                label &&
-                <Text style={[styles.label, labelStyle]}>{label}</Text>
-            }
+            {label && (
+                <Text style={[
+                    styles.label,
+                    { color: colors.text.primary }, // Dynamic Label Color
+                    labelStyle
+                ]}>
+                    {label}
+                </Text>
+            )}
             <RNTextInput
                 value={value}
                 onChangeText={onChangeText}
                 placeholder={placeholder}
+                placeholderTextColor={placeholderTextColor || colors.text.secondary}
                 secureTextEntry={secureTextEntry}
                 keyboardType={keyboardType}
                 autoCapitalize={autoCapitalize}
@@ -63,15 +73,21 @@ const TextInputCustom = (
                 numberOfLines={numberOfLines}
                 style={[
                     styles.input,
+                    {
+                        backgroundColor: colors.background.secondary,
+                        borderColor: isDarkMode ? colors.gray[700] : colors.gray[300],
+                        color: colors.text.primary
+                    },
                     inputStyle,
                     multiline && styles.multiligneInput,
-                    error && styles.inputError,
+                    error ? { borderColor: colors.error } : undefined,
                 ]}
             />
-            {
-                error &&
-                <Text style={styles.errorText}>{error}</Text>
-            }
+            {error && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                    {error}
+                </Text>
+            )}
         </View>
     );
 };
@@ -87,26 +103,18 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         fontSize: 14,
         fontWeight: "500",
-        color: AppColors.text.primary,
     },
     input: {
-        backgroundColor: AppColors.background.secondary,
         borderRadius: 8,
         paddingHorizontal: 16,
         paddingVertical: 12,
         borderWidth: 1,
-        borderColor: AppColors.gray[300],
-        color: AppColors.text.primary,
     },
     multiligneInput: {
         minHeight: 100,
         textAlignVertical: "top"
     },
-    inputError: {
-        borderColor: AppColors.error
-    },
     errorText: {
-        color: AppColors.error,
         fontSize: 12,
         marginTop: 4,
     }

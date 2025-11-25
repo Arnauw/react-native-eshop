@@ -3,12 +3,13 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {useRouter} from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Logo = () => {
     const router = useRouter();
+    const { colors } = useAppTheme();
 
     return (
         <TouchableOpacity
@@ -18,8 +19,11 @@ const Logo = () => {
             <MaterialIcons
                 name={"shopping-cart"}
                 size={30}
-                color={AppColors.primary[700]}/>
-            <Text style={styles.logoText}>ShopNGo</Text>
+                color={colors.primary[700]}
+            />
+            <Text style={[styles.logoText, { color: colors.primary[700] }]}>
+                ShopNGo
+            </Text>
         </TouchableOpacity>
     );
 };
@@ -35,7 +39,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: 2,
         fontFamily: 'Inter-Bold',
-        color: AppColors.primary[700],
     }
 });
-

@@ -1,20 +1,32 @@
 import {
     Text,
     StyleSheet,
+    View,
+    Modal,
+    ScrollView,
+    Image,
+    TouchableOpacity
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 const MyComponent = () => {
+    const { colors } = useAppTheme();
+
     return (
-        <Text>
-            
-        </Text>
+        <View style={styles.container}>
+            <Text style={[styles.modalTitle, { color: colors.text.primary }]}>
+                Example Title
+            </Text>
+        </View>
     );
 };
 
 export default MyComponent;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     errorContainer: {
         flex: 1,
         justifyContent: "center",
@@ -24,7 +36,6 @@ const styles = StyleSheet.create({
     errorText: {
         fontFamily: "Inter-Regular",
         fontSize: 16,
-        color: AppColors.error,
         textAlign: "center",
     },
     listContainer: {
@@ -33,14 +44,12 @@ const styles = StyleSheet.create({
     modalSectionTitle: {
         fontFamily: 'Inter-Bold',
         fontSize: 17,
-        color: AppColors.text.primary,
         marginTop: 12,
         marginBottom: 10,
     },
     modalText: {
         fontFamily: "Inter-Regular",
         fontSize: 15,
-        color: AppColors.text.primary,
         marginBottom: 10,
     },
     modalBody: {
@@ -49,7 +58,6 @@ const styles = StyleSheet.create({
     modalTitle: {
         fontFamily: "Inter-Bold",
         fontSize: 20,
-        color: AppColors.text.primary
     },
     modalHeader: {
         flexDirection: "row",
@@ -70,12 +78,11 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     closeButtonText: {
-        fontFamily: "Inter-Meduim",
+        fontFamily: "Inter-Medium",
         color: "#fff",
         fontSize: 15,
     },
     closeButton: {
-        backgroundColor: AppColors.primary[500],
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 8,
@@ -86,9 +93,8 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     itemsTitle: {
-        fontFamily: "Inter-medium",
+        fontFamily: "Inter-Medium",
         fontSize: 15,
-        color: AppColors.text.primary,
         marginBottom: 6,
     },
     itemDetails: {
@@ -103,7 +109,6 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         paddingBottom: 12,
-        backgroundColor: AppColors.background.primary + "80",
         borderRadius: 8,
         padding: 8,
     },
@@ -113,7 +118,6 @@ const styles = StyleSheet.create({
     itemText: {
         fontFamily: "Inter-Regular",
         fontSize: 13,
-        color: AppColors.text.secondary,
         marginBottom: 4,
     }
 });

@@ -27,8 +27,8 @@ export const Colors = {
   },
 };
 
-export const AppColors = {
-    primary:{
+const Palette = {
+    primary: {
         50: "#ebf5ff",
         100:"#dbeafe",
         200: "#bfdbfe",
@@ -40,7 +40,7 @@ export const AppColors = {
         800: "#1e40af",
         900: "#1e3a8a",
     },
-    accent:{
+    accent: {
         50: "#fff7ed",
         100: "#ffedd5",
         200: "#fed7aa",
@@ -52,7 +52,7 @@ export const AppColors = {
         800: "#9a3412",
         900: "#7c2d12",
     },
-    gray:{
+    gray: {
         50: "#fafafa",
         100: "#f4f4f5",
         200: "#e4e4e7",
@@ -68,19 +68,40 @@ export const AppColors = {
     error: "#ef4444",
     warning: "#f59e0b",
     info: "#3b82f6",
-
-    background: {
-        primary: "#ffffff",
-        secondary: "#f5f5f7",
-        tertiary: "#EEEEEE",
-    },
-    text:{
-        primary: "#1f2937",
-        secondary: "#6b7280",
-        tertiary: "#9ca3af",
-        inverse: "#f3f4f6",
-    },
 };
+
+export const AppTheme = {
+    light: {
+        ...Palette,
+        background: {
+            primary: "#ffffff",
+            secondary: "#f5f5f7",
+            tertiary: "#EEEEEE",
+        },
+        text: {
+            primary: "#1f2937",
+            secondary: "#6b7280",
+            tertiary: "#9ca3af",
+            inverse: "#f3f4f6",
+        },
+    },
+    dark: {
+        ...Palette,
+        background: {
+            primary: "#151718",
+            secondary: "#1E1E1E",
+            tertiary: "#2C2C2C",
+        },
+        text: {
+            primary: "#ECEDEE",
+            secondary: "#9BA1A6",
+            tertiary: "#6b7280",
+            inverse: "#1f2937",
+        },
+    }
+};
+
+export const AppColors = AppTheme.light;
 
 export const Fonts = Platform.select({
   ios: {

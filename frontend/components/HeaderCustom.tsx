@@ -6,9 +6,9 @@ import {
     Text
 } from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import Logo from "@/components/Logo";
-import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+import {Ionicons, MaterialCommunityIcons, Feather} from "@expo/vector-icons";
 import {useRouter, usePathname} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
@@ -16,54 +16,67 @@ import useFavoriteStore from "@/store/favoriteStore";
 const HeaderCustom = () => {
     const router = useRouter();
     const pathname = usePathname();
+    const { colors, isDarkMode, toggleTheme } = useAppTheme();
     const {items} = useCartStore();
     const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const {favoriteItems} = useFavoriteStore();
     const isProfilePage = pathname === '/profile' || pathname === '/login' || pathname === '/signup';
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background.primary }]}>
+            <View style={[styles.header, { borderBottomColor: isDarkMode ? colors.gray[800] : colors.gray[300] }]}>
                 <Logo/>
                 <View style={styles.iconContainer}>
                     
+                    <TouchableOpacity
+                        style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
+                        onPress={toggleTheme}
+                    >
+                        <Feather
+                            name={isDarkMode ? "sun" : "moon"}
+                            size={20}
+                            color={colors.primary[700]}
+                        />
+                    </TouchableOpacity>
+                    {/* ------------------------ */}
+
                     {pathname !== '/' && router.canGoBack() && (
                         <TouchableOpacity
-                            style={styles.searchButton}
+                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
                             onPress={() => router.back()}
                         >
                             <Ionicons
                                 name={'arrow-back'}
                                 size={20}
-                                color={AppColors.primary[700]}
+                                color={colors.primary[700]}
                             />
                         </TouchableOpacity>
                     )}
-                    
+
                     {pathname !== '/shop' && (
                         <TouchableOpacity
-                            style={styles.searchButton}
+                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
                             onPress={() => router.push('/shop')}
                         >
                             <MaterialCommunityIcons
                                 name={'storefront-outline'}
                                 size={20}
-                                color={AppColors.primary[700]}
+                                color={colors.primary[700]}
                             />
                         </TouchableOpacity>
                     )}
-                    
+
                     {pathname !== '/favorites' && (
                         <TouchableOpacity
-                            style={styles.searchButton}
+                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
                             onPress={() => router.push(`/favorites`)}
                         >
                             <MaterialCommunityIcons
                                 name={'heart-outline'}
                                 size={20}
-                                color={AppColors.primary[700]}
+                                color={colors.primary[700]}
                             />
-                            <View style={styles.itemsView}>
+                            <View style={[styles.itemsView, { backgroundColor: colors.background.primary, borderColor: colors.primary[500] }]}>
                                 <Text style={styles.itemsText}>
                                     {favoriteItems?.length ? favoriteItems?.length : 0}
                                 </Text>
@@ -73,31 +86,31 @@ const HeaderCustom = () => {
 
                     {pathname !== '/cart' && (
                         <TouchableOpacity
-                            style={styles.searchButton}
+                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
                             onPress={() => router.push(`/cart`)}
                         >
                             <MaterialCommunityIcons
                                 name={'cart-outline'}
                                 size={20}
-                                color={AppColors.primary[700]}
+                                color={colors.primary[700]}
                             />
-                            <View style={styles.itemsView}>
+                            <View style={[styles.itemsView, { backgroundColor: colors.background.primary, borderColor: colors.primary[500] }]}>
                                 <Text style={styles.itemsText}>
                                     {cartItemCount > 0 ? cartItemCount : 0}
                                 </Text>
                             </View>
                         </TouchableOpacity>
                     )}
-                    
+
                     {!isProfilePage && (
                         <TouchableOpacity
-                            style={styles.searchButton}
+                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
                             onPress={() => router.push('/profile')}
                         >
                             <Ionicons
                                 name={'person-outline'}
                                 size={20}
-                                color={AppColors.primary[700]}
+                                color={colors.primary[700]}
                             />
                         </TouchableOpacity>
                     )}
@@ -111,7 +124,6 @@ export default HeaderCustom;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: AppColors.background.primary,
         marginTop: Platform.OS === "android" ? 35 : 0,
     },
     header: {
@@ -119,7 +131,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[300],
         paddingBottom: 5,
         paddingHorizontal: 20,
     },
@@ -131,14 +142,12 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     searchButton: {
-        backgroundColor: AppColors.primary[50],
         borderRadius: 5,
         width: 35,
         height: 35,
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
-        borderColor: AppColors.primary[500],
     },
     itemsView: {
         position: "absolute",
@@ -147,16 +156,14 @@ const styles = StyleSheet.create({
         width: 18,
         height: 18,
         borderRadius: 9,
-        backgroundColor: AppColors.background.primary,
         borderWidth: 1,
-        borderColor: AppColors.primary[500],
         alignItems: "center",
         justifyContent: "center",
         zIndex: 10,
     },
     itemsText: {
         fontSize: 10,
-        color: AppColors.accent[500],
+        color: "#f97316", // Keeping accent static for now, or use colors.accent[500]
         fontWeight: "bold",
         includeFontPadding: false,
         textAlignVertical: 'center',

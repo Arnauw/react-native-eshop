@@ -7,7 +7,7 @@ import {
     Image,
     Text,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {Product} from "@/types/product";
 import ButtonCustom from "@/components/ButtonCustom"
 import Toast from "react-native-toast-message";
@@ -16,7 +16,6 @@ import Rating from "@/components/Rating";
 import useCartStore from "@/store/cartStore";
 import useFavoriteStore from "@/store/favoriteStore";
 import {AntDesign} from "@expo/vector-icons";
-import favoriteStore from "@/store/favoriteStore";
 
 interface ProductCardProps {
     product: Product;
@@ -31,6 +30,7 @@ const ProductCard = (
         customStyle
     }: ProductCardProps
 ) => {
+    const { colors } = useAppTheme();
     const {id, title, price, category, image, rating} = product;
     const router = useRouter();
     const {addItem, getItemCount} = useCartStore();
@@ -39,7 +39,6 @@ const ProductCard = (
 
     const handleProductRoute = (e: any) => {
         router.push(`/product/${id}`);
-        //     "as any" is probably absolutely not necessary here so I removed it.
     };
 
     const handleAddToCart = () => {
@@ -67,19 +66,19 @@ const ProductCard = (
     const handleToggleFavorite = () => {
         toggleFavorite(product);
     };
-
-
+    
     return (
         <TouchableOpacity
             onPress={handleProductRoute}
             style={[
                 styles.card,
+                { backgroundColor: colors.background.primary, borderColor: colors.gray[200] },
                 compact && styles.compactCard,
                 customStyle,
             ]}
             activeOpacity={0.8}
         >
-            <View style={styles.imageContainer}>
+            <View style={[styles.imageContainer, { backgroundColor: colors.background.primary }]}>
                 <Image
                     source={{uri: image}}
                     style={styles.image}
@@ -89,7 +88,10 @@ const ProductCard = (
                     onPress={handleToggleFavorite}
                     style={[
                         styles.favoriteButton,
-                        {borderWidth: isFav ? 1 : 0}
+                        {
+                            borderWidth: isFav ? 1 : 0,
+                            borderColor: colors.error
+                        }
                     ]}
                 >
                     <AntDesign
@@ -97,17 +99,17 @@ const ProductCard = (
                         size={18}
                         color={
                             isFav
-                                ? AppColors.error
-                                : AppColors.gray[400]
+                                ? colors.error
+                                : colors.gray[400]
                         }
                     />
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.content}>
-                <Text style={styles.category}>{category}</Text>
+            <View style={[styles.content, { backgroundColor: colors.background.secondary }]}>
+                <Text style={[styles.category, { color: colors.text.tertiary }]}>{category}</Text>
                 <Text
-                    style={styles.title}
+                    style={[styles.title, { color: colors.text.primary }]}
                     numberOfLines={compact ? 1 : 2}
                     ellipsizeMode={'tail'}
                 >
@@ -118,6 +120,7 @@ const ProductCard = (
                     <Text
                         style={[
                             styles.price,
+                            { color: colors.primary[600] },
                             !compact
                             && {marginBottom: 7}
                         ]}
@@ -127,6 +130,7 @@ const ProductCard = (
                     <Text
                         style={[
                             styles.ratingText,
+                            { color: colors.gray[600] },
                             !compact
                             && {marginBottom: 7}
                         ]}
@@ -160,34 +164,27 @@ const styles = StyleSheet.create({
     price: {
         fontSize: 16,
         fontWeight: '600',
-        color: AppColors.primary[600],
         marginBottom: 5,
     },
     footer: {
-        // flexDirection: 'row',
         justifyContent: 'space-between',
-        // alignItems: 'center',
     },
     ratingText: {
         marginBottom: 8,
         textTransform: 'capitalize',
-        color: AppColors.gray[600],
     },
     title: {
         fontSize: 14,
         fontWeight: '500',
-        color: AppColors.text.primary,
         marginBottom: 8,
     },
     category: {
         fontSize: 12,
-        color: AppColors.text.tertiary,
         textTransform: 'capitalize',
         marginBottom: 4,
     },
     content: {
         padding: 12,
-        backgroundColor: AppColors.background.secondary,
     },
     favoriteButton: {
         position: 'absolute',
@@ -200,7 +197,6 @@ const styles = StyleSheet.create({
         height: 32,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: AppColors.error,
     },
     image: {
         width: '100%',
@@ -209,8 +205,6 @@ const styles = StyleSheet.create({
     imageContainer: {
         position: 'relative',
         height: 150,
-        // width: 100,
-        backgroundColor: AppColors.background.primary,
         padding: 5,
     },
     compactCard: {
@@ -218,7 +212,6 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     card: {
-        backgroundColor: AppColors.background.primary,
         borderRadius: 12,
         overflow: 'hidden',
         shadowColor: '#000',
@@ -229,6 +222,5 @@ const styles = StyleSheet.create({
         width: '48%',
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: AppColors.gray[200],
     },
 });

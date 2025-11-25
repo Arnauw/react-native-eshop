@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useState, useEffect} from 'react';
 import {useLocalSearchParams, useRouter} from "expo-router";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {Product} from "@/types/product"
 import {getProduct} from "@/lib/API"
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -25,6 +25,7 @@ import {useProductStore} from "@/store/productStore";
 const {width} = Dimensions.get("window");
 
 const SingleProductScreen = () => {
+    const { colors } = useAppTheme();
     const {id} = useLocalSearchParams<{ id: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +38,7 @@ const SingleProductScreen = () => {
 
     useEffect(() => {
         const productId = Number(id);
-        
+
         const cachedProduct = products.find(
             p => p.id === productId
         );
@@ -73,7 +74,7 @@ const SingleProductScreen = () => {
     if (error || !product) {
         return (
             <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>
+                <Text style={[styles.errorText, { color: colors.error }]}>
                     {error || "Product not found"}
                 </Text>
                 <ButtonCustom
@@ -126,7 +127,7 @@ const SingleProductScreen = () => {
 
     return (
         <MainLayout>
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: colors.background.primary }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     style={{flex: 1}}
@@ -140,24 +141,27 @@ const SingleProductScreen = () => {
 
                         <TouchableOpacity
                             onPress={handleToggleFavorite}
-                            style={styles.favoriteButton}
+                            style={[
+                                styles.favoriteButton,
+                                { backgroundColor: colors.background.primary, borderColor: colors.gray[200] }
+                            ]}
                         >
                             <AntDesign
                                 name={"heart"}
                                 size={22}
-                                color={isFav ? AppColors.error : AppColors.gray[400]}
+                                color={isFav ? colors.error : colors.gray[400]}
                             />
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.productInfo}>
-                        <Text style={styles.category}>
+                    <View style={[styles.productInfo, { backgroundColor: colors.background.secondary }]}>
+                        <Text style={[styles.category, { color: colors.text.secondary }]}>
                             {
                                 product?.category?.charAt(0).toUpperCase()
                                 + (product?.category?.slice(1))
                             }
                         </Text>
-                        <Text style={styles.title}>
+                        <Text style={[styles.title, { color: colors.text.primary }]}>
                             {product?.title}
                         </Text>
                         <View style={styles.ratingContainer}>
@@ -166,42 +170,56 @@ const SingleProductScreen = () => {
                                 count={product?.rating?.count}
                             />
                         </View>
-                        <Text style={styles.price}>
+                        <Text style={[styles.price, { color: colors.primary[600] }]}>
                             {product?.price.toFixed(2)} €
                         </Text>
-                        <View style={styles.divider}/>
-                        <Text style={styles.descriptionTitle}>
+
+                        <View style={[styles.divider, { backgroundColor: colors.gray[200] }]}/>
+
+                        <Text style={[styles.descriptionTitle, { color: colors.text.primary }]}>
                             Description
                         </Text>
-                        <Text style={styles.description}>
+                        <Text style={[styles.description, { color: colors.text.secondary }]}>
                             {product?.description}
                         </Text>
                     </View>
                 </ScrollView>
-                <View style={styles.footer}>
+
+                <View style={[
+                    styles.footer,
+                    { backgroundColor: colors.background.primary, borderTopColor: colors.gray[200] }
+                ]}>
                     <View style={styles.quantityContainer}>
-                        <Text style={styles.quantityTitle}>Quantity</Text>
+                        <Text style={[styles.quantityTitle, { color: colors.text.primary }]}>Quantity</Text>
                         <View style={styles.quantityControls}>
-                            <TouchableOpacity onPress={handleDecreaseQuantity} disabled={quantity <= 1}
-                                              style={styles.quantityButton}>
-                                <AntDesign name="minus" size={20} color={AppColors.primary[600]}/>
+                            <TouchableOpacity
+                                onPress={handleDecreaseQuantity}
+                                disabled={quantity <= 1}
+                                style={[styles.quantityButton, { backgroundColor: colors.background.secondary }]}
+                            >
+                                <AntDesign name="minus" size={20} color={colors.primary[600]}/>
                             </TouchableOpacity>
 
-                            <Text style={styles.quantityValue}>{quantity}</Text>
+                            <Text style={[styles.quantityValue, { color: colors.text.primary }]}>{quantity}</Text>
 
-                            <TouchableOpacity onPress={handleIncreaseQuantity} disabled={quantity >= 100}
-                                              style={styles.quantityButton}>
-                                <AntDesign name="plus" size={20} color={AppColors.primary[600]}/>
+                            <TouchableOpacity
+                                onPress={handleIncreaseQuantity}
+                                disabled={quantity >= 100}
+                                style={[styles.quantityButton, { backgroundColor: colors.background.secondary }]}
+                            >
+                                <AntDesign name="plus" size={20} color={colors.primary[600]}/>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.divider}/>
+
+                    <View style={[styles.divider, { backgroundColor: colors.gray[200] }]}/>
+
                     <View style={styles.footerActions}>
                         <View style={styles.totalPriceContainer}>
-                            <Text style={styles.totalLabel}>
+                            <Text style={[styles.totalLabel, { color: colors.text.primary }]}>
                                 Total:
                             </Text>
-                            <Text style={styles.totalPrice}>
+                            <Text style={[styles.totalPrice, { color: colors.primary[600] }]}>
                                 {(product?.price * quantity).toFixed(2)} €
                             </Text>
                         </View>
@@ -227,7 +245,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: AppColors.background.primary,
         position: "relative",
     },
     errorButton: {
@@ -236,7 +253,6 @@ const styles = StyleSheet.create({
     errorText: {
         fontFamily: 'Inter-Medium',
         fontSize: 16,
-        color: AppColors.error,
         textAlign: 'center',
         marginBottom: 16,
     },
@@ -249,25 +265,21 @@ const styles = StyleSheet.create({
     description: {
         fontFamily: 'Inter-Regular',
         fontSize: 16,
-        color: AppColors.text.secondary,
         lineHeight: 24,
         marginBottom: 24,
     },
     descriptionTitle: {
         fontFamily: 'Inter-SemiBold',
         fontSize: 18,
-        color: AppColors.text.primary,
         marginBottom: 8,
     },
     divider: {
         height: 1,
-        backgroundColor: AppColors.gray[200],
         marginBottom: 16
     },
     price: {
         fontFamily: 'Inter-Bold',
         fontSize: 24,
-        color: AppColors.primary[600],
         marginBottom: 16,
     },
     ratingContainer: {
@@ -276,13 +288,11 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 24,
-        color: AppColors.text.primary,
         marginBottom: 8,
     },
     category: {
         fontFamily: 'Inter-Medium',
         fontSize: 14,
-        color: AppColors.text.secondary,
         marginBottom: 8,
         textTransform: 'capitalize',
     },
@@ -290,7 +300,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingBottom: 20,
         paddingTop: 20,
-        backgroundColor: AppColors.background.secondary,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         marginTop: 10,
@@ -310,7 +319,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 20,
         right: 44,
-        backgroundColor: 'white',
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -322,12 +330,9 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
         borderWidth: 1,
-        borderColor: AppColors.gray[100],
     },
     footer: {
-        backgroundColor: AppColors.background.primary,
         borderTopWidth: 1,
-        borderTopColor: AppColors.gray[200],
         paddingHorizontal: 24,
         paddingVertical: 16,
         paddingBottom: 30,
@@ -341,7 +346,6 @@ const styles = StyleSheet.create({
     quantityTitle: {
         fontFamily: 'Inter-SemiBold',
         fontSize: 16,
-        color: AppColors.text.primary,
     },
     quantityControls: {
         flexDirection: 'row',
@@ -351,14 +355,12 @@ const styles = StyleSheet.create({
         width: 36,
         height: 36,
         borderRadius: 18,
-        backgroundColor: AppColors.background.secondary,
         alignItems: 'center',
         justifyContent: 'center',
     },
     quantityValue: {
         fontFamily: 'Inter-Medium',
         fontSize: 16,
-        color: AppColors.text.primary,
         paddingHorizontal: 16,
         minWidth: 40,
         textAlign: 'center',
@@ -371,12 +373,10 @@ const styles = StyleSheet.create({
     totalLabel: {
         fontFamily: "Inter-Bold",
         fontSize: 20,
-        color: AppColors.text.primary,
     },
     totalPrice: {
         fontFamily: "Inter-Bold",
         fontSize: 20,
-        color: AppColors.primary[600],
     },
     totalPriceContainer: {
         flexDirection: 'row',

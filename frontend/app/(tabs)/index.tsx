@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import {Product} from "@/types/product";
 import {useProductStore} from "@/store/productStore";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {AntDesign} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
 import ProductCard from "@/components/ProductCard";
@@ -18,6 +18,8 @@ import MainLayout from "@/components/MainLayout";
 
 export default function HomeScreen() {
     const router = useRouter();
+    const { colors } = useAppTheme();
+
     const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
     const {
@@ -57,10 +59,10 @@ export default function HomeScreen() {
     const navigateToShop = () => {
         router.push('/shop');
     };
-    
+
     if (loading && products.length === 0) {
         return (
-            <View style={styles.loadingContainer}>
+            <View style={[styles.loadingContainer, { backgroundColor: colors.background.primary }]}>
                 <LoadingSpinner fullScreen/>
             </View>
         )
@@ -68,8 +70,8 @@ export default function HomeScreen() {
 
     if (error) {
         return (
-            <View style={styles.loadingContainer}>
-                <Text style={styles.errorText}>Error: {error}</Text>
+            <View style={[styles.loadingContainer, { backgroundColor: colors.background.primary }]}>
+                <Text style={[styles.errorText, { color: colors.error }]}>Error: {error}</Text>
             </View>
         )
     }
@@ -82,7 +84,9 @@ export default function HomeScreen() {
             >
                 <View style={styles.categoriesSection}>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Categories</Text>
+                        <Text style={[styles.sectionTitle, { color: colors.primary[500] }]}>
+                            Categories
+                        </Text>
                     </View>
                     <ScrollView
                         horizontal={true}
@@ -90,28 +94,32 @@ export default function HomeScreen() {
                     >
                         {categories?.map((category, index) => (
                             <TouchableOpacity
-                                style={styles.categoryButton}
+                                style={[styles.categoryButton, { backgroundColor: colors.background.secondary }]}
                                 key={index}
                                 onPress={() => navigateToCategory(category)}
                             >
                                 <AntDesign
                                     name={"tag"}
                                     size={16}
-                                    color={AppColors.primary[500]}
+                                    color={colors.primary[500]}
                                 />
-                                <Text style={styles.categoryText}>
+                                <Text style={[styles.categoryText, { color: colors.text.primary }]}>
                                     {category.charAt(0).toUpperCase() + category.slice(1)}
                                 </Text>
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
                 </View>
-
+                
                 <View style={styles.featuredSection}>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Best Sellers</Text>
+                        <Text style={[styles.sectionTitle, { color: colors.primary[500] }]}>
+                            Best Sellers
+                        </Text>
                         <TouchableOpacity onPress={navigateToShop}>
-                            <Text style={styles.seeAllText}>See all</Text>
+                            <Text style={[styles.seeAllText, { color: colors.primary[500] }]}>
+                                See all
+                            </Text>
                         </TouchableOpacity>
                     </View>
                     <FlatList
@@ -126,12 +134,16 @@ export default function HomeScreen() {
                         )}
                     />
                 </View>
-
+                
                 <View style={styles.newestSection}>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>New Products</Text>
+                        <Text style={[styles.sectionTitle, { color: colors.primary[500] }]}>
+                            New Products
+                        </Text>
                         <TouchableOpacity onPress={navigateToShop}>
-                            <Text style={styles.seeAllText}>See All</Text>
+                            <Text style={[styles.seeAllText, { color: colors.primary[500] }]}>
+                                See All
+                            </Text>
                         </TouchableOpacity>
                     </View>
 
@@ -160,7 +172,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: AppColors.background.primary,
     },
     scrollContainerView: {
         paddingBottom: 20,
@@ -168,7 +179,6 @@ const styles = StyleSheet.create({
     errorText: {
         fontFamily: 'Inter-Medium',
         fontSize: 16,
-        color: AppColors.error,
         textAlign: 'center',
     },
     sectionHeader: {
@@ -180,12 +190,10 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontFamily: 'Inter-Medium',
         fontSize: 14,
-        color: AppColors.primary[500],
     },
     seeAllText: {
         fontFamily: 'Inter-Medium',
         fontSize: 14,
-        color: AppColors.primary[500],
     },
     categoriesSection: {
         marginTop: 10,
@@ -194,7 +202,6 @@ const styles = StyleSheet.create({
     categoryButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: AppColors.background.secondary,
         paddingVertical: 10,
         paddingHorizontal: 12,
         borderRadius: 8,
@@ -205,7 +212,6 @@ const styles = StyleSheet.create({
         marginLeft: 6,
         fontFamily: 'Inter-Medium',
         fontSize: 12,
-        color: AppColors.text.primary,
         textTransform: 'capitalize',
     },
     featuredSection: {

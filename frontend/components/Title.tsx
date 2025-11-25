@@ -2,7 +2,7 @@ import {
     Text,
     StyleSheet,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {ReactNode} from "react";
 
 interface TitleProps {
@@ -12,9 +12,11 @@ interface TitleProps {
 const Title = (
     {children}: TitleProps
 ) => {
+    const { colors } = useAppTheme();
+
     return (
         <Text
-            style={styles.title}
+            style={[styles.title, { color: colors.text.primary }]}
         >
             {children}
         </Text>
@@ -27,6 +29,5 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 24,
-        color: AppColors.text.primary
     },
 });

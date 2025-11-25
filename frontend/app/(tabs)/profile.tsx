@@ -9,7 +9,7 @@ import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
 import {useEffect} from "react";
 import MainLayout from "@/components/MainLayout";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import ButtonCustom from "@/components/ButtonCustom";
 import {Feather, FontAwesome5, Foundation} from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -18,6 +18,8 @@ import Toast from "react-native-toast-message";
 const ProfileScreen = () => {
     const {user, logout, checkSession, isLoading} = useAuthStore();
     const router = useRouter();
+    
+    const { colors } = useAppTheme();
 
     useEffect(() => {
         if (!user) {
@@ -32,7 +34,7 @@ const ProfileScreen = () => {
                 <Foundation
                     name="shopping-cart"
                     size={20}
-                    color={AppColors.primary[500]}
+                    color={colors.primary[500]}
                 />
             ),
             title: 'My cart',
@@ -46,7 +48,7 @@ const ProfileScreen = () => {
                 <FontAwesome5
                     name="box-open"
                     size={16}
-                    color={AppColors.primary[500]}
+                    color={colors.primary[500]}
                 />
             ),
             title: 'My orders',
@@ -60,7 +62,7 @@ const ProfileScreen = () => {
                 <Foundation
                     name="credit-card"
                     size={20}
-                    color={AppColors.primary[500]}
+                    color={colors.primary[500]}
                 />
             ),
             title: 'My payments',
@@ -74,7 +76,7 @@ const ProfileScreen = () => {
                 <Foundation
                     name="home"
                     size={20}
-                    color={AppColors.primary[500]}
+                    color={colors.primary[500]}
                 />
             ),
             title: 'Delivery address',
@@ -88,7 +90,7 @@ const ProfileScreen = () => {
                 <Foundation
                     name="home"
                     size={20}
-                    color={AppColors.primary[500]}
+                    color={colors.primary[500]}
                 />
             ),
             title: 'Parameters',
@@ -128,79 +130,85 @@ const ProfileScreen = () => {
     return (
         <MainLayout>
             {user ? (
-                <View style={styles.contentContainer}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>My profile</Text>
+                <View style={[styles.contentContainer, { backgroundColor: colors.background.primary }]}>
+                    <View style={[styles.header, { backgroundColor: colors.background.primary }]}>
+                        <Text style={[styles.title, { color: colors.text.primary }]}>My profile</Text>
                     </View>
-                    <View style={styles.profileCard}>
-                        <View style={styles.avatarContainer}>
+
+                    <View style={[styles.profileCard, { borderBottomColor: colors.gray[200] }]}>
+                        <View style={[styles.avatarContainer, { backgroundColor: colors.gray[200] }]}>
                             <Feather
                                 name="user"
                                 size={40}
-                                color={AppColors.gray[400]}
+                                color={colors.gray[400]}
                             />
                         </View>
                         <View style={styles.profileInfo}>
-                            <Text style={styles.profileEmail}>{user?.email}</Text>
+                            <Text style={[styles.profileEmail, { color: colors.text.primary }]}>
+                                {user?.email}
+                            </Text>
                             <TouchableOpacity
-                                // style={styles.profileBtn}
                                 onPress={() => logout()}
                             >
-                                <Text style={styles.editProfileText}>Edit my profile</Text>
+                                <Text style={[styles.editProfileText, { color: colors.primary[500] }]}>
+                                    Edit my profile
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.menuContainer}>
+
+                    <View style={[styles.menuContainer, { backgroundColor: colors.background.primary }]}>
                         {menuItems?.map((item) => (
                             <TouchableOpacity
                                 key={item?.id}
-                                style={styles.menuItem}
+                                style={[styles.menuItem, { borderBottomColor: colors.gray[200] }]}
                                 onPress={item?.onPress}
                             >
                                 <View style={styles.menuItemLeft}>
                                     {item?.icon}
-                                    <Text
-                                        style={styles.menuItemTitle}
-                                    >
+                                    <Text style={[styles.menuItemTitle, { color: colors.text.primary }]}>
                                         {item?.title}
                                     </Text>
                                 </View>
                                 <MaterialIcons
                                     name="chevron-right"
                                     size={24}
-                                    color={AppColors.gray[400]}
+                                    color={colors.gray[400]}
                                 />
                             </TouchableOpacity>
                         ))}
                     </View>
+
                     <View style={styles.logoutContainer}>
                         <ButtonCustom
                             title="Log out"
                             onPress={handleLogout}
                             variant="outline"
                             fullWidth={true}
-                            style={styles.logoutButton}
-                            textStyle={styles.logoutButtonText}
+                            style={[styles.logoutButton, { borderColor: colors.error }]}
+                            textStyle={[styles.logoutButtonText, { color: colors.error }]}
                             disabled={isLoading}
                         />
                     </View>
                 </View>
             ) : (
-                <View style={styles.guestContainer}>
-                    <Text style={styles.title}>Welcome!</Text>
-                    <Text style={styles.message}>Please log in or register to access your profile.</Text>
+                <View style={[styles.guestContainer, { backgroundColor: colors.background.primary }]}>
+                    <Text style={[styles.title, { color: colors.text.primary }]}>Welcome!</Text>
+                    <Text style={[styles.message, { color: colors.text.secondary }]}>
+                        Please log in or register to access your profile.
+                    </Text>
                     <View style={styles.buttonContainer}>
                         <ButtonCustom title="Log In"
                                       fullWidth={true}
-                                      style={styles.loginButton}
-                                      textStyle={styles.buttonText}
+                                      style={[styles.loginButton, { backgroundColor: colors.primary[500] }]}
+                                      textStyle={[styles.buttonText, { color: colors.background.primary }]}
                                       onPress={() => router.push("/login")}
                         />
                         <ButtonCustom title="Register"
                                       fullWidth={true}
                                       variant='outline'
-                                      style={styles.signupButton}
-                                      textStyle={styles.signupButtonText}
+                                      style={[styles.signupButton, { borderColor: colors.primary[500] }]}
+                                      textStyle={[styles.signupButtonText, { color: colors.primary[500] }]}
                                       onPress={() => router.push("/signup")}
                         />
                     </View>
@@ -215,25 +223,21 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     guestContainer: {
         flex: 1,
-        backgroundColor: AppColors.background.primary,
         alignItems: "center",
         justifyContent: "center",
         paddingHorizontal: 24,
     },
     contentContainer: {
         flex: 1,
-        backgroundColor: AppColors.background.primary,
     },
     header: {
         paddingBottom: 16,
         paddingHorizontal: 16,
         paddingTop: 16,
-        backgroundColor: AppColors.background.primary,
     },
     title: {
         fontFamily: "Inter-Bold",
         fontSize: 24,
-        color: AppColors.text.primary,
     },
     profileCard: {
         flexDirection: 'row',
@@ -241,13 +245,11 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         paddingHorizontal: 16,
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[200],
     },
     avatarContainer: {
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: AppColors.gray[200],
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 16,
@@ -258,16 +260,13 @@ const styles = StyleSheet.create({
     profileEmail: {
         fontFamily: "Inter-SemiBold",
         fontSize: 16,
-        color: AppColors.text.primary,
     },
     editProfileText: {
         fontFamily: "Inter-Medium",
         fontSize: 14,
-        color: AppColors.primary[500],
     },
     menuContainer: {
         marginTop: 16,
-        backgroundColor: AppColors.background.primary,
         borderRadius: 8,
         paddingVertical: 8,
         marginHorizontal: 16,
@@ -278,7 +277,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingVertical: 16,
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[200],
     },
     menuItemLeft: {
         flexDirection: "row",
@@ -287,7 +285,6 @@ const styles = StyleSheet.create({
     menuItemTitle: {
         fontFamily: "Inter-Medium",
         fontSize: 16,
-        color: AppColors.text.primary,
         marginLeft: 12,
     },
     logoutContainer: {
@@ -296,15 +293,12 @@ const styles = StyleSheet.create({
     },
     logoutButton: {
         backgroundColor: "transparent",
-        borderColor: AppColors.error,
     },
     logoutButtonText: {
-        color: AppColors.error,
     },
     message: {
         fontFamily: "Inter-Regular",
         fontSize: 16,
-        color: AppColors.text.secondary,
         textAlign: "center",
         marginBottom: 24,
         marginTop: 8,
@@ -314,20 +308,16 @@ const styles = StyleSheet.create({
         gap: 16,
     },
     loginButton: {
-        backgroundColor: AppColors.primary[500]
     },
     buttonText: {
         fontFamily: "Inter-SemiBold",
         fontSize: 16,
-        color: AppColors.background.primary,
     },
     signupButton: {
-        borderColor: AppColors.primary[500],
         backgroundColor: "transparent"
     },
     signupButtonText: {
         fontFamily: "Inter-SemiBold",
         fontSize: 16,
-        color: AppColors.primary[500],
     },
 });

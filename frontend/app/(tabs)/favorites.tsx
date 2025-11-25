@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {useRouter} from "expo-router";
 import useFavoriteStore from "@/store/favoriteStore";
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import ProductCard from "@/components/ProductCard";
 import EmptyState from "@/components/EmptyState";
 import MainLayout from "@/components/MainLayout";
@@ -15,12 +15,13 @@ import Title from "@/components/Title";
 
 const FavoritesScreen = () => {
     const router = useRouter();
-    const {favoriteItems, resetFavorite} = useFavoriteStore()
+    const {favoriteItems, resetFavorite} = useFavoriteStore();
+    const { colors } = useAppTheme();
 
     const navigateToProducts = async () => {
         router.push("/");
     };
-    
+
     if (favoriteItems?.length === 0) {
         return (
             <MainLayout>
@@ -33,15 +34,15 @@ const FavoritesScreen = () => {
             </MainLayout>
         )
     }
-    
+
     return (
         <MainLayout>
-            <View style={styles.headerView}>
+            <View style={[styles.headerView, { borderBottomColor: colors.gray[200] }]}>
                 <View>
                     <Title>
                         Favorite list
                     </Title>
-                    <Text style={styles.itemCount}>
+                    <Text style={[styles.itemCount, { color: colors.text.secondary }]}>
                         {favoriteItems?.length} products
                     </Text>
                 </View>
@@ -49,7 +50,7 @@ const FavoritesScreen = () => {
                     <TouchableOpacity
                         onPress={() => resetFavorite()}
                     >
-                        <Text style={styles.resetText}>
+                        <Text style={[styles.resetText, { color: colors.error }]}>
                             Reset favorites
                         </Text>
                     </TouchableOpacity>
@@ -82,25 +83,21 @@ const styles = StyleSheet.create({
     headerView: {
         paddingBottom: 15,
         borderBottomWidth: 1,
-        borderBottomColor: AppColors.gray[200],
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 10,
     },
     resetText: {
-        color: AppColors.error,
         fontWeight: '500',
     },
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 20,
-        color: AppColors.text.primary,
     },
     itemCount: {
         fontFamily: 'Inter-Regular',
         fontSize: 14,
-        color: AppColors.text.secondary,
         marginTop: 2,
     },
     productsGrid: {

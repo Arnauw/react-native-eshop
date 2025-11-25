@@ -6,7 +6,7 @@ import {
     ScrollView,
     Platform,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import MainLayout from "@/components/MainLayout";
 import {useState} from "react";
 import {useRouter} from "expo-router";
@@ -22,6 +22,8 @@ const LoginScreen = () => {
 
     const router = useRouter();
     const { login, isLoading, error } = useAuthStore();
+    
+    const { colors } = useAppTheme();
 
     const validateForm = () => {
         let isValid = true;
@@ -68,14 +70,20 @@ const LoginScreen = () => {
                 >
 
                     <View style={styles.header}>
-                        <Text style={styles.title}>Welcome Back!</Text>
-                        <Text style={styles.subtitle}>Log in to your account</Text>
+                        <Text style={[styles.title, { color: colors.text.primary }]}>
+                            Welcome Back!
+                        </Text>
+                        <Text style={[styles.subtitle, { color: colors.text.secondary }]}>
+                            Log in to your account
+                        </Text>
                     </View>
 
                     <View style={styles.form}>
                         {
                             error &&
-                            <Text style={styles.errorText}>{error}</Text>
+                            <Text style={[styles.errorText, { color: colors.error }]}>
+                                {error}
+                            </Text>
                         }
                         <TextInputCustom
                             value={email}
@@ -126,13 +134,11 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'Inter-Bold',
         fontSize: 28,
-        color: AppColors.text.primary,
         marginBottom: 8,
     },
     subtitle: {
         fontFamily: 'Inter-Regular',
         fontSize: 16,
-        color: AppColors.text.secondary,
     },
     form: {
         width: "100%",
@@ -141,7 +147,6 @@ const styles = StyleSheet.create({
         marginTop: 24,
     },
     errorText: {
-        color: AppColors.error,
         fontFamily: "Inter-Regular",
         fontSize: 14,
         marginBottom: 16,

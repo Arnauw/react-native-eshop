@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native';
-import {AppColors} from "@/constants/theme";
+import { useAppTheme } from "@/hooks/useAppTheme";
 import {Product} from "@/types/product";
 import {useRouter} from "expo-router";
 import useCartStore from "@/store/cartStore";
@@ -25,6 +25,7 @@ const CartItem = (
 ) => {
     const router = useRouter();
     const {updateQuantity, removeItem} = useCartStore();
+    const { colors } = useAppTheme();
 
     const handlePress = () => {
         router.push(`/product/${product.id}`);
@@ -71,10 +72,16 @@ const CartItem = (
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[
+            styles.container,
+            {
+                backgroundColor: colors.background.primary,
+                borderColor: colors.gray[200]
+            }
+        ]}>
             <TouchableOpacity
                 onPress={handlePress}
-                style={styles.imageContainer}
+                style={[styles.imageContainer, { backgroundColor: colors.background.secondary }]}
             >
                 <Image
                     source={{uri: product.image}}
@@ -86,45 +93,45 @@ const CartItem = (
                 <TouchableOpacity
                     onPress={handlePress}
                 >
-                    <Text style={styles.title}>
+                    <Text style={[styles.title, { color: colors.text.primary }]}>
                         {product.title}
                     </Text>
                 </TouchableOpacity>
-                <Text style={styles.price}>
+                <Text style={[styles.price, { color: colors.primary[600] }]}>
                     {(product.price * quantity).toFixed(2)} €
                 </Text>
                 <View style={styles.quantityContainer}>
                     <TouchableOpacity
                         onPress={handleDecrease}
-                        style={styles.quantityButton}
+                        style={[styles.quantityButton, { backgroundColor: colors.background.secondary }]}
                     >
                         <AntDesign
                             name="minus"
                             size={16}
-                            color={AppColors.text.primary}
+                            color={colors.text.primary}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.quantity}>
+                    <Text style={[styles.quantity, { color: colors.text.primary }]}>
                         {quantity}
                     </Text>
                     <TouchableOpacity
                         onPress={handleIncrease}
-                        style={styles.quantityButton}
+                        style={[styles.quantityButton, { backgroundColor: colors.background.secondary }]}
                     >
                         <AntDesign
                             name="plus"
                             size={16}
-                            color={AppColors.text.primary}
+                            color={colors.text.primary}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={handleRemove}
-                        style={styles.removeButton}
+                        style={[styles.removeButton, { backgroundColor: colors.background.secondary }]}
                     >
                         <AntDesign
                             name="delete"
                             size={16}
-                            color={AppColors.error}
+                            color={colors.error}
                         />
                     </TouchableOpacity>
                 </View>
@@ -139,7 +146,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         padding: 16,
-        // backgroundColor: AppColors.background.primary,
         borderRadius: 8,
         marginBottom: 12,
         shadowColor: '#000',
@@ -148,12 +154,10 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 1,
         borderWidth: 1,
-        borderColor: AppColors.primary[200],
     },
     imageContainer: {
         width: 80,
         height: 80,
-        backgroundColor: AppColors.background.secondary,
         borderRadius: 8,
         overflow: 'hidden',
         marginRight: 16,
@@ -165,13 +169,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: '500',
-        color: AppColors.text.primary,
         marginBottom: 4,
     },
     price: {
         fontSize: 16,
         fontWeight: '600',
-        color: AppColors.primary[600],
         marginBottom: 8,
     },
     details: {
@@ -186,14 +188,12 @@ const styles = StyleSheet.create({
         width: 28,
         height: 28,
         borderRadius: 4,
-        backgroundColor: AppColors.background.secondary,
         alignItems: 'center',
         justifyContent: 'center',
     },
     quantity: {
         fontSize: 14,
         fontWeight: "500",
-        color: AppColors.text.primary,
         paddingHorizontal: 12,
     },
     removeButton: {
@@ -201,7 +201,6 @@ const styles = StyleSheet.create({
         width: 28,
         height: 28,
         borderRadius: 4,
-        backgroundColor: AppColors.background.secondary,
         alignItems: 'center',
         justifyContent: 'center',
     }
