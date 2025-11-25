@@ -27,7 +27,7 @@ const CartItem = (
     const {updateQuantity, removeItem} = useCartStore();
 
     const handlePress = () => {
-        router.push(`/product/${product}`);
+        router.push(`/product/${product.id}`);
     };
 
     const handleDecrease = () => {
@@ -70,7 +70,7 @@ const CartItem = (
         <View style={styles.container}>
             <TouchableOpacity
                 onPress={handlePress}
-                style={styles.image}
+                style={styles.imageContainer}
             >
                 <Image
                     source={{uri: product.image}}

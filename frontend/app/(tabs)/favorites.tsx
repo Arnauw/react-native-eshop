@@ -38,7 +38,7 @@ const FavoritesScreen = () => {
             <View style={styles.headerView}>
                 <View>
                     <Text style={styles.title}>
-                        Favorite products list
+                        Favorite list
                     </Text>
                     <Text style={styles.itemCount}>
                         {favoriteItems?.length} products

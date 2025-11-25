@@ -1,36 +1,122 @@
 import {
+    FlatList,
     StyleSheet,
-    Text,
+    Text, TouchableOpacity,
     View
 } from 'react-native';
 import {AppColors} from "@/constants/theme";
-import {useRouter} from "expo-router";
+import {Link, useRouter} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import {useAuthStore} from "@/store/authStore";
 import {useState} from "react";
 import MainLayout from "@/components/MainLayout";
 import EmptyState from "@/components/EmptyState";
 import Title from "@/components/Title";
-
+import CartItem from "@/components/CartItem";
+import ButtonCustom from "@/components/ButtonCustom";
 
 const CartScreen = () => {
     const router = useRouter();
     const {items, getTotalPrice, clearCart} = useCartStore();
     const {user} = useAuthStore();
     const [loading, setLoading] = useState<boolean>(false);
+    const subtotal = getTotalPrice();
+    const shippingCost = subtotal > 50 ? 5.99 : 0;
+    const total = subtotal + shippingCost;
+    
+
+    const handlePlaceOrder = () => {
+        
+    };
 
     return (
         <MainLayout>
             {items?.length > 0 ? (
-                <View style={styles.header}>
-                    <Title>
-                        Cart products
-                    </Title>
-                    <Text
-                        style={styles.itemCount}
-                    >
-                        {items?.length}
-                    </Text>
+                <View style={styles.container}>
+                    <View style={styles.headerView}>
+                        <View style={styles.header}>
+                            <Title>
+                                Cart products
+                            </Title>
+                            <Text
+                                style={styles.itemCount}
+                            >
+                                {items?.length} products
+                            </Text>
+                        </View>
+                        <View>
+                            <TouchableOpacity
+                                onPress={() => clearCart()}
+                            >
+                                <Text style={styles.resetText}>
+                                    Empty the cart
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <FlatList
+                        data={items}
+                        keyExtractor={
+                            (item) =>
+                                item.product.id.toString()
+                        }
+                        renderItem={
+                            ({item}) => (
+                                <CartItem
+                                    product={item.product}
+                                    quantity={item.quantity}
+                                />
+                            )
+                        }
+                        contentContainerStyle={styles.cartItemsContainer}
+                        showsVerticalScrollIndicator={false}
+                    />
+                    <View style={styles.summaryContainer}>
+                        <View style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>
+                                Subtotal:
+                            </Text>
+                            <Text style={styles.summaryValue}>
+                                {subtotal.toFixed(2)} €
+                            </Text>
+                        </View>
+                        {shippingCost > 0 && (
+                            <View style={styles.summaryRow}>
+                                <Text style={styles.summaryLabel}>
+                                    {"Shipping fees: "}
+                                </Text>
+                                <Text style={styles.summaryValue}>
+                                    {shippingCost.toFixed(2)} €
+                                </Text>
+                            </View>
+                        )}
+                        <View style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>
+                                Total:
+                            </Text>
+                            <Text style={styles.summaryValue}>
+                                {total.toFixed(2)} €
+                            </Text>
+                        </View>
+                        <ButtonCustom
+                            title="Place order"
+                            onPress={handlePlaceOrder}
+                            disabled={!user || loading}
+                            style={styles.checkoutButton}
+                        />
+                        {!user && (
+                            <View style={styles.alertView}>
+                                <Text style={styles.alertText}>
+                                    Log in to place order
+                                </Text>
+                                <Link href={"/login"}>
+                                    <Text style={styles.loginText}>
+                                        Login
+                                    </Text>
+                                </Link>
+                            </View>
+                        )}
+                    </View>
                 </View>
             ) : (
                 <EmptyState
