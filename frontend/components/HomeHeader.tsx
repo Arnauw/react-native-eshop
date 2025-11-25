@@ -26,8 +26,7 @@ const HomeHeader = () => {
             <View style={styles.header}>
                 <Logo/>
                 <View style={styles.iconContainer}>
-
-                    {/* 1. BACK BUTTON */}
+                    
                     {pathname !== '/' && router.canGoBack() && (
                         <TouchableOpacity
                             style={styles.searchButton}
@@ -40,8 +39,7 @@ const HomeHeader = () => {
                             />
                         </TouchableOpacity>
                     )}
-
-                    {/* 2. SHOP BUTTON */}
+                    
                     {pathname !== '/shop' && (
                         <TouchableOpacity
                             style={styles.searchButton}
@@ -54,22 +52,7 @@ const HomeHeader = () => {
                             />
                         </TouchableOpacity>
                     )}
-
-                    {/* 3. SEARCH BUTTON */}
-                    {pathname !== '/search' && (
-                        <TouchableOpacity
-                            style={styles.searchButton}
-                            onPress={() => router.push(`/search`)}
-                        >
-                            <Ionicons
-                                name={'search'}
-                                size={20}
-                                color={AppColors.primary[700]}
-                            />
-                        </TouchableOpacity>
-                    )}
-
-                    {/* 4. FAVORITES BUTTON */}
+                    
                     {pathname !== '/favorites' && (
                         <TouchableOpacity
                             style={styles.searchButton}

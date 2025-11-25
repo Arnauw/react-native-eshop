@@ -6,16 +6,18 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Keyboard
 } from 'react-native';
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {AppColors} from "@/constants/theme";
 import MainLayout from "@/components/MainLayout";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
-import {useLocalSearchParams, useRouter} from "expo-router";
+import {useLocalSearchParams} from "expo-router";
 import {useProductStore} from "@/store/productStore";
 import EmptyState from "@/components/EmptyState";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import TextInputCustom from "@/components/TextInputCustom";
 
 const ShopScreen = () => {
     const {
@@ -27,28 +29,53 @@ const ShopScreen = () => {
         fetchCategories,
         setCategory,
         sortProducts,
+        searchProductsRealTime,
     } = useProductStore();
 
     const { category: categoryParam } = useLocalSearchParams<{ category?: string; }>();
-
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const searchTimeOutRef = useRef<NodeJS.Timeout | number | null>(null);
     const [showShortModal, setShowShortModal] = useState<boolean>(false);
     const [activeSortOption, setActiveSortOption] = useState<string | null>(null);
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
-    const router = useRouter();
 
     useEffect(() => {
-        if (categories.length === 0) {
-            fetchCategories();
-        }
+        if (categories.length === 0) fetchCategories();
+        if (filteredProducts.length === 0) fetchProducts();
 
-        if (filteredProducts.length === 0) {
-            fetchProducts();
-        }
-        
         if (categoryParam) {
             setCategory(categoryParam);
         }
+        
+        return () => {
+            if (searchTimeOutRef.current) {
+                clearTimeout(searchTimeOutRef.current);
+            }
+        };
     }, []);
+    
+    const handleSearchChange = (text: string) => {
+        setSearchQuery(text);
+
+        if (searchTimeOutRef.current) {
+            clearTimeout(searchTimeOutRef.current);
+        }
+
+        // Debounce: Wait 500ms after user stops typing
+        if (text.length >= 1) {
+            searchTimeOutRef.current = setTimeout(() => {
+                searchProductsRealTime(text);
+            }, 500);
+        } else {
+            searchProductsRealTime("");
+        }
+    };
+
+    const handleClearSearch = () => {
+        setSearchQuery("");
+        searchProductsRealTime("");
+        Keyboard.dismiss();
+    };
 
     const handleSort = (sortBy: "price-asc" | "price-desc" | "rating") => {
         sortProducts(sortBy);
@@ -70,20 +97,33 @@ const ShopScreen = () => {
                 <Text style={styles.title}>
                     All products
                 </Text>
+                
                 <View style={styles.flexRow}>
-                    <TouchableOpacity
-                        style={styles.searchRow}
-                        onPress={() => router.push("/search")}
-                    >
-                        <View style={styles.searchContainer}>
-                            <View style={styles.searchInput}>
-                                <Text style={{color: AppColors.text.secondary}}>Search a product...</Text>
-                            </View>
+                    <View style={styles.searchContainer}>
+                        <View style={styles.inputWrapper}>
+                            <TextInputCustom
+                                value={searchQuery}
+                                onChangeText={handleSearchChange}
+                                placeholder="Search a product..."
+                                style={styles.searchInputContainer}
+                                inputStyle={styles.searchInputStyle}
+                            />
+                            {searchQuery.length > 0 ? (
+                                <TouchableOpacity
+                                    onPress={handleClearSearch}
+                                    style={styles.clearButton}
+                                >
+                                    <AntDesign name="close" size={16} color={AppColors.gray[500]} />
+                                </TouchableOpacity>
+                            ) : (
+                                // Magnifying glass icon when no text
+                                <View style={styles.searchIcon}>
+                                    <Ionicons name="search" size={20} color={AppColors.text.secondary} />
+                                </View>
+                            )}
                         </View>
-                        <View style={styles.searchButton}>
-                            <Ionicons name="search" size={20} color="white"/>
-                        </View>
-                    </TouchableOpacity>
+                    </View>
+
                     <TouchableOpacity
                         onPress={() => setShowShortModal(true)}
                         style={[
@@ -94,6 +134,7 @@ const ShopScreen = () => {
                         <AntDesign name="filter" size={20} color={AppColors.text.primary}/>
                     </TouchableOpacity>
                 </View>
+
                 <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
@@ -139,7 +180,7 @@ const ShopScreen = () => {
     return (
         <MainLayout>
             {renderHeader()}
-            
+
             {loading && filteredProducts.length === 0 ? (
                 <View style={styles.loadingSpinner}>
                     <LoadingSpinner fullScreen={true}/>
@@ -147,7 +188,7 @@ const ShopScreen = () => {
             ) : filteredProducts?.length === 0 ? (
                 <EmptyState
                     type="search"
-                    message="No products found"
+                    message={searchQuery ? "No products found matching your search" : "No products available"}
                 />
             ) : (
                 <FlatList
@@ -166,9 +207,11 @@ const ShopScreen = () => {
                     columnWrapperStyle={styles.columnWrapper}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<View style={styles.footer}/>}
+                    onScrollBeginDrag={() => Keyboard.dismiss()}
                 />
             )}
 
+            {/* Sort Modal */}
             <Modal
                 visible={showShortModal}
                 transparent={true}
@@ -227,6 +270,8 @@ const styles = StyleSheet.create({
     flexRow: {
         flexDirection: "row",
         width: "100%",
+        alignItems: 'center',
+        marginBottom: 16,
     },
     header: {
         paddingTop: 10,
@@ -240,38 +285,42 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Bold',
         fontSize: 24,
         color: AppColors.text.primary,
-        marginBottom: 8,
-    },
-    searchRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
         marginBottom: 16,
-        flex: 1,
-        marginRight: 10,
     },
     searchContainer: {
         flex: 1,
+        marginRight: 10,
     },
-    searchInput: {
-        backgroundColor: AppColors.background.secondary,
-        borderTopLeftRadius: 8,
-        borderBottomLeftRadius: 8,
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderWidth: 1,
-        borderColor: AppColors.gray[300],
-        borderRightWidth: 0,
-        height: 44,
+    inputWrapper: {
+        position: "relative",
         justifyContent: 'center',
     },
-    searchButton: {
-        backgroundColor: AppColors.primary[500],
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-        width: 44,
+    searchInputContainer: {
+        marginBottom: 0,
+    },
+    searchInputStyle: {
+        backgroundColor: AppColors.background.secondary,
+        borderRadius: 8,
+        borderColor: 'transparent',
+        paddingRight: 40,
         height: 44,
+    },
+    clearButton: {
+        position: 'absolute',
+        right: 12,
+        height: 24,
+        width: 24,
+        borderRadius: 12,
+        backgroundColor: AppColors.gray[200],
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 1,
+        top: 10,
+    },
+    searchIcon: {
+        position: 'absolute',
+        right: 12,
+        top: 12,
     },
     sortOptionView: {
         borderWidth: 1,
@@ -280,7 +329,8 @@ const styles = StyleSheet.create({
         height: 44,
         borderRadius: 8,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: AppColors.background.primary,
     },
     activeSortButton: {
         borderWidth: 1,
