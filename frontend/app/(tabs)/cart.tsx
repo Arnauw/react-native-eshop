@@ -96,7 +96,7 @@ const CartScreen = () => {
             };
             
             const response = await axios.post(
-                "http://10.0.2.2/checkout",
+                "http://10.0.2.2:8000/checkout",
                 payload,
                 {
                     headers: {

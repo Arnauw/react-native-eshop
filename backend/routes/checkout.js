@@ -37,7 +37,7 @@ router.post(
                amount: priceInCents,
                 currency: "EUR",
                 customer: customer.id,
-                automatic_payment_method: {
+                automatic_payment_methods: {
                    enabled: true,
                 },
                 receipt_email: email,
