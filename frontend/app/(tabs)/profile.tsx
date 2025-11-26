@@ -68,9 +68,9 @@ const ProfileScreen = () => {
                     color={colors.primary[500]}
                 />
             ),
-            title: 'My payments',
+            title: 'My payment',
             onPress: () => {
-                // router.push('/payments');
+                // router.push('/payment');
             },
         },
         {

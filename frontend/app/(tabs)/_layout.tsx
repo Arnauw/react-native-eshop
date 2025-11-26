@@ -17,6 +17,7 @@ export default function TabLayout() {
             <Stack.Screen name="search" />
             <Stack.Screen name="favorites" />
             <Stack.Screen name="orders" />
+            <Stack.Screen name="payments" />
             <Stack.Screen name="product/[id]" />
         </Stack>
     );
