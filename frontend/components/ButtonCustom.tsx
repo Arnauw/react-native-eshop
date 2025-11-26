@@ -6,12 +6,13 @@ import {
     ViewStyle,
     TouchableOpacity,
     ActivityIndicator,
+    GestureResponderEvent,
 } from 'react-native';
 import { useAppTheme } from "@/hooks/useAppTheme";
 
 interface ButtonProps {
     title: string;
-    onPress: () => void;
+    onPress: (event: GestureResponderEvent) => void;
     size?: 'small' | 'medium' | 'large';
     variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
     disabled?: boolean;

@@ -6,6 +6,7 @@ import {
     StyleProp,
     Image,
     Text,
+    GestureResponderEvent,
 } from 'react-native';
 import { useAppTheme } from "@/hooks/useAppTheme";
 import {Product} from "@/types/product";
@@ -41,7 +42,9 @@ const ProductCard = (
         router.push(`/product/${id}`);
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = (e: GestureResponderEvent) => {
+        e.stopPropagation();
+
         if (getItemCount() >= 99) {
             Toast.show({
                 type: 'error',
@@ -63,7 +66,8 @@ const ProductCard = (
         });
     };
 
-    const handleToggleFavorite = () => {
+    const handleToggleFavorite = (e: GestureResponderEvent) => {
+        e.stopPropagation();
         toggleFavorite(product);
     };
     
