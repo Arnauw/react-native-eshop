@@ -1,7 +1,6 @@
 import {
     View,
     StyleSheet,
-    Platform,
     TouchableOpacity,
     Text
 } from 'react-native';
