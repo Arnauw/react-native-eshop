@@ -1,5 +1,5 @@
 import {Router} from "express";
-import * as stripe from "stripe";
+import stripe from "../lib/stripe.js";
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.get(
 router.post(
     "/checkout",
     async (req, res) => {
-        const { email, price } = await req.body;
+        const { email, price } = req.body;
         
         if (typeof price !== "number" || isNaN(price) || price <= 0) {
             return res.status(400).send({
@@ -51,7 +51,7 @@ router.post(
                 success: true,
                 message: "Payment session created successfully",
                 paymentIntent: paymentIntent.client_secret,
-                ephemeral_key: ephemeralKey.secret,
+                ephemeralKey: ephemeralKey.secret,
                 customer: customer.id,
             });
             

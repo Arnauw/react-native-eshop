@@ -45,6 +45,24 @@ const CartScreen = () => {
         try {
             setLoading(true);
 
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            console.log("---------------- DEBUG ----------------");
+            console.log("Session Error:", sessionError);
+            console.log("Is Session Null?", session === null);
+            console.log("Access Token present?", !!session?.access_token);
+            console.log("User Role:", session?.user?.role);
+            console.log("---------------------------------------");
+
+            if (!session) {
+                Toast.show({
+                    type: "error",
+                    text1: "Auth Error",
+                    text2: "No active session found. Please log in again.",
+                });
+                setLoading(false);
+                return;
+            }
+
             const orderData = {
                 user_email: user.email,
                 total_price: total,
@@ -57,6 +75,10 @@ const CartScreen = () => {
                 })),
                 payment_status: "pending",
             };
+
+            console.log("User Email in Store:", user?.email);
+            const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+            console.log("User Email in Supabase Token:", supabaseUser?.email);
 
             const {data, error} = await supabase
                 .from("orders")
@@ -74,7 +96,7 @@ const CartScreen = () => {
             };
             
             const response = await axios.post(
-                "http://localhost:8000/checkout",
+                "http://10.0.2.2/checkout",
                 payload,
                 {
                     headers: {
