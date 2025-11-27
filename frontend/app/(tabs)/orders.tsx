@@ -15,9 +15,11 @@ import Animated, {
 } from "react-native-reanimated";
 import {useAppTheme} from "@/hooks/use-app-theme";
 import {AppColors} from "@/constants/theme";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {LinearGradient} from "expo-linear-gradient";
 import {Feather} from "@expo/vector-icons";
+import {useAuthStore} from "@/store/authStore";
+import {useRouter} from "expo-router";
 
 interface Order {
     id: number;
@@ -146,23 +148,30 @@ const OrderDetailsModal = (
                                                 {item.title}
                                             </Text>
                                             <Text style={styles.itemText}>
-                                            
+                                            Price: {item.price.toFixed(2)} €
                                             </Text>
                                             <Text style={styles.itemText}>
-
+                                                Quantity: {item.quantity} €
                                             </Text>
                                             <Text style={styles.itemText}>
-
+                                                Subtotal: {(item.price * item.quantity).toFixed(2)} €
                                             </Text>
                                         </View>
                                     </View>
                                 )}
+                                showsHorizontalScrollIndicator={false}
+                                style={styles.itemList}
                             />
                         </View>
+                        <TouchableOpacity
+                            onPress={onClose}
+                            activeOpacity={0.7}
+                            style={styles.closeButton}
+                        >
+                        </TouchableOpacity>
                     </LinearGradient>
                 </Animated.View>
             </View>
-
         </Modal>
     );
 
@@ -170,11 +179,20 @@ const OrderDetailsModal = (
 
 
 const OrdersScreen = () => {
-    const {colors} = useAppTheme();
-
+    const {user} = useAuthStore();
+    const router = useRouter();
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [refreshing, setRefreshing] = useState<boolean>(false);
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    
+    const fetchOrders = async () => {}
+    
     return (
         <View>
-            <Text style={[styles.modalTitle, {color: colors.text.primary}]}>
+            <Text>
                 Example Title
             </Text>
         </View>
