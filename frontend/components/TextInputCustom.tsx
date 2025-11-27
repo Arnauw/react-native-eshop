@@ -54,7 +54,7 @@ const TextInputCustom = (
             {label && (
                 <Text style={[
                     styles.label,
-                    { color: colors.text.primary }, // Dynamic Label Color
+                    { color: colors.text.primary },
                     labelStyle
                 ]}>
                     {label}

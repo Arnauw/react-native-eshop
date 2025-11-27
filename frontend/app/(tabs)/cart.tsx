@@ -71,7 +71,7 @@ const CartScreen = () => {
                     product_id: item.product.id,
                     title: item.product.title,
                     price: item.product.price,
-                    quantity: item.product.quantity,
+                    quantity: item.quantity,
                     image: item.product.image,
                 })),
                 payment_status: "pending",

@@ -107,7 +107,6 @@ const useStripePayment = (
 
         } catch (error: any) {
             const msg = error.message || "Something went wrong";
-            // Alert.alert("Payment failed!", msg);
             Toast.show({
                 type: "error",
                 text1: "Payment failed",

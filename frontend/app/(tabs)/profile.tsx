@@ -56,7 +56,7 @@ const ProfileScreen = () => {
             ),
             title: 'My orders',
             onPress: () => {
-                // router.push('/orders');
+                router.push('/orders');
             },
         },
         {
