@@ -3,7 +3,7 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {useRouter} from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 

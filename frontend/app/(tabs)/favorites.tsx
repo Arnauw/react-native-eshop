@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {useRouter} from "expo-router";
 import useFavoriteStore from "@/store/favoriteStore";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import ProductCard from "@/components/ProductCard";
 import EmptyState from "@/components/EmptyState";
 import MainLayout from "@/components/MainLayout";

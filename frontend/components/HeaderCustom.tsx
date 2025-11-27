@@ -5,7 +5,7 @@ import {
     Text
 } from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import Logo from "@/components/Logo";
 import {Ionicons, MaterialCommunityIcons, Feather} from "@expo/vector-icons";
 import {useRouter, usePathname} from "expo-router";

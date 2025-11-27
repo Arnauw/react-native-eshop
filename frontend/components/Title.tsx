@@ -2,7 +2,7 @@ import {
     Text,
     StyleSheet,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {ReactNode} from "react";
 
 interface TitleProps {

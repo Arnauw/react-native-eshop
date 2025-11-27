@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useState, useEffect} from 'react';
 import {useLocalSearchParams, useRouter} from "expo-router";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {Product} from "@/types/product"
 import {getProduct} from "@/lib/API"
 import LoadingSpinner from "@/components/LoadingSpinner";

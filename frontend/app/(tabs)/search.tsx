@@ -14,7 +14,7 @@ import {
     AntDesign,
     Ionicons
 } from "@expo/vector-icons";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {useProductStore} from "@/store/productStore";
 import TextInputCustom from "@/components/TextInputCustom";
 import LoadingSpinner from "@/components/LoadingSpinner";

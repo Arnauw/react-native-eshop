@@ -4,7 +4,7 @@ import {
     Text,
     View
 } from "react-native";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 
 interface LoadingSpinnerProps {
     size?: "small" | "large";

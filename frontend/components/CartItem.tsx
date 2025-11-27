@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {Product} from "@/types/product";
 import {useRouter} from "expo-router";
 import useCartStore from "@/store/cartStore";

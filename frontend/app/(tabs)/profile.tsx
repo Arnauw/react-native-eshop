@@ -9,7 +9,7 @@ import {useAuthStore} from "@/store/authStore";
 import {useRouter} from "expo-router";
 import {useEffect} from "react";
 import MainLayout from "@/components/MainLayout";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import ButtonCustom from "@/components/ButtonCustom";
 import {Feather, FontAwesome5, Foundation} from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";

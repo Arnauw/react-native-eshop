@@ -8,7 +8,7 @@ import {
     TextStyle,
     TextInput as RNTextInput,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 
 interface TextInputProps {
     value: string;

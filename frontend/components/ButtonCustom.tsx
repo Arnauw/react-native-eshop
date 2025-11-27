@@ -8,7 +8,7 @@ import {
     ActivityIndicator,
     GestureResponderEvent,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 
 interface ButtonProps {
     title: string;

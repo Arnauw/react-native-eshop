@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import {useAppTheme} from "@/hooks/useAppTheme";
+import {useAppTheme} from "@/hooks/use-app-theme";
 import {Link, useRouter} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import {useAuthStore} from "@/store/authStore";
@@ -18,6 +18,7 @@ import ButtonCustom from "@/components/ButtonCustom";
 import Toast from "react-native-toast-message";
 import {supabase} from "@/lib/supabase";
 import axios from "axios";
+import {EXPO_PUBLIC_ANDROID_EMULATOR_URL} from "@/config";
 
 const CartScreen = () => {
     const router = useRouter();
@@ -45,7 +46,7 @@ const CartScreen = () => {
         try {
             setLoading(true);
 
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            const {data: {session}, error: sessionError} = await supabase.auth.getSession();
             console.log("---------------- DEBUG ----------------");
             console.log("Session Error:", sessionError);
             console.log("Is Session Null?", session === null);
@@ -77,7 +78,7 @@ const CartScreen = () => {
             };
 
             console.log("User Email in Store:", user?.email);
-            const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+            const {data: {user: supabaseUser}} = await supabase.auth.getUser();
             console.log("User Email in Supabase Token:", supabaseUser?.email);
 
             const {data, error} = await supabase
@@ -85,18 +86,20 @@ const CartScreen = () => {
                 .insert([orderData])
                 .select()
                 .single();
-            
+
             if (error) {
                 throw new Error(`Failed to save order: ${error.message}`);
             }
-            
+
             const payload = {
                 price: total,
                 email: user?.email,
             };
-            
+
+            console.log("EXPO_PUBLIC_ANDROID_EMULATOR_URL: ", EXPO_PUBLIC_ANDROID_EMULATOR_URL);
+
             const response = await axios.post(
-                "http://10.0.2.2:8000/checkout",
+                `${EXPO_PUBLIC_ANDROID_EMULATOR_URL}/checkout`,
                 payload,
                 {
                     headers: {
@@ -104,13 +107,13 @@ const CartScreen = () => {
                     }
                 },
             );
-            
+
             const {
                 paymentIntent,
                 ephemeralKey,
                 customer,
             } = response.data;
-            
+
             if (!paymentIntent || !ephemeralKey || !customer) {
                 throw new Error("The required Stripe datas from server are missing");
             } else {
@@ -143,7 +146,7 @@ const CartScreen = () => {
                 visibilityTime: 2000,
             });
             console.log("Order error", error);
-            
+
         } finally {
             setLoading(false);
         }

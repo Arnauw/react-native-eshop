@@ -8,7 +8,7 @@ import {
     Text,
     GestureResponderEvent,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {Product} from "@/types/product";
 import ButtonCustom from "@/components/ButtonCustom"
 import Toast from "react-native-toast-message";

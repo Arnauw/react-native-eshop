@@ -9,7 +9,7 @@ import {
     Keyboard
 } from 'react-native';
 import {useEffect, useRef, useState} from "react";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import MainLayout from "@/components/MainLayout";
 import {AntDesign, Ionicons} from "@expo/vector-icons";
 import {useLocalSearchParams, useRouter} from "expo-router";

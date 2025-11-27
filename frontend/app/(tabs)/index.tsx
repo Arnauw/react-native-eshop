@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import {Product} from "@/types/product";
 import {useProductStore} from "@/store/productStore";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {AntDesign} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
 import ProductCard from "@/components/ProductCard";

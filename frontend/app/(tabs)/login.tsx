@@ -6,7 +6,7 @@ import {
     ScrollView,
     Platform,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import MainLayout from "@/components/MainLayout";
 import {useState} from "react";
 import {useRouter} from "expo-router";

@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import {ReactNode} from "react";
 import HeaderCustom from "@/components/HeaderCustom";
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 
 interface MainLayoutProps {
     children: ReactNode;

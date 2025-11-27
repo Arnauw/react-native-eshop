@@ -3,7 +3,7 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {ComponentProps, FC} from "react";
 import {FontAwesome} from "@expo/vector-icons";
 

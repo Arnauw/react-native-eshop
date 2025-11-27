@@ -3,7 +3,7 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/useAppTheme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {useLocalSearchParams, useRouter} from "expo-router";
 import {useAuthStore} from "@/store/authStore";
 import ButtonCustom from "@/components/ButtonCustom";
