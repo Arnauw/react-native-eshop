@@ -18,7 +18,6 @@ export default function RootLayout() {
             >
                 <Stack>
                     <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-                    <Stack.Screen name="payments" options={{headerShown: false}}/>
                 </Stack>
                 <Toast config={toastConfig}/>
             </StripeProvider>

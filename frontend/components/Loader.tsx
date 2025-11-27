@@ -12,7 +12,10 @@ const Loader = () => {
     const { colors } = useAppTheme();
 
     return (
-        <View style={styles.container}>
+        <View style={[
+            styles.container,
+            { backgroundColor: colors.background.primary }
+        ]}>
             <ActivityIndicator
                 size="large"
                 color={colors.primary[500]}
@@ -26,7 +29,6 @@ export default Loader;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
         alignItems: "center",
         justifyContent: "center",
         width: width,

@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
     Image,
 } from 'react-native';
-import { useAppTheme } from "@/hooks/use-app-theme";
+import {useAppTheme} from "@/hooks/use-app-theme";
 import {useState} from "react";
 import {useRouter} from "expo-router";
 import axios from "axios";
@@ -42,7 +42,7 @@ const OrderItem = (
         email,
         onViewDetails,
     }: OrderProps) => {
-    const { colors } = useAppTheme();
+    const {colors} = useAppTheme();
 
     const isPaid = order?.payment_status === "success";
     const [loading, setLoading] = useState<boolean>(false);
@@ -106,21 +106,9 @@ const OrderItem = (
     };
 
     const handleDelete = () => {
-        Toast.show({
-            type: 'deleteToast',
-            text1: "Delete Order",
-            text2: `Are you sure you want to delete order #${order?.id}?`,
-            position: 'bottom',
-            autoHide: false,
-            props: {
-                onDelete: () => {
-                    Toast.hide();
-                    if (order?.id) {
-                        onDelete(order.id);
-                    }
-                }
-            }
-        });
+        if (order?.id) {
+            onDelete(order.id);
+        }
     };
 
     return (
@@ -132,11 +120,11 @@ const OrderItem = (
             }
         ]}>
             <View style={styles.orderItem}>
-                <Text style={[styles.orderId, { color: colors.text.primary }]}>
+                <Text style={[styles.orderId, {color: colors.text.primary}]}>
                     Order #{order?.id}
                 </Text>
 
-                <Text style={{ color: colors.text.primary }}>
+                <Text style={{color: colors.text.primary}}>
                     Total: {order?.total_price.toFixed(2)} €
                 </Text>
 
@@ -147,14 +135,14 @@ const OrderItem = (
                     Status: {isPaid ? "Payment successful" : "Pending"}
                 </Text>
 
-                <Text style={[styles.orderDate, { color: colors.text.secondary }]}>
+                <Text style={[styles.orderDate, {color: colors.text.secondary}]}>
                     Placed on: {new Date(order.created_at).toLocaleDateString()}
                 </Text>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         onPress={() => onViewDetails(order)}
-                        style={[styles.viewDetailsButton, { backgroundColor: colors.primary[600] }]}
+                        style={[styles.actionButton, {backgroundColor: colors.primary[600]}]}
                     >
                         <Text style={styles.viewDetailsText}>
                             Details
@@ -164,7 +152,7 @@ const OrderItem = (
                         <TouchableOpacity
                             onPress={handlePayNow}
                             disabled={disabled}
-                            style={[styles.payNowButton, { backgroundColor: colors.primary[500] }]}
+                            style={[styles.actionButton, {backgroundColor: colors.primary[500]}]}
                         >
                             {loading ? (
                                 <ActivityIndicator
@@ -256,6 +244,30 @@ const styles = StyleSheet.create({
         padding: 8,
         marginLeft: 12,
     },
+    buttonContainer: {
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: "flex-start",
+        gap: 12,
+        marginTop: 12,
+    },
+    actionButton: {
+        paddingVertical: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 90,
+        shadowColor: "#000",
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    buttonText: {
+        fontFamily: "Inter-Medium",
+        color: "#fff",
+        fontSize: 14,
+    },
     payNowButton: {
         marginTop: 8,
         paddingVertical: 6,
@@ -268,13 +280,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Medium',
         color: '#fff',
         fontSize: 14,
-    },
-    buttonContainer: {
-        flexDirection: "row",
-        alignItems: 'center',
-        justifyContent: "flex-start",
-        gap: 12,
-        marginTop: 8,
     },
     viewDetailsText: {
         fontFamily: "Inter-Medium",

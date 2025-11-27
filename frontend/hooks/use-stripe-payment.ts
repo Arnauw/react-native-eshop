@@ -76,20 +76,6 @@ const useStripePayment = (
             }
 
             await updatePaymentStatus();
-            // Alert.alert(
-            //     "Payment successful!",
-            //     "Thanks for your purchase",
-            //     [{
-            //         text: "OK",
-            //         onPress: () => {
-            //             if (onSuccess) {
-            //                 onSuccess();
-            //             } else {
-            //                 router.push("/orders");
-            //             }
-            //         },
-            //     }],
-            // );
             Toast.show({
                 type: "success",
                 text1: "Payment successful!",

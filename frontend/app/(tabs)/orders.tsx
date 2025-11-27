@@ -13,7 +13,7 @@ import Animated, {
     withSpring,
     withTiming,
 } from "react-native-reanimated";
-import { useAppTheme } from "@/hooks/use-app-theme";
+import {useAppTheme} from "@/hooks/use-app-theme";
 import {useCallback, useEffect, useState} from "react";
 import {LinearGradient} from "expo-linear-gradient";
 import {Feather} from "@expo/vector-icons";
@@ -48,22 +48,22 @@ interface OrderDetailsModalProps {
 }
 
 const OrderDetailsModal = (
-    { 
+    {
         visible,
         order,
         onClose,
     }: OrderDetailsModalProps) => {
-    const { colors, isDarkMode } = useAppTheme();
+    const {colors, isDarkMode} = useAppTheme();
     const translateY = useSharedValue(300);
     const opacity = useSharedValue(0);
 
     useEffect(() => {
         if (visible) {
-            translateY.value = withSpring(0, { damping: 15, stiffness: 100 });
-            opacity.value = withTiming(1, { duration: 300 });
+            translateY.value = withSpring(0, {damping: 15, stiffness: 100});
+            opacity.value = withTiming(1, {duration: 300});
         } else {
-            translateY.value = withTiming(300, { duration: 200 });
-            opacity.value = withTiming(0, { duration: 200 });
+            translateY.value = withTiming(300, {duration: 200});
+            opacity.value = withTiming(0, {duration: 200});
         }
     }, [visible]);
 
@@ -73,7 +73,7 @@ const OrderDetailsModal = (
     }));
 
     if (!order) return null;
-    
+
     const gradientColors: [string, string] = isDarkMode
         ? [colors.background.secondary, colors.background.primary]
         : ["#ebf5ff", "#dbeafe"];
@@ -86,28 +86,29 @@ const OrderDetailsModal = (
             onRequestClose={onClose}
         >
             <View style={styles.modalOverlay}>
-                <Animated.View style={[styles.modalContent, animatedModalStyle, { backgroundColor: colors.background.primary }]}>
+                <Animated.View
+                    style={[styles.modalContent, animatedModalStyle, {backgroundColor: colors.background.primary}]}>
                     <LinearGradient
                         colors={gradientColors}
                         style={styles.modalGradient}
                     >
                         <View style={styles.modalHeader}>
-                            <Text style={[styles.modalTitle, { color: colors.text.primary }]}>
+                            <Text style={[styles.modalTitle, {color: colors.text.primary}]}>
                                 Order #{order.id} details
                             </Text>
                             <TouchableOpacity onPress={onClose}>
-                                <Feather name="x" size={24} color={colors.text.primary} />
+                                <Feather name="x" size={24} color={colors.text.primary}/>
                             </TouchableOpacity>
                         </View>
 
                         <View style={styles.modalBody}>
-                            <Text style={[styles.modalText, { color: colors.text.primary }]}>
+                            <Text style={[styles.modalText, {color: colors.text.primary}]}>
                                 Total: {order?.total_price.toFixed(2)} €
                             </Text>
-                            <Text style={[styles.modalText, { color: colors.text.primary }]}>
+                            <Text style={[styles.modalText, {color: colors.text.primary}]}>
                                 {`Status: ${order.payment_status === "success" ? "Payment completed" : "Pending"}`}
                             </Text>
-                            <Text style={[styles.modalSectionTitle, { color: colors.text.primary }]}>
+                            <Text style={[styles.modalSectionTitle, {color: colors.text.primary}]}>
                                 Articles:
                             </Text>
 
@@ -115,22 +116,26 @@ const OrderDetailsModal = (
                                 data={order.items}
                                 keyExtractor={(item) => item?.product_id.toString()}
                                 renderItem={({item}) => (
-                                    <View style={[styles.itemContainer, { backgroundColor: isDarkMode ? colors.gray[800] : "#ffffff80" }]}>
+                                    <View
+                                        style={[styles.itemContainer, {backgroundColor: isDarkMode ? colors.gray[800] : "#ffffff80"}]}>
                                         <Image
                                             source={{uri: item?.image}}
-                                            style={styles.itemImage}
+                                            style={[
+                                                styles.itemImage,
+                                                {backgroundColor: colors.background.secondary}
+                                            ]}
                                         />
                                         <View style={styles.itemDetails}>
-                                            <Text style={[styles.itemsTitle, { color: colors.text.primary }]}>
+                                            <Text style={[styles.itemsTitle, {color: colors.text.primary}]}>
                                                 {item.title}
                                             </Text>
-                                            <Text style={[styles.itemText, { color: colors.text.secondary }]}>
+                                            <Text style={[styles.itemText, {color: colors.text.secondary}]}>
                                                 Price: {item.price.toFixed(2)} €
                                             </Text>
-                                            <Text style={[styles.itemText, { color: colors.text.secondary }]}>
+                                            <Text style={[styles.itemText, {color: colors.text.secondary}]}>
                                                 Quantity: {item.quantity}
                                             </Text>
-                                            <Text style={[styles.itemText, { color: colors.text.secondary }]}>
+                                            <Text style={[styles.itemText, {color: colors.text.secondary}]}>
                                                 Subtotal: {(item.price * item.quantity).toFixed(2)} €
                                             </Text>
                                         </View>
@@ -144,7 +149,7 @@ const OrderDetailsModal = (
                         <TouchableOpacity
                             onPress={onClose}
                             activeOpacity={0.7}
-                            style={[styles.closeButton, { backgroundColor: colors.primary[500] }]}
+                            style={[styles.closeButton, {backgroundColor: colors.primary[500]}]}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
                         </TouchableOpacity>
@@ -156,8 +161,8 @@ const OrderDetailsModal = (
 };
 
 const OrdersScreen = () => {
-    const { colors } = useAppTheme();
-    const { user } = useAuthStore();
+    const {colors} = useAppTheme();
+    const {user} = useAuthStore();
     const router = useRouter();
 
     const [orders, setOrders] = useState<Order[]>([]);
@@ -213,15 +218,27 @@ const OrdersScreen = () => {
                 onDelete: async () => {
                     Toast.hide();
                     try {
-                        const {error} = await supabase.from("orders").delete().eq("id", orderId);
+                        const {error} = await supabase
+                            .from("orders")
+                            .delete()
+                            .eq("id", orderId);
+                        
                         if (error) throw error;
-                        await fetchOrders();
-                        Toast.show({ 
+                        
+                        setOrders(
+                            (currentOrders) =>
+                                currentOrders.filter(
+                                    (order) =>
+                                        order.id !== orderId
+                                )
+                        );
+
+                        Toast.show({
                             type: "success",
                             text1: "Order deleted",
                         });
                     } catch (error) {
-                        Toast.show({ 
+                        Toast.show({
                             type: "error",
                             text1: "Error deleting order",
                         });
@@ -250,7 +267,7 @@ const OrdersScreen = () => {
             <MainLayout>
                 <Title>My Orders</Title>
                 <View style={styles.errorContainer}>
-                    <Text style={[styles.errorText, { color: colors.error }]}>Error</Text>
+                    <Text style={[styles.errorText, {color: colors.error}]}>Error</Text>
                 </View>
             </MainLayout>
         );
@@ -263,8 +280,6 @@ const OrdersScreen = () => {
                 <FlatList
                     data={orders}
                     keyExtractor={(item) => item.id.toString()}
-                    refreshing={refreshing}
-                    onRefresh={() => fetchOrders()}
                     renderItem={({item}) => (
                         <OrderItem
                             order={item}
