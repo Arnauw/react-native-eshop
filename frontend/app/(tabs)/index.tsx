@@ -49,7 +49,7 @@ export default function HomeScreen() {
 
     const navigateToCategory = (category: string) => {
         router.push({
-            pathname: '/shop',
+            pathname: '/(tabs)/shop',
             params: {
                 category,
             },
@@ -57,7 +57,7 @@ export default function HomeScreen() {
     };
 
     const navigateToShop = () => {
-        router.push('/shop');
+        router.push('/(tabs)/shop');
     };
 
     if (loading && products.length === 0) {

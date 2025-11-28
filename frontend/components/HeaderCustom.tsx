@@ -5,7 +5,7 @@ import {
     Text
 } from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
-import { useAppTheme } from "@/hooks/use-app-theme";
+import {useAppTheme} from "@/hooks/use-app-theme";
 import Logo from "@/components/Logo";
 import {Ionicons, MaterialCommunityIcons, Feather} from "@expo/vector-icons";
 import {useRouter, usePathname} from "expo-router";
@@ -15,20 +15,25 @@ import useFavoriteStore from "@/store/favoriteStore";
 const HeaderCustom = () => {
     const router = useRouter();
     const pathname = usePathname();
-    const { colors, isDarkMode, toggleTheme } = useAppTheme();
+    const {colors, isDarkMode, toggleTheme} = useAppTheme();
     const {items} = useCartStore();
     const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const {favoriteItems} = useFavoriteStore();
-    const isProfilePage = pathname === '/profile' || pathname === '/login' || pathname === '/signup';
+    const isProfilePage = pathname === '/(tabs)/profile'
+        || pathname === '/(tabs)/login'
+        || pathname === '/(tabs)/signup';
 
     return (
-        <SafeAreaView style={{ backgroundColor: colors.background.primary }}>
-            <View style={[styles.header, { borderBottomColor: isDarkMode ? colors.gray[800] : colors.gray[300] }]}>
+        <SafeAreaView style={{backgroundColor: colors.background.primary}}>
+            <View style={[styles.header, {borderBottomColor: isDarkMode ? colors.gray[800] : colors.gray[300]}]}>
                 <Logo/>
                 <View style={styles.iconContainer}>
-                    
+
                     <TouchableOpacity
-                        style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
+                        style={[styles.searchButton, {
+                            borderColor: colors.primary[500],
+                            backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
+                        }]}
                         onPress={toggleTheme}
                     >
                         <Feather
@@ -40,7 +45,10 @@ const HeaderCustom = () => {
 
                     {pathname !== '/' && router.canGoBack() && (
                         <TouchableOpacity
-                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
+                            style={[styles.searchButton, {
+                                borderColor: colors.primary[500],
+                                backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
+                            }]}
                             onPress={() => router.back()}
                         >
                             <Ionicons
@@ -51,10 +59,13 @@ const HeaderCustom = () => {
                         </TouchableOpacity>
                     )}
 
-                    {pathname !== '/shop' && (
+                    {pathname !== '/(tabs)/shop' && (
                         <TouchableOpacity
-                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
-                            onPress={() => router.push('/shop')}
+                            style={[styles.searchButton, {
+                                borderColor: colors.primary[500],
+                                backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
+                            }]}
+                            onPress={() => router.push('/(tabs)/shop')}
                         >
                             <MaterialCommunityIcons
                                 name={'storefront-outline'}
@@ -64,17 +75,23 @@ const HeaderCustom = () => {
                         </TouchableOpacity>
                     )}
 
-                    {pathname !== '/favorites' && (
+                    {pathname !== '/(tabs)/favorites' && (
                         <TouchableOpacity
-                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
-                            onPress={() => router.push(`/favorites`)}
+                            style={[styles.searchButton, {
+                                borderColor: colors.primary[500],
+                                backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
+                            }]}
+                            onPress={() => router.push(`/(tabs)/favorites`)}
                         >
                             <MaterialCommunityIcons
                                 name={'heart-outline'}
                                 size={20}
                                 color={colors.primary[700]}
                             />
-                            <View style={[styles.itemsView, { backgroundColor: colors.background.primary, borderColor: colors.primary[500] }]}>
+                            <View style={[styles.itemsView, {
+                                backgroundColor: colors.background.primary,
+                                borderColor: colors.primary[500]
+                            }]}>
                                 <Text style={styles.itemsText}>
                                     {favoriteItems?.length ? favoriteItems?.length : 0}
                                 </Text>
@@ -82,17 +99,23 @@ const HeaderCustom = () => {
                         </TouchableOpacity>
                     )}
 
-                    {pathname !== '/cart' && (
+                    {pathname !== '/(tabs)/cart' && (
                         <TouchableOpacity
-                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
-                            onPress={() => router.push(`/cart`)}
+                            style={[styles.searchButton, {
+                                borderColor: colors.primary[500],
+                                backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
+                            }]}
+                            onPress={() => router.push(`/(tabs)/cart`)}
                         >
                             <MaterialCommunityIcons
                                 name={'cart-outline'}
                                 size={20}
                                 color={colors.primary[700]}
                             />
-                            <View style={[styles.itemsView, { backgroundColor: colors.background.primary, borderColor: colors.primary[500] }]}>
+                            <View style={[styles.itemsView, {
+                                backgroundColor: colors.background.primary,
+                                borderColor: colors.primary[500]
+                            }]}>
                                 <Text style={styles.itemsText}>
                                     {cartItemCount > 0 ? cartItemCount : 0}
                                 </Text>
@@ -102,8 +125,11 @@ const HeaderCustom = () => {
 
                     {!isProfilePage && (
                         <TouchableOpacity
-                            style={[styles.searchButton, { borderColor: colors.primary[500], backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50] }]}
-                            onPress={() => router.push('/profile')}
+                            style={[styles.searchButton, {
+                                borderColor: colors.primary[500],
+                                backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
+                            }]}
+                            onPress={() => router.push('/(tabs)/profile')}
                         >
                             <Ionicons
                                 name={'person-outline'}

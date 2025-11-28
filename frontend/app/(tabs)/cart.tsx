@@ -21,7 +21,6 @@ import ButtonCustom from "@/components/ButtonCustom";
 import Toast from "react-native-toast-message";
 import {supabase} from "@/lib/supabase";
 import axios from "axios";
-import {EXPO_PUBLIC_ANDROID_EMULATOR_URL} from "@/config";
 
 const CartScreen = () => {
     const router = useRouter();
@@ -32,6 +31,7 @@ const CartScreen = () => {
     const subtotal = getTotalPrice();
     const shippingCost = subtotal > 50 ? 5.99 : 0;
     const total = subtotal + shippingCost;
+    const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 
     const handlePlaceOrder = async () => {
@@ -99,10 +99,9 @@ const CartScreen = () => {
                 email: user?.email,
             };
 
-            console.log("EXPO_PUBLIC_ANDROID_EMULATOR_URL: ", EXPO_PUBLIC_ANDROID_EMULATOR_URL);
-
+            console.log("EXPO_PUBLIC_BACKEND_URL: ", BACKEND_URL);
             const response = await axios.post(
-                `${EXPO_PUBLIC_ANDROID_EMULATOR_URL}/checkout`,
+                `${BACKEND_URL}/checkout`,
                 payload,
                 {
                     headers: {
@@ -129,7 +128,7 @@ const CartScreen = () => {
                 });
 
                 router.push({
-                    pathname: "/payments",
+                    pathname: "/(tabs)/payments",
                     params: {
                         paymentIntent,
                         ephemeralKey,

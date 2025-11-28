@@ -28,7 +28,7 @@ const CartItem = (
     const { colors } = useAppTheme();
 
     const handlePress = () => {
-        router.push(`/product/${product.id}`);
+        router.push(`/(tabs)/product/${product.id}`);
     };
 
     const handleDecrease = () => {

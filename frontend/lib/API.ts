@@ -1,6 +1,6 @@
 import {Product} from "@/types/product";
-import {EXPO_PUBLIC_API_URL as API_URL} from "@/config";
 
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 // console.log('API_URL is:', API_URL);
 
 const getProducts = async (): Promise<Product[]> => {

@@ -52,7 +52,7 @@ const LoginScreen = () => {
     const handleLogin = async () => {
         if (validateForm()) {
             await login(email, password);
-            router.push("/profile");
+            router.push("/(tabs)/profile");
             setEmail("");
             setPassword("");
         }

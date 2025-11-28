@@ -45,3 +45,6 @@ app-example
 
 # temp libreoffice files
 .~lock*
+
+# build folders
+/build

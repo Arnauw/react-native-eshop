@@ -58,7 +58,7 @@ const SignUpScreen = () => {
     const handleSignUp = async () => {
         if (validateForm()) {
             await signup(email, password);
-            router.push("/login");
+            router.push("/(tabs)/login");
             setEmail("");
             setPassword("");
             setConfirmPassword("");

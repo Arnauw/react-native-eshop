@@ -11,7 +11,6 @@ import {useAppTheme} from "@/hooks/use-app-theme";
 import {useState} from "react";
 import {useRouter} from "expo-router";
 import axios from "axios";
-import {EXPO_PUBLIC_ANDROID_EMULATOR_URL} from "@/config";
 import Toast from "react-native-toast-message";
 import {Feather} from "@expo/vector-icons";
 
@@ -49,6 +48,7 @@ const OrderItem = (
     const [loading, setLoading] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(false);
     const router = useRouter();
+    const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
     const handlePayNow = async () => {
         setLoading(true);
@@ -60,7 +60,7 @@ const OrderItem = (
 
         try {
             const response = await axios.post(
-                `${EXPO_PUBLIC_ANDROID_EMULATOR_URL}/checkout`,
+                `${BACKEND_URL}/checkout`,
                 payload,
                 {
                     headers: {
@@ -85,7 +85,7 @@ const OrderItem = (
                         onPay: () => {
                             Toast.hide();
                             router.push({
-                                pathname: "/payments",
+                                pathname: "/(tabs)/payments",
                                 params: {
                                     paymentIntent,
                                     ephemeralKey,
