@@ -132,8 +132,15 @@ const OrderItem = (
                     styles.orderStatus,
                     {color: isPaid ? colors.success : colors.error},
                 ]}>
-                    Status: {isPaid ? "Payment successful" : "Pending"}
+                    Payment status: {isPaid ? "Successful" : "Pending"}
                 </Text>
+
+                {/*<Text style={[*/}
+                {/*    styles.orderStatus,*/}
+                {/*    {color: isPaid ? colors.success : colors.error},*/}
+                {/*]}>*/}
+                {/*    Delivery status: {isPaid ? "Successful" : "Pending"}*/}
+                {/*</Text>*/}
 
                 <Text style={[styles.orderDate, {color: colors.text.secondary}]}>
                     Placed on: {new Date(order.created_at).toLocaleDateString()}

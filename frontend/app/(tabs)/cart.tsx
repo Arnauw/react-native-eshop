@@ -5,8 +5,11 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import {
+    Link,
+    useRouter,
+} from "expo-router";
 import {useAppTheme} from "@/hooks/use-app-theme";
-import {Link, useRouter} from "expo-router";
 import useCartStore from "@/store/cartStore";
 import {useAuthStore} from "@/store/authStore";
 import {useState} from "react";
