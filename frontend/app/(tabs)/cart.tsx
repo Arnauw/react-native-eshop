@@ -106,6 +106,7 @@ const CartScreen = () => {
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        "x-app-secret": process.env.EXPO_PUBLIC_APP_SHARED_SECRET
                     }
                 },
             );
