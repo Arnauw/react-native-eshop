@@ -19,9 +19,9 @@ const HeaderCustom = () => {
     const {items} = useCartStore();
     const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const {favoriteItems} = useFavoriteStore();
-    const isProfilePage = pathname === '/(tabs)/profile'
-        || pathname === '/(tabs)/login'
-        || pathname === '/(tabs)/signup';
+    const isProfilePage = pathname === '/profile'
+        || pathname === '/login'
+        || pathname === '/signup';
 
     return (
         <SafeAreaView style={{backgroundColor: colors.background.primary}}>
@@ -59,13 +59,13 @@ const HeaderCustom = () => {
                         </TouchableOpacity>
                     )}
 
-                    {pathname !== '/(tabs)/shop' && (
+                    {pathname !== '/shop' && (
                         <TouchableOpacity
                             style={[styles.searchButton, {
                                 borderColor: colors.primary[500],
                                 backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
                             }]}
-                            onPress={() => router.push('/(tabs)/shop')}
+                            onPress={() => router.push('/shop')}
                         >
                             <MaterialCommunityIcons
                                 name={'storefront-outline'}
@@ -75,13 +75,13 @@ const HeaderCustom = () => {
                         </TouchableOpacity>
                     )}
 
-                    {pathname !== '/(tabs)/favorites' && (
+                    {pathname !== '/favorites' && (
                         <TouchableOpacity
                             style={[styles.searchButton, {
                                 borderColor: colors.primary[500],
                                 backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
                             }]}
-                            onPress={() => router.push(`/(tabs)/favorites`)}
+                            onPress={() => router.push(`/favorites`)}
                         >
                             <MaterialCommunityIcons
                                 name={'heart-outline'}
@@ -99,13 +99,13 @@ const HeaderCustom = () => {
                         </TouchableOpacity>
                     )}
 
-                    {pathname !== '/(tabs)/cart' && (
+                    {pathname !== '/cart' && (
                         <TouchableOpacity
                             style={[styles.searchButton, {
                                 borderColor: colors.primary[500],
                                 backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
                             }]}
-                            onPress={() => router.push(`/(tabs)/cart`)}
+                            onPress={() => router.push(`/cart`)}
                         >
                             <MaterialCommunityIcons
                                 name={'cart-outline'}
@@ -129,7 +129,7 @@ const HeaderCustom = () => {
                                 borderColor: colors.primary[500],
                                 backgroundColor: isDarkMode ? colors.gray[800] : colors.primary[50]
                             }]}
-                            onPress={() => router.push('/(tabs)/profile')}
+                            onPress={() => router.push('/profile')}
                         >
                             <Ionicons
                                 name={'person-outline'}

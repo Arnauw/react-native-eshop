@@ -128,7 +128,7 @@ const CartScreen = () => {
                 });
 
                 router.push({
-                    pathname: "/(tabs)/payments",
+                    pathname: "/payments",
                     params: {
                         paymentIntent,
                         ephemeralKey,

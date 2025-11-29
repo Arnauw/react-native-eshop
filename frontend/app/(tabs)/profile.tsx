@@ -42,7 +42,7 @@ const ProfileScreen = () => {
             ),
             title: 'My cart',
             onPress: () => {
-                router.push('/(tabs)/cart');
+                router.push('/cart');
             },
         },
         {
@@ -56,7 +56,7 @@ const ProfileScreen = () => {
             ),
             title: 'My orders',
             onPress: () => {
-                router.push('/(tabs)/orders');
+                router.push('/orders');
             },
         },
         {
@@ -70,7 +70,7 @@ const ProfileScreen = () => {
             ),
             title: 'My payment',
             onPress: () => {
-                // router.push('/(tabs)/payment');
+                // router.push('/payment');
             },
         },
         {
@@ -84,7 +84,7 @@ const ProfileScreen = () => {
             ),
             title: 'Delivery address',
             onPress: () => {
-                // router.push('/(tabs)/address');
+                // router.push('/address');
             },
         },
         {
@@ -98,7 +98,7 @@ const ProfileScreen = () => {
             ),
             title: 'Settings',
             onPress: () => {
-                // router.push('/(tabs)/settings');
+                // router.push('/settings');
             },
         },
     ];

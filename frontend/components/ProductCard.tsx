@@ -39,7 +39,7 @@ const ProductCard = (
     const isFav = isFavorite(id);
 
     const handleProductRoute = (e: any) => {
-        router.push(`/(tabs)/product/${id}`);
+        router.push(`/product/${id}`);
     };
 
     const handleAddToCart = (e: GestureResponderEvent) => {
